@@ -1,0 +1,56 @@
+-- Сценарий “Поиск нужной картины”
+-- Основной сценарий
+-- select  * FROM Main.artwork
+-- WHERE name_ = 'Возьми мое сердце' AND
+--       author_ = 'Богданов Степан Семёнович' AND
+--       museum_name = 'Great Secrets Museum' AND
+--       museum_address = '109 Community College Rd Ahoskie NC 27910-9522 USA' and
+--       materials = 'Краски' and
+--       genre_name = 'Пейзаж';
+--
+--
+-- -- Сценарий “Создание новой картины”.
+-- DO $$
+-- DECLARE
+--     new_type varchar(100) =  'Глина';
+--     new_genre varchar(100) = 'Рококо';
+--     new_name varchar(200) = 'Закат13';
+--     new_author varchar(200) = 'Мусоргский М.П.';
+--     new_description varchar(10000) = '[2022-10-16 23:05:22] Connecting to postgres@localhost…';
+--     new_museum_name VARCHAR(200) = 'Institute of Fire';
+--     new_museum_address VARCHAR(200) = '	1102 N Massey Blvd';
+--     new_materials varchar(200) = 'Краски, известь';
+--     new_start_year DATE = '2012-05-24';
+--     new_end_year DATE = '2014-07-12';
+--     new_url varchar(10000) = 'https://www.imgonline.com.ua/examples/bee-on-daisy.jpg';
+-- BEGIN
+--     INSERT INTO Main.artwork(type_name, genre_name, name_, author_, description, museum_name, museum_address, materials, start_year_, end_year_)
+--     select new_type, new_genre, new_name, new_author, new_description, new_museum_name, new_museum_address, new_materials, new_start_year, new_end_year
+--     where NOT EXISTS (SELECT type_name, genre_name, name_, author_, description, museum_name, museum_address, materials, start_year_, end_year_
+--                       FROM Main.artwork WHERE type_name = new_type AND
+--                                               genre_name = new_genre AND
+--                                               name_ = new_name AND
+--                                               author_ = new_author AND
+--                                               description = new_description AND
+--                                               museum_name = new_museum_name AND
+--                                               museum_address = new_museum_address AND
+--                                               materials = new_materials AND
+--                                               start_year_ = new_start_year AND
+--                                               end_year_ = new_end_year and
+--                                               URL = new_url);
+-- END $$;
+--
+-- SELECT * from Main.artwork;
+--
+--  -- Сценарий “Редактирование картины”.
+-- UPDATE Main.artwork
+-- SET name_ = 'No name1'
+--     WHERE Main.artwork.artworkid = 2;
+--
+-- SELECT * from Main.artwork order by artworkid;
+--
+-- -- Cценарий "Удаление картины"
+-- DELETE  FROM Main.artwork
+-- WHERE Main.artwork.artworkid = 3 ;
+
+SELECT * from Main.artwork order by artworkid;
