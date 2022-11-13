@@ -1,0 +1,34 @@
+version: '3'
+services:
+  memcached:
+    image: memcached:1.6.12
+    container_name: memcached
+    ports:
+      - "11211:11211"
+    expose:
+      - "11211"
+    entrypoint:
+      - memcached
+      - -m 64
+  backend:
+    build: ./backend
+    container_name: backend-nsubd
+    environment:
+      - FLASK_ENV=development
+      - FLASK_DEBUG=True
+      - PYTHONUNBUFFERED=True
+    volumes:
+      - ./backend:/backend
+    ports:
+      - "5000:5000"
+    command: python src/main.py
+    links:
+      - memcached
+  frontend:
+    build: ./frontend
+    container_name: frontend-nsubd
+    volumes:
+      - ./frontend:/frontend
+    ports:
+      - "3000:3000"
+    command: npm run start
