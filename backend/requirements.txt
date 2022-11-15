@@ -9,3 +9,5 @@ MarkupSafe==2.1.1
 python-memcached==1.59
 six==1.16.0
 Werkzeug==2.2.2
+sqlalchemy
+psycopg2
