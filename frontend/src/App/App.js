@@ -1,5 +1,6 @@
 import React from "react";
 import {API_SERVER} from "../constants";
+import {AddArtworkForm} from "../components/AddArtworkForm";
 
 export default class App extends React.Component {
   render() {
@@ -9,6 +10,11 @@ export default class App extends React.Component {
                     <input type="text" name="name"></input>
                     <input type="submit" value="Set"></input>
                 </form>
+                <br/>
+                <br/>
+                <br/>
+
+                <AddArtworkForm/>
             </div>);
   }
 }
