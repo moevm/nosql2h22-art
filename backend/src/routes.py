@@ -21,12 +21,17 @@ VALUES  ('Возьми мое сердце', 'Богданов Степан Се
         'Скульптура', 'Great Secrets Museum', '109 Community College Rd Ahoskie NC 27910-9522 USA', 'Портрет', 'https://www.imgonline.com.ua/examples/bee-on-daisy.jpg')
         """
 
+DELETE_ALL_NOTES = """
+DELETE  FROM ArtWorks *; 
+"""
+
 
 def test():
-    db.execute(INSERT_VALS_EX)
+    # db.execute(INSERT_VALS_EX)
+    db.execute(DELETE_ALL_NOTES)
     res = db.execute("""
-    SELECT * FROM ArtWorks
-    """)
+        SELECT * FROM ArtWorks
+        """)
     for i in res:
         print(i["name_"])
 
@@ -36,6 +41,30 @@ def test():
 
 
 def add_art():
+    data = request.get_json()
+    # adding into postgres
+    ADD_PICTURE = """
+    INSERT INTO ArtWorks (name_, author_, 
+                          description, start_year_, 
+                          end_year_, materials, 
+                          type_name,  museum_name, 
+                          museum_address, genre_name, URL)
+    VALUES (%s, %s, %s, %s, 
+            %s, %s, %s, %s, 
+            %s, %s, %s)"""
 
-    return request.get_json()
+    db.execute(ADD_PICTURE, (data['name'], data['author'],
+                             data['description'], data['startYear'],
+                             data['endYear'], data['materials'],
+                             data['type'], data['museumName'],
+                             data['museumAddress'], data['genre'],
+                             data['URL']))
 
+    res = db.execute("""SELECT * FROM ArtWorks""")
+
+    for i in res:
+        print(i["name_"] + '|' + i["author_"] + '|' + i["genre_name"])
+
+    # adding into memcached
+
+    return data
