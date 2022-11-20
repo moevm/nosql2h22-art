@@ -29,7 +29,13 @@ def test():
     """)
     for i in res:
         print(i["name_"])
-    
+
     print("Set: " + request.form['name'] + " as a value of 'key' | " + str(cache.set('key', request.form['name'], 0)))
     print("Value: " + cache.get('key'))
     return "It's me, Flask"
+
+
+def add_art():
+
+    return request.get_json()
+
