@@ -43,6 +43,7 @@ def test():
 def add_art():
     data = request.get_json()
     # adding into postgres
+
     ADD_PICTURE = """
     INSERT INTO ArtWorks (name_, author_, 
                           description, start_year_, 
@@ -51,20 +52,40 @@ def add_art():
                           museum_address, genre_name, URL)
     VALUES (%s, %s, %s, %s, 
             %s, %s, %s, %s, 
-            %s, %s, %s)"""
+            %s, %s, %s)
+    RETURNING artworkid;
+    """
 
-    db.execute(ADD_PICTURE, (data['name'], data['author'],
-                             data['description'], data['startYear'],
-                             data['endYear'], data['materials'],
-                             data['type'], data['museumName'],
-                             data['museumAddress'], data['genre'],
-                             data['URL']))
+    key = db.execute(ADD_PICTURE, (data['name'], data['author'],
+                                   data['description'], data['startYear'],
+                                   data['endYear'], data['materials'],
+                                   data['type'], data['museumName'],
+                                   data['museumAddress'], data['genre'],
+                                   data['URL']))
+
+    GET_ID = """
+        SELECT artworkid FROM ArtWorks
+        WHERE ((name_ = %s) AND
+              (author_ = %s) AND 
+              (description = %s) AND
+              (start_year_ = %s) AND 
+              (end_year_ = %s) AND
+              (materials = %s) AND
+              (type_name = %s) AND  
+              (museum_name = %s) AND
+              (museum_address = %s) AND
+              (genre_name = %s) AND
+              (URL = %s));
+    """
 
     res = db.execute("""SELECT * FROM ArtWorks""")
-
     for i in res:
-        print(i["name_"] + '|' + i["author_"] + '|' + i["genre_name"])
+        print(i)
 
     # adding into memcached
+    key = str(key.all()[0][0])
+    cache.set(key, data)
+    print("Value is written into memcached by key: {}".format(key))
+    print(cache.get(key))
 
     return data
