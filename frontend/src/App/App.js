@@ -4,13 +4,34 @@ import AppBarComp from '../components/AppBarComp';
 import GridCardComp from '../components/GridCardComp'
 import EditorComp from '../components/EditorComp';
 import UpdaterComp from '../components/UpdaterComp';
+import TableComp from '../components/TableComp';
 import {Box, Button} from '@mui/material';
 import FilterComp from '../components/FilterComp';
 import {API_SERVER} from "../constants";
 import AddArtworkForm from "../components/AddArtworkForm";
 
+function createData(id, name, author, description, type, genre, museum, materials, start, end, image) {
+  return {id, name, author, description, type, genre, museum, materials, start, end, image};
+}
+
+const rows = [
+  createData(1, 'Morning in the Pine forest', 'Shishkin', '', 'Picture', 'Аnimalism', 'Hermitage', 'Oil', 1889, 1889, 'https://wpsovet.ru/wp-content/uploads/c/6/c/c6cdad86498ee5eb17cc914c96711dc1.jpeg'),
+  createData(2, 'Mona Lisa', 'Leonardo da Vinci', '', 'Picture', 'Portret', 'Louvre', 'Oil', 1503, 1503, 'https://s.ecrater.com/stores/430136/5d624bd8d5f7a_430136b.jpg'),
+  createData(3, 'Morning in the Pine forest', 'Shishkin', '', 'Picture', 'Аnimalism', 'Hermitage', 'Oil', 1889, 1889, 'https://wpsovet.ru/wp-content/uploads/c/6/c/c6cdad86498ee5eb17cc914c96711dc1.jpeg'),
+  createData(4, 'Mona Lisa', 'Leonardo da Vinci', '', 'Picture', 'Portret', 'Louvre', 'Oil', 1503, 1503, 'https://s.ecrater.com/stores/430136/5d624bd8d5f7a_430136b.jpg'),
+  createData(5, 'Morning in the Pine forest', 'Shishkin', '', 'Picture', 'Аnimalism', 'Hermitage', 'Oil', 1889, 1889, 'https://wpsovet.ru/wp-content/uploads/c/6/c/c6cdad86498ee5eb17cc914c96711dc1.jpeg'),
+  createData(6, 'Mona Lisa', 'Leonardo da Vinci', '', 'Picture', 'Portret', 'Louvre', 'Oil', 1503, 1503, 'https://s.ecrater.com/stores/430136/5d624bd8d5f7a_430136b.jpg'),
+  createData(7, 'Morning in the Pine forest', 'Shishkin', '', 'Picture', 'Аnimalism', 'Hermitage', 'Oil', 1889, 1889, 'https://wpsovet.ru/wp-content/uploads/c/6/c/c6cdad86498ee5eb17cc914c96711dc1.jpeg'),
+  createData(8, 'Mona Lisa', 'Leonardo da Vinci', '', 'Picture', 'Portret', 'Louvre', 'Oil', 1503, 1503, 'https://s.ecrater.com/stores/430136/5d624bd8d5f7a_430136b.jpg'),
+  createData(9, 'Morning in the Pine forest', 'Shishkin', '', 'Picture', 'Аnimalism', 'Hermitage', 'Oil', 1889, 1889, 'https://wpsovet.ru/wp-content/uploads/c/6/c/c6cdad86498ee5eb17cc914c96711dc1.jpeg'),
+  createData(10, 'Mona Lisa', 'Leonardo da Vinci', '', 'Picture', 'Portret', 'Louvre', 'Oil', 1503, 1503, 'https://s.ecrater.com/stores/430136/5d624bd8d5f7a_430136b.jpg'),
+  createData(11, 'Morning in the Pine forest', 'Shishkin', '', 'Picture', 'Аnimalism', 'Hermitage', 'Oil', 1889, 1889, 'https://wpsovet.ru/wp-content/uploads/c/6/c/c6cdad86498ee5eb17cc914c96711dc1.jpeg'),
+  createData(12, 'Mona Lisa', 'Leonardo da Vinci', '', 'Picture', 'Portret', 'Louvre', 'Oil', 1503, 1503, 'https://s.ecrater.com/stores/430136/5d624bd8d5f7a_430136b.jpg'),
+];
+
 function App() {
   const [displayEditor, setDisplay] = React.useState(true);
+  const [mainDisplay, setMainDisplay] = React.useState(true);
 
   function DisplayEditor(){
     if(displayEditor){
@@ -24,12 +45,26 @@ function App() {
     }
   }
 
-  const handleDisplayShow = () => {
-    setDisplay(true);
+  function MainDisplay(){
+    if(mainDisplay){
+      return(
+        <GridCardComp data = {rows}/>
+      );
+    }
+    else{
+      return(
+        <TableComp data = {rows}/>
+      );
+    }
   }
-  const handleDisplayHide = () => {
-    setDisplay(false);
+
+  const EditorDisplayChange = () => {
+    setDisplay(!displayEditor);
   }
+  const MainDisplayChange = () => {
+    setMainDisplay(!mainDisplay);
+  }
+
   return (
     <>
       <AppBarComp/>
@@ -41,13 +76,16 @@ function App() {
         <div className='rightSide'>
           <div className='modeButtons'>
             <Box mr={3}>
-              <Button variant='outlined' color='inherit' onClick={handleDisplayHide}>Analyze</Button>   
+              <Button variant='outlined' color='inherit' onClick={MainDisplayChange}>View as a table</Button>   
             </Box>
             <Box mr={3}>
-              <Button color='inherit' variant='outlined' align='right' onClick={handleDisplayShow}>Export</Button>
+              <Button variant='outlined' color='inherit'>Analyze</Button>   
+            </Box>
+            <Box mr={3}>
+              <Button color='inherit' variant='outlined' align='right' onClick={EditorDisplayChange}>Export</Button>
             </Box>
           </div>
-          <GridCardComp/>
+          <MainDisplay/>
         </div>
       </div>
       <div>

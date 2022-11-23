@@ -1,24 +1,31 @@
 import {Grid, Card, CardMedia, CardContent, Typography, Button, Container, CardActions} from '@mui/material';
+import {Component} from 'react';
 import '../App/App.css';
 
-function GridCardComp(){
-  const cards = [1,2,3,4,5,6,7,8,9,10,11,12]
+export default class GridCardComp extends Component{
+  constructor(props){
+    super(props)
+    this.state = {
+
+    }
+  }
+  render(){
     return (
         <div className='cardContainer'>
           <Grid container spacing={4}>
-            {cards.map((card)=>(
-              <Grid item key = {card} xs="16" sm="9" md="3">
+            {this.props.data.map((card)=>(
+              <Grid item key = {card.id} xs="16" sm="9" md="3">
                 <Card className='card'>
                   <CardMedia
                     className='cardMedia'
-                    image="https://source.unsplash.com/random"
+                    image= {card.image}
                   />
                   <CardContent className="cardContent">
                     <Typography variant='h5' gutterBottom>
-                      Название
+                      {card.name}
                     </Typography>
                     <Typography variant='h7' gutterBottom>
-                      Автор
+                      {card.author}
                     </Typography>
                   </CardContent>
                   <CardActions>
@@ -29,6 +36,5 @@ function GridCardComp(){
           </Grid>
         </div>  
     );
+  }
 }
-
-export default GridCardComp;
