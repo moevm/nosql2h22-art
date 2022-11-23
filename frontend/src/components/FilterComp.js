@@ -1,17 +1,17 @@
-import {Typography, Input, TextField, Container, MenuItem, Grid, Button} from "@mui/material";
+import {Typography, Input, TextField, Container, MenuItem, Grid, Button, Box, InputLabel} from "@mui/material";
 import React from "react";
 import '../App/App.css';
 
 const museums = [
     {
-      value: 'HERMITAGE',
-      label: 'Эрмитаж'
+        value: 'HERMITAGE',
+        label: 'Эрмитаж'
     },
     {
-      value: 'LOUVRE',
-      label: 'Лувр'
+        value: 'LOUVRE',
+        label: 'Лувр'
     }
-  ];
+];
 const genres = [
     {
         value: "LANDSCAPE",
@@ -33,7 +33,7 @@ const materials = [
     },
 ]
 
-function FilterComp(){
+function FilterComp() {
     const [museum, setMuseum] = React.useState('HERMITAGE');
     const [genre, setGenre] = React.useState('LANDSCAPE');
     const [material, setMaterial] = React.useState('OIL');
@@ -47,80 +47,95 @@ function FilterComp(){
     const materialChange = (event) => {
         setMaterial(event.target.value);
     };
-    return(
-        <div className="filterMenu">
-            <Typography>Filters</Typography>
-            <div>
-                <TextField id="outlined-basic" label="Название" variant="outlined" />
-            </div>
-            <div>
-                <TextField id="outlined-basic" label="Автор" variant="outlined" />
-            </div>
-            <div>
-                <TextField id="outlined-basic" label="Год начала" variant="outlined" />
-            </div>
-            <div>
-                <TextField id="outlined-basic" label="Год завершения" variant="outlined" />
-            </div>
-            <div>
-                <TextField 
-                    id="outlined-basic" 
-                    label="Музей" 
-                    variant="outlined" 
-                    select
-                    value={museum}
-                    onChange={museumChange}
-                >
-                {museums.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                </MenuItem>
-                 ))}
-                </TextField>
-            </div>
-            <div>
-                <TextField 
-                    id="outlined-basic" 
-                    label="Жанр" 
-                    variant="outlined" 
-                    select
-                    value={genre}
-                    onChange={genreChange}
-                >
-                {genres.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                </MenuItem>
-                 ))}
-                </TextField>
-            </div>
-            <div>
-                <TextField 
-                    id="outlined-basic" 
-                    label="Материал" 
-                    variant="outlined" 
-                    select
-                    value={material}
-                    onChange={materialChange}
-                >
-                {materials.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                </MenuItem>
-                 ))}
-                </TextField>
-            </div>
-            <div className='bottomGrid'>
-                <Grid container spacing={2}>
-                    <Grid item>
-                        <Button variant='contained' color='success'>Find</Button>
-                    </Grid>
-                    <Grid item>
-                        <Button variant='outlined' color='primary'>Clear</Button>
-                    </Grid>
+    return (
+        <Box className="filterMenu">
+            <Typography fontSize={20}>Filters</Typography>
+            <Grid container spacing={1} padding={1} alignItems={'center'}>
+                <Grid item xs={12}>
+                    <TextField size='small' fullWidth={true} label="Название" variant="outlined"/>
                 </Grid>
-            </div>
-        </div>
+                <Grid item xs={12}>
+                    <TextField size='small' fullWidth={true} label="Автор" variant="outlined"/>
+                </Grid>
+                <Grid item xs={12}>
+                    <TextField size='small' fullWidth={true} label="Год начала" variant="outlined"/>
+                </Grid>
+                <Grid item xs={12}>
+                    <TextField size='small' fullWidth={true} label="Год завершения" variant="outlined"/>
+                </Grid>
+
+                <Grid item xs={4}>
+                    <InputLabel>Музей</InputLabel>
+                </Grid>
+
+                <Grid item xs={8}>
+                    <TextField
+                        size='small'
+                        fullWidth={true}
+                        variant="outlined"
+                        select
+                        value={museum}
+                        onChange={museumChange}
+                    >
+                        {museums.map((option) => (
+                            <MenuItem key={option.value} value={option.value}>
+                                {option.label}
+                            </MenuItem>
+                        ))}
+                    </TextField>
+                </Grid>
+
+                <Grid item xs={4}>
+                    <InputLabel>Жанр</InputLabel>
+                </Grid>
+
+                <Grid item xs={8}>
+                    <TextField
+                        size='small'
+                        fullWidth={true}
+                        variant="outlined"
+                        select
+                        value={genre}
+                        onChange={genreChange}
+                    >
+                        {genres.map((option) => (
+                            <MenuItem key={option.value} value={option.value}>
+                                {option.label}
+                            </MenuItem>
+                        ))}
+                    </TextField>
+                </Grid>
+
+                <Grid item xs={4}>
+                    <InputLabel>Материал</InputLabel>
+                </Grid>
+
+                <Grid item xs={8}>
+                    <TextField
+                        size='small'
+                        fullWidth={true}
+                        variant="outlined"
+                        select
+                        value={material}
+                        onChange={materialChange}
+                    >
+                        {materials.map((option) => (
+                            <MenuItem key={option.value} value={option.value}>
+                                {option.label}
+                            </MenuItem>
+                        ))}
+                    </TextField>
+                </Grid>
+
+                <Grid item xs={6}>
+                    <Button variant='contained' color='success'>Find</Button>
+                </Grid>
+
+                <Grid item xs={6}>
+                    <Button variant='outlined' color='primary'>Clear</Button>
+                </Grid>
+            </Grid>
+        </Box>
     );
 }
 

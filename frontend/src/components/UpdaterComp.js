@@ -1,10 +1,10 @@
-import {Typography, TextField,  Grid, Button} from "@mui/material";
+import {Typography, TextField, Grid, Button} from "@mui/material";
 import React from "react";
 import DescriptionEditor from "./DescriptionEditor";
 import '../App/App.css';
 
 
-function UpdaterComp(){
+function UpdaterComp() {
     const [desc_editor, setDescEditor] = React.useState(false);
 
     const handleDescOpen = () => {
@@ -14,7 +14,7 @@ function UpdaterComp(){
         setDescEditor(false);
     }
 
-    return(
+    return (
         <div className="editorMenu">
             <Typography>Editor</Typography>
             <Button variant='outlined' color='primary'>Add picture</Button>
@@ -22,24 +22,24 @@ function UpdaterComp(){
                 <TextField id="outlined-basic" label="Name" variant="outlined"/>
             </div>
             <div>
-                <TextField id="outlined-basic" label="Author" variant="outlined" />
+                <TextField id="outlined-basic" label="Author" variant="outlined"/>
             </div>
             <div>
                 <Button variant='outlined' color='primary' onClick={handleDescOpen}>Descryption</Button>
-                <DescriptionEditor is_open = {desc_editor} func={handleDescClose}/>
+                <DescriptionEditor is_open={desc_editor} func={handleDescClose}/>
             </div>
             <div>
-                <TextField id="outlined-basic" label="Museum" variant="outlined" />
+                <TextField id="outlined-basic" label="Museum" variant="outlined"/>
             </div>
             <div>
-                <TextField id="outlined-basic" label="Start year" variant="outlined" />
-                <TextField id="outlined-basic" label="End year" variant="outlined" />
+                <TextField id="outlined-basic" label="Start year" variant="outlined"/>
+                <TextField id="outlined-basic" label="End year" variant="outlined"/>
             </div>
             <div>
-                <TextField id="outlined-basic" label="Genre" variant="outlined" />
+                <TextField id="outlined-basic" label="Genre" variant="outlined"/>
             </div>
             <div>
-                <TextField id="outlined-basic" label="Materials" variant="outlined" />
+                <TextField id="outlined-basic" label="Materials" variant="outlined"/>
             </div>
 
             <div className='bottomGrid'>

@@ -3,20 +3,17 @@ import React from 'react';
 import '../App/App.css';
 
 export default class PreviewComp extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props)
-        this.state = {
-            
-        }
+        this.state = {}
     }
-    render(){ 
+
+    render() {
         return (
             <Dialog open={this.props.is_open} onClose={this.props.func} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Description</DialogTitle>
                 <DialogContent>
-                    <DialogContentText></DialogContentText>
                     <div>
-                        <img src="https://source.unsplash.com/random"/>
+                        <img src="https://source.unsplash.com/random" style={{width: '400px', height: '400px'}}/>
                     </div>
                     <div>
                         <Typography>Morning in a pine forest</Typography>
