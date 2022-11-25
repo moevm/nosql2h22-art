@@ -1,8 +1,8 @@
-import React, {Component} from "react";
+import React, {PureComponent} from "react";
 import {Table, TableContainer, TableBody, TableCell, TableHead, TableRow, Paper} from "@mui/material";
 import '../App/App'
 
-export default class TableComp extends Component {
+export default class TableComp extends PureComponent {
     constructor(props) {
         super(props)
         this.state = {}

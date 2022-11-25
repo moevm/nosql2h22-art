@@ -1,9 +1,9 @@
-import {Grid, Card, CardMedia, CardContent, Typography, Button, Container, CardActions} from '@mui/material';
-import React, {Component} from 'react';
+import {Grid, Card, CardMedia, CardContent, Typography} from '@mui/material';
+import React, {PureComponent} from 'react';
 import '../App/App.css';
 import PreviewComp from "./PreviewComp";
 
-export default class GridCardComp extends Component {
+export default class GridCardComp extends PureComponent {
     constructor(props) {
         super(props)
         this.state = {

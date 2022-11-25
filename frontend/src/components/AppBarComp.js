@@ -5,13 +5,13 @@ import {
     Toolbar,
     Typography,
 } from '@mui/material'
-import {Component} from 'react';
+import {PureComponent} from 'react';
 import '../App/App.css';
 import {Box} from '@mui/system';
 import MenuIcon from '@mui/icons-material/Menu'
 
 
-export default class AppBarComp extends Component {
+export default class AppBarComp extends PureComponent {
     constructor(props) {
         super(props)
         this.state = {

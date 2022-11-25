@@ -1,4 +1,4 @@
-import React, {Component, useState, useEffect} from "react";
+import React, {useState} from "react";
 import {API_ADD_ART, API_SERVER} from "../constants";
 import Axios from "axios";
 

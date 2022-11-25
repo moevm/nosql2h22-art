@@ -1,8 +1,8 @@
-import {Dialog, DialogTitle, DialogContent, DialogContentText, Typography} from '@mui/material';
-import React from 'react';
+import {Dialog, DialogContent, Typography} from '@mui/material';
+import React, {PureComponent} from 'react';
 import '../App/App.css';
 
-export default class PreviewComp extends React.Component {
+export default class PreviewComp extends PureComponent {
     constructor(props) {
         super(props)
         this.state = {}

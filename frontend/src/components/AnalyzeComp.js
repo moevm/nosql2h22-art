@@ -1,5 +1,5 @@
 import '../App/App.css';
-import {Box, Button, Typography} from '@mui/material';
+import {Button, Typography} from '@mui/material';
 import FilterComp from './FilterComp';
 
 const fields = [
