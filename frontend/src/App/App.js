@@ -1,5 +1,5 @@
 import './App.css';
-import React from 'react';
+import React, {useEffect} from 'react';
 import AppBarComp from '../components/AppBarComp';
 import GridCardComp from '../components/GridCardComp'
 import EditorComp from '../components/EditorComp';
@@ -7,31 +7,19 @@ import UpdaterComp from '../components/UpdaterComp';
 import TableComp from '../components/TableComp';
 import {Box, Button} from '@mui/material';
 import FilterComp from '../components/FilterComp';
-import {API_SERVER} from "../constants";
+import {API_SERVER, API_GET_ARTS} from "../constants";
 import AddArtworkForm from "../components/AddArtworkForm";
-
-function createData(id, name, author, description, type, genre, museum, materials, start, end, image) {
-    return {id, name, author, description, type, genre, museum, materials, start, end, image};
-}
-
-const rows = [
-    createData(1, 'Morning in the Pine forest', 'Shishkin', '', 'Picture', 'Аnimalism', 'Hermitage', 'Oil', 1889, 1889, 'https://wpsovet.ru/wp-content/uploads/c/6/c/c6cdad86498ee5eb17cc914c96711dc1.jpeg'),
-    createData(2, 'Mona Lisa', 'Leonardo da Vinci', '', 'Picture', 'Portret', 'Louvre', 'Oil', 1503, 1503, 'https://s.ecrater.com/stores/430136/5d624bd8d5f7a_430136b.jpg'),
-    createData(3, 'Morning in the Pine forest', 'Shishkin', '', 'Picture', 'Аnimalism', 'Hermitage', 'Oil', 1889, 1889, 'https://wpsovet.ru/wp-content/uploads/c/6/c/c6cdad86498ee5eb17cc914c96711dc1.jpeg'),
-    createData(4, 'Mona Lisa', 'Leonardo da Vinci', '', 'Picture', 'Portret', 'Louvre', 'Oil', 1503, 1503, 'https://s.ecrater.com/stores/430136/5d624bd8d5f7a_430136b.jpg'),
-    createData(5, 'Morning in the Pine forest', 'Shishkin', '', 'Picture', 'Аnimalism', 'Hermitage', 'Oil', 1889, 1889, 'https://wpsovet.ru/wp-content/uploads/c/6/c/c6cdad86498ee5eb17cc914c96711dc1.jpeg'),
-    createData(6, 'Mona Lisa', 'Leonardo da Vinci', '', 'Picture', 'Portret', 'Louvre', 'Oil', 1503, 1503, 'https://s.ecrater.com/stores/430136/5d624bd8d5f7a_430136b.jpg'),
-    createData(7, 'Morning in the Pine forest', 'Shishkin', '', 'Picture', 'Аnimalism', 'Hermitage', 'Oil', 1889, 1889, 'https://wpsovet.ru/wp-content/uploads/c/6/c/c6cdad86498ee5eb17cc914c96711dc1.jpeg'),
-    createData(8, 'Mona Lisa', 'Leonardo da Vinci', '', 'Picture', 'Portret', 'Louvre', 'Oil', 1503, 1503, 'https://s.ecrater.com/stores/430136/5d624bd8d5f7a_430136b.jpg'),
-    createData(9, 'Morning in the Pine forest', 'Shishkin', '', 'Picture', 'Аnimalism', 'Hermitage', 'Oil', 1889, 1889, 'https://wpsovet.ru/wp-content/uploads/c/6/c/c6cdad86498ee5eb17cc914c96711dc1.jpeg'),
-    createData(10, 'Mona Lisa', 'Leonardo da Vinci', '', 'Picture', 'Portret', 'Louvre', 'Oil', 1503, 1503, 'https://s.ecrater.com/stores/430136/5d624bd8d5f7a_430136b.jpg'),
-    createData(11, 'Morning in the Pine forest', 'Shishkin', '', 'Picture', 'Аnimalism', 'Hermitage', 'Oil', 1889, 1889, 'https://wpsovet.ru/wp-content/uploads/c/6/c/c6cdad86498ee5eb17cc914c96711dc1.jpeg'),
-    createData(12, 'Mona Lisa', 'Leonardo da Vinci', '', 'Picture', 'Portret', 'Louvre', 'Oil', 1503, 1503, 'https://s.ecrater.com/stores/430136/5d624bd8d5f7a_430136b.jpg'),
-];
+import Axios from "axios";
+import {saveAs} from 'file-saver'
 
 function App() {
     const [displayEditor, setDisplay] = React.useState(true);
     const [mainDisplay, setMainDisplay] = React.useState(true);
+    const [data, setData] = React.useState([]);
+
+    useEffect(() => {
+        UpdateData()
+    }, [])
 
     function DisplayEditor() {
         if (displayEditor) {
@@ -47,17 +35,24 @@ function App() {
     function MainDisplay() {
         if (mainDisplay) {
             return (
-                <GridCardComp data={rows}/>
+                <GridCardComp data={data}/>
             );
         } else {
             return (
-                <TableComp data={rows}/>
+                <TableComp data={data}/>
             );
         }
     }
 
-    function onFileChange() {
-        return
+    function onExport() {
+        try {
+            Axios.get(API_GET_ARTS).then(r => {
+                let blob = new Blob([JSON.stringify(r.data)], {type: 'application/json'})
+                saveAs(blob, 'exported_data.json')
+            });
+        } catch (e) {
+            alert('Something unplanned!');
+        }
     }
 
     const EditorDisplayChange = () => {
@@ -67,9 +62,19 @@ function App() {
         setMainDisplay(!mainDisplay);
     }
 
+    const UpdateData = () => {
+        try {
+            Axios.get(API_GET_ARTS).then(r => {
+                setData(r.data);
+            });
+        } catch (e) {
+            alert('Something unplanned!');
+        }
+    }
+
     return (
         <div>
-            <AppBarComp changeView={EditorDisplayChange} editor={displayEditor}/>
+            <AppBarComp changeView={EditorDisplayChange} updateData={UpdateData} editor={displayEditor}/>
             <div className='mainContainer'>
                 <div className='leftSide'>
                     <FilterComp/>
@@ -86,19 +91,19 @@ function App() {
                         </Box>
                         <Box mr={3}>
                             <Button color='inherit' variant='outlined' align='right' component="label"
-                                    onClick={onFileChange}>Export</Button>
+                                    onClick={onExport}>Export</Button>
                         </Box>
                     </div>
                     <MainDisplay/>
                 </div>
             </div>
             {/*<div>*/}
-            {/*  It's me, React!*/}
-            {/*  <form method={'POST'} action={API_SERVER}>*/}
-            {/*      <input type="text" name="name"></input>*/}
-            {/*      <input type="submit" value="Set"></input>*/}
-            {/*  </form>*/}
-            {/*  <AddArtworkForm/>*/}
+            {/*    It's me, React!*/}
+            {/*    <form method={'POST'} action={API_SERVER}>*/}
+            {/*        <input type="text" name="name"></input>*/}
+            {/*        <input type="submit" value="Set"></input>*/}
+            {/*    </form>*/}
+            {/*    <AddArtworkForm/>*/}
             {/*</div>*/}
         </div>
     );

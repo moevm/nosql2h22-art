@@ -1,14 +1,14 @@
 CREATE TABLE IF NOT EXISTS ArtWorks (
-    artWorkId SERIAL PRIMARY KEY,
-    name_ varchar(200),
-    author_ varchar(200),
+    artworkid SERIAL PRIMARY KEY,
+    name varchar(200),
+    author varchar(200),
     description varchar(10000),
-    start_year_ DATE,
-    end_year_ DATE,
+    startYear DATE,
+    endYear DATE,
     materials varchar(200),
-    type_name varchar(100),
-    museum_name varchar(200),
-    museum_address varchar(200),
-    genre_name varchar(100),
+    type varchar(100),
+    museumName varchar(200),
+    museumAddress varchar(200),
+    genre varchar(100),
     URL varchar(10000)
 );
