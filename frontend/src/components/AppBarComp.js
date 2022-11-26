@@ -10,17 +10,19 @@ import '../App/App.css';
 import {Box} from '@mui/system';
 import MenuIcon from '@mui/icons-material/Menu'
 
+import {API_IMPORT} from "../constants";
+import Axios from "axios";
+
 
 export default class AppBarComp extends PureComponent {
     constructor(props) {
         super(props)
-        this.state = {
-
-        }
-        //this.handleLogInOpen = this.handleLogInOpen.bind(this)
+        this.onFileChange = this.onFileChange.bind(this)
+        this.state = {}
     }
 
     onFileChange = event => {
+        event.preventDefault();
         var reader = new FileReader();
         var json = null;
 
@@ -32,15 +34,14 @@ export default class AppBarComp extends PureComponent {
             return
         }
         reader.readAsText(event.target.files[0], "UTF-8");
-
         reader.onload = function (evt) {
-            console.log(evt.target.result)
             try {
                 json = JSON.parse(evt.target.result);
-                console.log(json)
+                Axios.post(API_IMPORT, json).then(() => {
+                    window.location.reload()
+                });
             } catch (e) {
                 alert('JSON is not valid');
-                return
             }
         }
     };
@@ -64,10 +65,10 @@ export default class AppBarComp extends PureComponent {
                         </Box>
                         <Box mr={3}>
                             {this.props.editor
-                                ?<Button color='secondary' variant='contained' align='right'
-                                    onClick={this.props.changeView}>Develop</Button>
-                                :<Button color='success' variant='contained' align='right'
-                                    onClick={this.props.changeView}>View</Button>
+                                ? <Button color='secondary' variant='contained' align='right'
+                                          onClick={this.props.changeView}>Develop</Button>
+                                : <Button color='success' variant='contained' align='right'
+                                          onClick={this.props.changeView}>View</Button>
                             }
                         </Box>
                     </Toolbar>
