@@ -77,7 +77,7 @@ function App() {
             <AppBarComp changeView={EditorDisplayChange} updateData={UpdateData} editor={displayEditor}/>
             <div className='mainContainer'>
                 <div className='leftSide'>
-                    <FilterComp/>
+                    <FilterComp setData={setData} />
                     <DisplayEditor/>
                 </div>
                 <div className='rightSide'>

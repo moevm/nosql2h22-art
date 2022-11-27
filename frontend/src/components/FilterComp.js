@@ -1,42 +1,79 @@
 import {Typography, TextField, MenuItem, Grid, Button, Box, InputLabel} from "@mui/material";
 import React from "react";
+import Axios from "axios";
 import '../App/App.css';
 
 const museums = [
     {
-        value: 'HERMITAGE',
+        value: 'Эрмитаж',
         label: 'Эрмитаж'
     },
     {
-        value: 'LOUVRE',
+        value: 'Лувр',
         label: 'Лувр'
     }
 ];
 const genres = [
     {
-        value: "LANDSCAPE",
+        value: "Пейзаж",
         label: "Пейзаж"
     },
     {
-        value: "PORTRET",
+        value: "Портрет",
         label: "Портрет"
     },
 ]
 const materials = [
     {
-        value: "OIL",
+        value: "Масло",
         label: "Масло"
     },
     {
-        value: "PAINTS",
+        value: "Краски",
         label: "Краски"
     },
 ]
 
-function FilterComp() {
-    const [museum, setMuseum] = React.useState('HERMITAGE');
-    const [genre, setGenre] = React.useState('LANDSCAPE');
-    const [material, setMaterial] = React.useState('OIL');
+function FilterComp({ setData }) {
+    const url = "http://localhost:5000/get_arts_by_filter";
+
+    const [museum, setMuseum] = React.useState('Эрмитаж');
+    const [genre, setGenre] = React.useState('Пейзаж');
+    const [material, setMaterial] = React.useState('Масло');
+
+    const [title, setTitle] = React.useState('');
+    const [author, setAuthor] = React.useState('');
+    const [startYear, setStartYear] = React.useState('');
+    const [endYear, setEndYear] = React.useState('');
+
+    const handleChangeTitle = (event) => setTitle(event.target.value);
+    const handleChangeAuthor = (event) => setAuthor(event.target.value);
+    const handleChangeStartYear = (event) => setStartYear(event.target.value);
+    const handleChangeEndYear = (event) => setEndYear(event.target.value);
+
+    const findByFilter = async () => {
+        console.log('title', title);
+        console.log('author', author);
+        console.log('startYear', startYear);
+        console.log('endYear', endYear);
+        console.log('material', material);
+        console.log('genre', genre);
+        console.log('museum', museum);
+
+      const response = await Axios.post(url, {
+        title,
+        author,
+        startYear,
+        endYear,
+        museum,
+        genre,
+        material,
+      })
+
+      // TODO: вызвать UpdateDate(response.data)
+        console.log('response.data', response.data);
+        setData(response.data)
+    };
 
     const museumChange = (event) => {
         setMuseum(event.target.value);
@@ -52,16 +89,16 @@ function FilterComp() {
             <Typography fontSize={20}>Filters</Typography>
             <Grid container spacing={1} padding={1} alignItems={'center'}>
                 <Grid item xs={12}>
-                    <TextField size='small' fullWidth={true} label="Название" variant="outlined"/>
+                    <TextField value={title} onChange={handleChangeTitle} size='small' fullWidth={true} label="Название" variant="outlined"/>
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField size='small' fullWidth={true} label="Автор" variant="outlined"/>
+                    <TextField value={author} onChange={handleChangeAuthor} size='small' fullWidth={true} label="Автор" variant="outlined"/>
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField size='small' fullWidth={true} label="Год начала" variant="outlined"/>
+                    <TextField value={startYear} onChange={handleChangeStartYear} size='small' fullWidth={true} label="Год начала" variant="outlined"/>
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField size='small' fullWidth={true} label="Год завершения" variant="outlined"/>
+                    <TextField value={endYear} onChange={handleChangeEndYear} size='small' fullWidth={true} label="Год завершения" variant="outlined"/>
                 </Grid>
 
                 <Grid item xs={4}>
@@ -128,7 +165,7 @@ function FilterComp() {
                 </Grid>
 
                 <Grid item xs={6}>
-                    <Button variant='contained' color='success'>Find</Button>
+                    <Button onClick={findByFilter} variant='contained' color='success'>Find</Button>
                 </Grid>
 
                 <Grid item xs={6}>

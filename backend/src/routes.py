@@ -84,3 +84,104 @@ def get_arts():
     for i in res:
         json.append(dict(i))
     return json
+
+def get_arts_by_filter():
+    requestJson = request.get_json()
+
+    titleFilter = requestJson['title']
+    authorFilter = requestJson['author']
+    startYearFilter = requestJson['startYear']
+    endYearFilter = requestJson['endYear']
+    museumFilter = requestJson['museum']
+    genreFilter = requestJson['genre']
+    materialFilter = requestJson['material']
+    res = []
+
+    if ((startYearFilter != '') & (endYearFilter != '')):
+        res = db.execute(
+            """
+                SELECT * FROM ArtWorks
+                WHERE
+                    name_ LIKE %s
+                    AND author_ LIKE %s
+                    AND start_year_ > %s
+                    AND end_year_ < %s
+                    AND museum_name = %s
+                    AND genre_name = %s
+                    AND materials = %s
+            """,
+            (
+                '%' + titleFilter + '%',
+                '%' + authorFilter + '%',
+                startYearFilter + '-01-01',
+                endYearFilter + '-12-31',
+                museumFilter,
+                genreFilter,
+                materialFilter
+            )
+        )
+    elif ((startYearFilter == '') & (endYearFilter != '')):
+        res = db.execute(
+            """
+                SELECT * FROM ArtWorks
+                WHERE
+                    name_ LIKE %s
+                    AND author_ LIKE %s
+                    AND end_year_ < %s
+                    AND museum_name_ = %s
+                    AND genre_name = %s
+                    AND materials = %s
+            """,
+            (
+                '%' + titleFilter + '%',
+                '%' + authorFilter + '%',
+                endYearFilter + '-12-31',
+                museumFilter,
+                genreFilter,
+                materialFilter
+            )
+        )
+    elif ((startYearFilter != '') & (endYearFilter == '')):
+        res = db.execute(
+            """
+                SELECT * FROM ArtWorks
+                WHERE
+                    name_ LIKE %s
+                    AND author_ LIKE %s
+                    AND start_year_ > %s
+                    AND museum_name = %s
+                    AND genre_name = %s
+                    AND materials = %s
+            """,
+            (
+                '%' + titleFilter + '%',
+                '%' + authorFilter + '%',
+                startYearFilter + '-01-01',
+                museumFilter,
+                genreFilter,
+                materialFilter
+            )
+        )
+    elif ((startYearFilter == '') & (endYearFilter == '')):
+        res = db.execute(
+            """
+                SELECT * FROM ArtWorks
+                WHERE
+                    name_ LIKE %s
+                    AND author_ LIKE %s
+                    AND museum_name = %s
+                    AND genre_name = %s
+                    AND materials = %s
+            """,
+            (
+                '%' + titleFilter + '%',
+                '%' + authorFilter + '%',
+                museumFilter,
+                genreFilter,
+                materialFilter
+            )
+        )
+    json = []
+    for i in res:
+        json.append(dict(i))
+    return json
