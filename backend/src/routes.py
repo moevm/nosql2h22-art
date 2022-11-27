@@ -16,7 +16,7 @@ db = create_engine(db_string)
 cache = MemcachedCache(['memcached:11211'])
 
 DELETE_ALL_NOTES = """
-DELETE FROM ArtWorks
+DELETE FROM ArtWorks *;
 """
 
 ADD_PICTURE = """
@@ -30,6 +30,8 @@ ADD_PICTURE = """
             %s, %s, %s)
     RETURNING artworkid;
     """
+
+
 
 
 def clear_tmp():
@@ -57,10 +59,13 @@ def add_art():
     key = str(key.all()[0][0])
     cache.set(key, data)
 
+    print('added')
+
     return data
 
 
 def reimport_arts():
+    print('reimport_arts')
     db.execute(DELETE_ALL_NOTES)
     cache.clear()
     json = request.get_json()
