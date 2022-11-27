@@ -35,7 +35,8 @@ const materials = [
 ]
 
 function FilterComp({ setData }) {
-    const url = "http://localhost:5000/get_arts_by_filter";
+    const get_arts_url = "http://localhost:5000/get_arts_by_filter";
+    const materials_url = "http://localhost:5000/get_materials";
 
     const [museum, setMuseum] = React.useState('Эрмитаж');
     const [genre, setGenre] = React.useState('Пейзаж');
@@ -60,7 +61,7 @@ function FilterComp({ setData }) {
         console.log('genre', genre);
         console.log('museum', museum);
 
-      const response = await Axios.post(url, {
+      const response = await Axios.post(get_arts_url, {
         title,
         author,
         startYear,
@@ -70,9 +71,15 @@ function FilterComp({ setData }) {
         material,
       })
 
-      // TODO: вызвать UpdateDate(response.data)
+
         console.log('response.data', response.data);
         setData(response.data)
+    };
+
+    const getMaterials = async () => {
+       
+        const response = await Axios.get(materials_url)
+        console.log('materials', response.data);
     };
 
     const museumChange = (event) => {
@@ -169,7 +176,7 @@ function FilterComp({ setData }) {
                 </Grid>
 
                 <Grid item xs={6}>
-                    <Button variant='outlined' color='primary'>Clear</Button>
+                    <Button onClick={getMaterials} variant='outlined' color='primary'>Clear</Button>
                 </Grid>
             </Grid>
         </Box>
