@@ -13,8 +13,8 @@ function EditorComp() {
         name: '',
         author: '',
         description: '',
-        startYear: '',
-        endYear: '',
+        startYear: 0,
+        endYear: 0,
         materials: '',
         type: '',
         museumName: '',
@@ -33,7 +33,6 @@ function EditorComp() {
             data.description = descriptionData;
 
         setDescEditor(false);
-        // console.log(data);
     }
 
     const handlePreviewOpen = () => {
@@ -81,11 +80,23 @@ function EditorComp() {
         }
     }
 
+    const isValidUrl = urlString=> {
+        var urlPattern = new RegExp('^(https?:\\/\\/)?'+ // validate protocol
+        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // validate domain name
+        '((\\d{1,3}\\.){3}\\d{1,3}))'+ // validate OR ip (v4) address
+        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // validate port and path
+        '(\\?[;&a-z\\d%_.~+=-]*)?'+ // validate query string
+        '(\\#[-a-z\\d_]*)?$','i'); // validate fragment locator
+        return !!urlPattern.test(urlString);
+    }
+
     function valid(){
         return (data.name != '') && (data.author != '') && (data.type != '') &&
-            (data.description != '') && (data.startYear != '') && (data.endYear != '') &&
-            (data.materials != '') && (data.museumName != '') && (data.museumAddress != '') &&
-            (data.genre != '');
+            (data.description != '')  && (data.materials != '') &&
+            (data.museumName != '') && (data.museumAddress != '') &&
+            (data.genre != '') && (data.URL != '') && ((data.startYear) <= (data.endYear)) &&
+            (data.startYear > 0 && data.startYear < 3000 && data.endYear > 0 && data.endYear < 3000) &&
+            (isValidUrl(data.URL));
     }
 
     return (
@@ -118,11 +129,11 @@ function EditorComp() {
                 </Grid>
                 <Grid item xs={6}>
                     Start year
-                    <TextField onChange={(e) => {data.startYear = e.target.value}} type="date"  size='small' fullWidth={true}  variant="outlined" required/>
+                    <TextField onChange={(e) => {data.startYear = +(e.target.value)}} type="number"  size='small' fullWidth={true}  variant="outlined" required/>
                 </Grid>
                 <Grid item xs={6}>
                     End year
-                    <TextField onChange={(e) => {data.endYear = e.target.value}} type="date"  size='small' fullWidth={true}  variant="outlined" required/>
+                    <TextField onChange={(e) => {data.endYear = +(e.target.value)}} type="number"  size='small' fullWidth={true}  variant="outlined" required/>
                 </Grid>
                 <Grid item xs={12}>
                     <TextField  onChange={(e) => {data.genre = e.target.value}} size='small' fullWidth={true} label="Genre" variant="outlined" required/>

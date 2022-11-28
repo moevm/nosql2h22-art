@@ -6,40 +6,40 @@ import EditorComp from "./EditorComp";
 
 export default class PreviewComp extends PureComponent {
     constructor(props) {
-        super(props)
-
+        super(props);
     }
 
     render() {
-        let data = this.props.dataToPass;
-        // console.log(data.URL);
-        return (
-            <Dialog open={this.props.is_open} onClose={this.props.func} aria-labelledby="form-dialog-title">
-                <DialogContent>
-                    <div>
-                        <img src="" style={{width: '400px', height: '400px'}}/>
-                    </div>
-                    <div>
-                        <Typography>{}</Typography>
-                        <Typography>{}</Typography>
-                    </div>
-                    <div>
-                        <p>Genre:</p>
-                        <Typography>{}</Typography>
-                    </div>
-                    <div>
-                        <p>Materials:</p>
-                        <Typography></Typography>
-                    </div>
-                    <div>
-                        <p>Museum:</p>
-                        <Typography></Typography>
-                    </div>
-                    <div>
-                        <Typography></Typography>
-                    </div>
-                </DialogContent>
-            </Dialog>
-        );
+        if(this.props.dataToPass !== undefined) {
+            return (
+                <Dialog open={this.props.is_open} onClose={this.props.func} aria-labelledby="form-dialog-title">
+                    <DialogContent>
+                        <div>
+                            <img src={this.props.dataToPass.URL} style={{width: '400px', height: '400px'}}/>
+                        </div>
+                        <div>
+                            <Typography> {this.props.dataToPass.name}</Typography>
+                            <Typography>{this.props.dataToPass.author}</Typography>
+                        </div>
+                        <div>
+                            <p>Genre:</p>
+                            <Typography> {this.props.dataToPass.genre}</Typography>
+                        </div>
+                        <div>
+                            <p>Materials:</p>
+                            <Typography> {this.props.dataToPass.materials}</Typography>
+                        </div>
+                        <div>
+                            <p>Museum:</p>
+                            <Typography> {this.props.dataToPass.museumName}</Typography>
+                        </div>
+                        <div>
+                            <p>Type:</p>
+                            <Typography> {this.props.dataToPass.type}</Typography>
+                        </div>
+                    </DialogContent>
+                </Dialog>
+            );
+        }
     }
 }
