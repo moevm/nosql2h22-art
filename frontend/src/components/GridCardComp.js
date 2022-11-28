@@ -3,6 +3,10 @@ import React, {PureComponent} from 'react';
 import '../App/App.css';
 import PreviewComp from "./PreviewComp";
 
+function itemInRow(num_items){
+    return((num_items % 3) > (num_items % 4) ? 3 : 4);
+}
+
 export default class GridCardComp extends PureComponent {
     constructor(props) {
         super(props)
@@ -29,9 +33,9 @@ export default class GridCardComp extends PureComponent {
         return (
             <div>
                 <PreviewComp is_open={this.state.preview_open} func={this.handlePreviewClose}/>
-                <Grid style={{height: '90vh'}} container spacing={4} padding={2}>
+                <Grid style={{height: '90vh', overflowY: 'scroll'}} container spacing={4} padding={2}>
                     {this.props.data.map((card) => (
-                        <Grid item key={card.id} xs="3">
+                        <Grid item key={card.id} xs= {itemInRow(this.props.data.length)}>
                             <Card>
                                 <CardMedia
                                     className='cardMedia'
