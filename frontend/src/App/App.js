@@ -7,18 +7,16 @@ import UpdaterComp from '../components/UpdaterComp';
 import TableComp from '../components/TableComp';
 import { Box, Button } from '@mui/material';
 import FilterComp from '../components/FilterComp';
-import { API_SERVER, API_GET_ARTS } from "../constants";
+import {API_GET_ARTS, API_GET_MATERIALS, API_GET_GENRES, API_GET_MUSEUMS} from "../constants";
 import AddArtworkForm from "../components/AddArtworkForm";
 import Axios from "axios";
 import { saveAs } from 'file-saver'
 
 function App() {
-    const getMaterialsUrl = "http://localhost:5000/get_materials";
-    const getGenresUrl = "http://localhost:5000/get_genres";
-    const getMuseumsUrl = "http://localhost:5000/get_museums";
 
     const [displayEditor, setDisplay] = React.useState(true);
     const [mainDisplay, setMainDisplay] = React.useState(true);
+    const [page, setPage] = React.useState(1);
 
     const [data, setData] = React.useState([]);
     const [museums, setMuseums] = React.useState([]);
@@ -45,8 +43,9 @@ function App() {
 
     function MainDisplay() {
         if (mainDisplay) {
+            console.log(data.slice((page-1)*12, (page)*12))
             return (
-                <GridCardComp data={data} />
+                <GridCardComp data={data.slice((page-1)*12, (page)*12)} total={data.length} setPage={setPage} page={page}/>
             );
         } else {
             return (
@@ -84,19 +83,19 @@ function App() {
     }
 
     const getMaterials = async () => {
-        const response = await Axios.get(getMaterialsUrl)
+        const response = await Axios.get(API_GET_MATERIALS)
         console.log('materials', response.data);
         setMaterials(response.data.map((value, index) => ({ value: `${index}`, label: value })));
     };
 
     const getGenres = async () => {
-        const response = await Axios.get(getGenresUrl)
+        const response = await Axios.get(API_GET_GENRES)
         console.log('genres', response.data);
         setGenres(response.data.map((value, index) => ({ value: `${index}`, label: value })));
     };
 
     const getMuseums = async () => {
-        const response = await Axios.get(getMuseumsUrl)
+        const response = await Axios.get(API_GET_MUSEUMS)
         console.log('museums', response.data);
         setMuseums(response.data.map((value, index) => ({ value: `${index}`, label: value })));
     };

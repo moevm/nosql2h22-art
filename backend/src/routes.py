@@ -58,6 +58,7 @@ def clear_tmp():
     cache.clear()
     return "It's me, Flask"
 
+
 def get_materials():
     res = db.execute("""SELECT DISTINCT(materials) FROM ArtWorks""")
     materials_list = []
@@ -65,12 +66,14 @@ def get_materials():
         materials_list.append(dict(i)['materials'])
     return materials_list
 
+
 def get_genres():
     res = db.execute("""SELECT DISTINCT(genre) FROM ArtWorks""")
     genres_list = []
     for i in res:
         genres_list.append(dict(i)['genre'])
     return genres_list
+
 
 def get_museums():
     res = db.execute("""SELECT DISTINCT(museum_name) FROM ArtWorks""")
@@ -130,6 +133,7 @@ def get_arts():
         json.append(dict(i))
     return json
 
+
 def get_arts_by_filter():
     requestJson = request.get_json()
 
@@ -143,16 +147,11 @@ def get_arts_by_filter():
     res = []
 
     titleFilter = '%' + titleFilter + '%'
- 
+
     authorFilter = '%' + authorFilter + '%'
 
-    if ((startYearFilter == '') & (endYearFilter != '')):
-        startYearFilter = '0001'
-    elif ((startYearFilter != '') & (endYearFilter == '')):
-        endYearFilter = '9999'
-    elif ((startYearFilter == '') & (endYearFilter == '')):
-        startYearFilter = '0001'
-        endYearFilter = '9999'
+    startYearFilter = '0001' if startYearFilter == '' else startYearFilter
+    endYearFilter = '9999' if endYearFilter == '' else endYearFilter
 
     res = db.execute(
 
@@ -176,14 +175,15 @@ def get_arts_by_filter():
             genreFilter,
             materialFilter
         )
-        )
-    
+    )
+
     json = []
     for i in res:
         json.append(dict(i))
     return json
 
-def recreate_table(): # it's not used but it useful when you need to change table configuration (e.g. fields)
+
+def recreate_table():  # it's not used but it useful when you need to change table configuration (e.g. fields)
     db.execute(DROP_TABLE)
     db.execute(CREATE_TABLE)
     cache.clear()
