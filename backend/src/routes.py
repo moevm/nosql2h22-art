@@ -110,7 +110,7 @@ def get_arts():
     return json
 
 
-def recreate_table():
+def recreate_table(): # it's not used but it useful when you need to change table configuration (e.g. fields)
     db.execute(DROP_TABLE)
     db.execute(CREATE_TABLE)
     cache.clear()
