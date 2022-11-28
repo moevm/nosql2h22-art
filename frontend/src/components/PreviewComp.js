@@ -1,27 +1,31 @@
 import {Dialog, DialogContent, Typography} from '@mui/material';
 import React, {PureComponent} from 'react';
 import '../App/App.css';
+import EditorComp from "./EditorComp";
+
 
 export default class PreviewComp extends PureComponent {
     constructor(props) {
         super(props)
-        this.state = {}
+
     }
 
     render() {
+        let data = this.props.dataToPass;
+        // console.log(data.URL);
         return (
             <Dialog open={this.props.is_open} onClose={this.props.func} aria-labelledby="form-dialog-title">
                 <DialogContent>
                     <div>
-                        <img src="https://source.unsplash.com/random" style={{width: '400px', height: '400px'}}/>
+                        <img src="" style={{width: '400px', height: '400px'}}/>
                     </div>
                     <div>
-                        <Typography>Morning in a pine forest</Typography>
-                        <Typography>Shishkin Ivan Ivanovich</Typography>
+                        <Typography>{}</Typography>
+                        <Typography>{}</Typography>
                     </div>
                     <div>
                         <p>Genre:</p>
-                        <Typography></Typography>
+                        <Typography>{}</Typography>
                     </div>
                     <div>
                         <p>Materials:</p>

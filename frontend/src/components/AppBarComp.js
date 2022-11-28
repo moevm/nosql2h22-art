@@ -37,6 +37,9 @@ export default class AppBarComp extends PureComponent {
         reader.onload = function (evt) {
             try {
                 json = JSON.parse(evt.target.result);
+
+                console.log(evt.target.result);
+
                 Axios.post(API_IMPORT, json).then(() => {
                     window.location.reload()
                 });
