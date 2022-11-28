@@ -1,24 +1,22 @@
 import './App.css';
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import AppBarComp from '../components/AppBarComp';
 import GridCardComp from '../components/GridCardComp'
 import EditorComp from '../components/EditorComp';
 import UpdaterComp from '../components/UpdaterComp';
 import TableComp from '../components/TableComp';
-import { Box, Button } from '@mui/material';
+import {Box, Button} from '@mui/material';
 import FilterComp from '../components/FilterComp';
-import { API_SERVER, API_GET_ARTS } from "../constants";
+import {API_GET_ARTS, API_GET_MATERIALS, API_GET_GENRES, API_GET_MUSEUMS} from "../constants";
 import AddArtworkForm from "../components/AddArtworkForm";
 import Axios from "axios";
-import { saveAs } from 'file-saver'
+import {saveAs} from 'file-saver'
 
 function App() {
-    const getMaterialsUrl = "http://localhost:5000/get_materials";
-    const getGenresUrl = "http://localhost:5000/get_genres";
-    const getMuseumsUrl = "http://localhost:5000/get_museums";
 
     const [displayEditor, setDisplay] = React.useState(true);
     const [mainDisplay, setMainDisplay] = React.useState(true);
+    const [page, setPage] = React.useState(1);
 
     const [data, setData] = React.useState([]);
     const [museums, setMuseums] = React.useState([]);
@@ -35,7 +33,7 @@ function App() {
     function DisplayEditor() {
         if (displayEditor) {
             return (
-                <EditorComp />
+                <EditorComp/>
             );
         } else {
             return (<></>
@@ -45,12 +43,14 @@ function App() {
 
     function MainDisplay() {
         if (mainDisplay) {
+            console.log(data.slice((page - 1) * 12, (page) * 12))
             return (
-                <GridCardComp data={data} />
+                <GridCardComp data={data.slice((page - 1) * 12, (page) * 12)} total={data.length} setPage={setPage}
+                              page={page}/>
             );
         } else {
             return (
-                <TableComp data={data} />
+                <TableComp data={data}/>
             );
         }
     }
@@ -58,7 +58,7 @@ function App() {
     function onExport() {
         try {
             Axios.get(API_GET_ARTS).then(r => {
-                let blob = new Blob([JSON.stringify(r.data)], { type: 'application/json' })
+                let blob = new Blob([JSON.stringify(r.data)], {type: 'application/json'})
                 saveAs(blob, 'exported_data.json')
             });
         } catch (e) {
@@ -84,39 +84,41 @@ function App() {
     }
 
     const getMaterials = async () => {
-        const response = await Axios.get(getMaterialsUrl)
+        const response = await Axios.get(API_GET_MATERIALS)
         console.log('materials', response.data);
-        setMaterials(response.data.map((value, index) => ({ value: `${index}`, label: value })));
+        setMaterials(response.data.map((value, index) => ({value: `${index}`, label: value})));
     };
 
     const getGenres = async () => {
-        const response = await Axios.get(getGenresUrl)
+        const response = await Axios.get(API_GET_GENRES)
         console.log('genres', response.data);
-        setGenres(response.data.map((value, index) => ({ value: `${index}`, label: value })));
+        setGenres(response.data.map((value, index) => ({value: `${index}`, label: value})));
     };
 
     const getMuseums = async () => {
-        const response = await Axios.get(getMuseumsUrl)
+        const response = await Axios.get(API_GET_MUSEUMS)
         console.log('museums', response.data);
-        setMuseums(response.data.map((value, index) => ({ value: `${index}`, label: value })));
+        setMuseums(response.data.map((value, index) => ({value: `${index}`, label: value})));
     };
 
     return (
         <div>
-            <AppBarComp changeView={EditorDisplayChange} updateData={UpdateData} editor={displayEditor} />
+            <AppBarComp changeView={EditorDisplayChange} updateData={UpdateData} editor={displayEditor}/>
             <div className='mainContainer'>
                 <div className='leftSide'>
-                    <FilterComp setData={setData} museums={museums} genres={genres} materials={materials} getAllData={UpdateData} />
-                    <DisplayEditor updateMaterialsSelect={getMaterials} updateGenresSelect={getGenres} updateMuseumsSelect={getMuseums}/>
+                    <FilterComp setData={setData} museums={museums} genres={genres} materials={materials}
+                                getAllData={UpdateData}/>
+                    <DisplayEditor updateMaterialsSelect={getMaterials} updateGenresSelect={getGenres}
+                                   updateMuseumsSelect={getMuseums}/>
                 </div>
                 <div className='rightSide'>
                     <div className='modeButtons'>
                         <Box mr={3}>
                             {mainDisplay
                                 ? <Button variant='outlined' color='inherit' onClick={MainDisplayChange}>View as a
-                                      table</Button>
+                                    table</Button>
                                 : <Button variant='outlined' color='inherit' onClick={MainDisplayChange}>View as a
-                                      list</Button>
+                                    list</Button>
                             }
                         </Box>
                         <Box mr={3}>
@@ -124,10 +126,10 @@ function App() {
                         </Box>
                         <Box mr={3}>
                             <Button color='inherit' variant='outlined' align='right' component="label"
-                                onClick={onExport}>Export</Button>
+                                    onClick={onExport}>Export</Button>
                         </Box>
                     </div>
-                    <MainDisplay />
+                    <MainDisplay/>
                 </div>
             </div>
             {/*<div>*/}

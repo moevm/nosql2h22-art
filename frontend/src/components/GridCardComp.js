@@ -1,11 +1,7 @@
-import {Grid, Card, CardMedia, CardContent, Typography} from '@mui/material';
+import {Grid, Card, CardMedia, CardContent, Typography, Box} from '@mui/material';
 import React, {PureComponent} from 'react';
 import '../App/App.css';
 import PreviewComp from "./PreviewComp";
-
-function itemInRow(num_items){
-    return((num_items % 3) > (num_items % 4) ? 3 : 4);
-}
 
 export default class GridCardComp extends PureComponent {
     constructor(props) {
@@ -31,13 +27,20 @@ export default class GridCardComp extends PureComponent {
         console.log(this.state.preview_open)
     }
 
+    set_page = (e) => {
+        e.preventDefault();
+        console.log(e.target.id)
+        this.props.setPage(e.target.id)
+    }
+
     render() {
         return (
             <div>
-                <PreviewComp dataToPass={this.props.data[this.state.current_index]} is_open={this.state.preview_open} func={this.handlePreviewClose}/>
-                <Grid style={{height: '90vh', overflowY: 'scroll'}} container spacing={4} padding={2}>
+                <PreviewComp dataToPass={this.props.data[this.state.current_index]} is_open={this.state.preview_open}
+                             func={this.handlePreviewClose}/>
+                <Grid style={{height: '80vh'}} container spacing={4} padding={2}>
                     {this.props.data.map((card, index) => (
-                        <Grid item key={card.id} xs= {itemInRow(this.props.data.length)}>
+                        <Grid item key={card.id} xs="3">
                             <Card>
                                 <CardMedia
                                     className='cardMedia'
@@ -55,6 +58,27 @@ export default class GridCardComp extends PureComponent {
                             </Card>
                         </Grid>
                     ))}
+                    <Grid xs="12" display={"flex"} justifyContent={"center"}>
+                        {this.props.page - 5 > 1
+                            ? <p>...</p>
+                            : <p/>
+                        }
+                        {((rows, i, len) => {
+                            while (++i <= len) {
+                                if (i >= 1 && i <= this.props.total / 12 + 1 && (i - 1) !== this.props.total / 12)
+                                    if (i != this.props.page) {
+                                        rows.push(<a id={i} onClick={this.set_page} href="">{i}</a>)
+                                    } else {
+                                        rows.push(<a>{i}</a>)
+                                    }
+                            }
+                            return rows;
+                        })([], this.props.page - 5, this.props.page + 5)}
+                        {this.props.page + 5 < this.props.total / 12
+                            ? <p>...</p>
+                            : <p/>
+                        }
+                    </Grid>
                 </Grid>
             </div>
         );

@@ -1,10 +1,10 @@
-import { Typography, TextField, MenuItem, Grid, Button, Box, InputLabel } from "@mui/material";
+import {Typography, TextField, MenuItem, Grid, Button, Box, InputLabel} from "@mui/material";
 import React from "react";
 import Axios from "axios";
 import '../App/App.css';
+import {API_GET_ARTS_BY_FILTER} from "../constants";
 
-function FilterComp({ setData, museums, genres, materials, getAllData }) {
-    const get_arts_url = "http://localhost:5000/get_arts_by_filter";
+function FilterComp({setData, museums, genres, materials, getAllData}) {
 
     const [museum_name, setMuseum] = React.useState('0');
     const [genre, setGenre] = React.useState('0');
@@ -21,15 +21,7 @@ function FilterComp({ setData, museums, genres, materials, getAllData }) {
     const handleChangeEndYear = (event) => setEndYear(event.target.value);
 
     const findByFilter = async () => {
-        console.log('title', title);
-        console.log('author', author);
-        console.log('start_year', start_year);
-        console.log('end_year', end_year);
-        console.log('material', material);
-        console.log('genre', genre);
-        console.log('museum_name', museum_name);
-
-        const response = await Axios.post(get_arts_url, {
+        const response = await Axios.post(API_GET_ARTS_BY_FILTER, {
             title,
             author,
             start_year,
@@ -68,16 +60,20 @@ function FilterComp({ setData, museums, genres, materials, getAllData }) {
             <Typography fontSize={20}>Filters</Typography>
             <Grid container spacing={1} padding={1} alignItems={'center'}>
                 <Grid item xs={12}>
-                    <TextField value={title} onChange={handleChangeTitle} size='small' fullWidth={true} label="Название" variant="outlined" />
+                    <TextField value={title} onChange={handleChangeTitle} size='small' fullWidth={true} label="Название"
+                               variant="outlined"/>
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField value={author} onChange={handleChangeAuthor} size='small' fullWidth={true} label="Автор" variant="outlined" />
+                    <TextField value={author} onChange={handleChangeAuthor} size='small' fullWidth={true} label="Автор"
+                               variant="outlined"/>
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField value={start_year} onChange={handleChangeStartYear} size='small' fullWidth={true} label="Год начала" variant="outlined" />
+                    <TextField value={start_year} onChange={handleChangeStartYear} size='small' fullWidth={true}
+                               label="Год начала" variant="outlined"/>
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField value={end_year} onChange={handleChangeEndYear} size='small' fullWidth={true} label="Год завершения" variant="outlined" />
+                    <TextField value={end_year} onChange={handleChangeEndYear} size='small' fullWidth={true}
+                               label="Год завершения" variant="outlined"/>
                 </Grid>
 
                 <Grid item xs={4}>
