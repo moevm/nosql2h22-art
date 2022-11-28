@@ -38,14 +38,25 @@ def clear_tmp():
     return "It's me, Flask"
 
 def get_materials():
-    res = db.execute("""SELECT DISTINCT (materials) * FROM ArtWorks""")
-    json = []
+    res = db.execute("""SELECT DISTINCT(materials) FROM ArtWorks""")
     materials_list = []
     for i in res:
-        json.append(dict(i))
-    for i in json:
-        materials_list[i] = json[i]['materials']
+        materials_list.append(dict(i)['materials'])
     return materials_list
+
+def get_genres():
+    res = db.execute("""SELECT DISTINCT(genre) FROM ArtWorks""")
+    genres_list = []
+    for i in res:
+        genres_list.append(dict(i)['genre'])
+    return genres_list
+
+def get_museums():
+    res = db.execute("""SELECT DISTINCT(museumname) FROM ArtWorks""")
+    museums_list = []
+    for i in res:
+        museums_list.append(dict(i)['museumname'])
+    return museums_list
 
 
 def add_art():

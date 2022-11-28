@@ -1,46 +1,14 @@
-import {Typography, TextField, MenuItem, Grid, Button, Box, InputLabel} from "@mui/material";
+import { Typography, TextField, MenuItem, Grid, Button, Box, InputLabel } from "@mui/material";
 import React from "react";
 import Axios from "axios";
 import '../App/App.css';
 
-const museums = [
-    {
-        value: 'Эрмитаж',
-        label: 'Эрмитаж'
-    },
-    {
-        value: 'Лувр',
-        label: 'Лувр'
-    }
-];
-const genres = [
-    {
-        value: "Пейзаж",
-        label: "Пейзаж"
-    },
-    {
-        value: "Портрет",
-        label: "Портрет"
-    },
-]
-const materials = [
-    {
-        value: "Масло",
-        label: "Масло"
-    },
-    {
-        value: "Краски",
-        label: "Краски"
-    },
-]
-
-function FilterComp({ setData }) {
+function FilterComp({ setData, museums, genres, materials }) {
     const get_arts_url = "http://localhost:5000/get_arts_by_filter";
-    const materials_url = "http://localhost:5000/get_materials";
 
-    const [museum, setMuseum] = React.useState('Эрмитаж');
-    const [genre, setGenre] = React.useState('Пейзаж');
-    const [material, setMaterial] = React.useState('Масло');
+    const [museum, setMuseum] = React.useState(museums[0].value);
+    const [genre, setGenre] = React.useState(genres[0].value);
+    const [material, setMaterial] = React.useState(materials[0].value);
 
     const [title, setTitle] = React.useState('');
     const [author, setAuthor] = React.useState('');
@@ -61,25 +29,19 @@ function FilterComp({ setData }) {
         console.log('genre', genre);
         console.log('museum', museum);
 
-      const response = await Axios.post(get_arts_url, {
-        title,
-        author,
-        startYear,
-        endYear,
-        museum,
-        genre,
-        material,
-      })
+        const response = await Axios.post(get_arts_url, {
+            title,
+            author,
+            startYear,
+            endYear,
+            museum,
+            genre,
+            material,
+        })
 
 
         console.log('response.data', response.data);
         setData(response.data)
-    };
-
-    const getMaterials = async () => {
-       
-        const response = await Axios.get(materials_url)
-        console.log('materials', response.data);
     };
 
     const museumChange = (event) => {
@@ -96,16 +58,16 @@ function FilterComp({ setData }) {
             <Typography fontSize={20}>Filters</Typography>
             <Grid container spacing={1} padding={1} alignItems={'center'}>
                 <Grid item xs={12}>
-                    <TextField value={title} onChange={handleChangeTitle} size='small' fullWidth={true} label="Название" variant="outlined"/>
+                    <TextField value={title} onChange={handleChangeTitle} size='small' fullWidth={true} label="Название" variant="outlined" />
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField value={author} onChange={handleChangeAuthor} size='small' fullWidth={true} label="Автор" variant="outlined"/>
+                    <TextField value={author} onChange={handleChangeAuthor} size='small' fullWidth={true} label="Автор" variant="outlined" />
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField value={startYear} onChange={handleChangeStartYear} size='small' fullWidth={true} label="Год начала" variant="outlined"/>
+                    <TextField value={startYear} onChange={handleChangeStartYear} size='small' fullWidth={true} label="Год начала" variant="outlined" />
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField value={endYear} onChange={handleChangeEndYear} size='small' fullWidth={true} label="Год завершения" variant="outlined"/>
+                    <TextField value={endYear} onChange={handleChangeEndYear} size='small' fullWidth={true} label="Год завершения" variant="outlined" />
                 </Grid>
 
                 <Grid item xs={4}>
@@ -176,7 +138,7 @@ function FilterComp({ setData }) {
                 </Grid>
 
                 <Grid item xs={6}>
-                    <Button onClick={getMaterials} variant='outlined' color='primary'>Clear</Button>
+                    <Button variant='outlined' color='primary'>Clear</Button>
                 </Grid>
             </Grid>
         </Box>
