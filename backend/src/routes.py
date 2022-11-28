@@ -19,6 +19,27 @@ DELETE_ALL_NOTES = """
 DELETE FROM ArtWorks *;
 """
 
+DROP_TABLE = """
+DROP TABLE IF EXISTS ArtWorks;
+"""
+
+CREATE_TABLE = """
+CREATE TABLE IF NOT EXISTS ArtWorks (
+    artworkid SERIAL PRIMARY KEY,
+    name varchar(200),
+    author varchar(200),
+    description varchar(10000),
+    startYear INT,
+    endYear INT,
+    materials varchar(200),
+    type varchar(100),
+    museumName varchar(200),
+    museumAddress varchar(200),
+    genre varchar(100),
+    URL varchar(10000)
+);
+"""
+
 ADD_PICTURE = """
     INSERT INTO ArtWorks (name, author, 
                           description, startYear, 
@@ -29,9 +50,7 @@ ADD_PICTURE = """
             %s, %s, %s, %s, 
             %s, %s, %s)
     RETURNING artworkid;
-    """
-
-
+"""
 
 
 def clear_tmp():
@@ -89,3 +108,9 @@ def get_arts():
     for i in res:
         json.append(dict(i))
     return json
+
+
+def recreate_table():
+    db.execute(DROP_TABLE)
+    db.execute(CREATE_TABLE)
+    cache.clear()
