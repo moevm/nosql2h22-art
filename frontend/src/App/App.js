@@ -19,6 +19,7 @@ function App() {
 
     const [displayEditor, setDisplay] = React.useState(true);
     const [mainDisplay, setMainDisplay] = React.useState(true);
+
     const [data, setData] = React.useState([]);
     const [museums, setMuseums] = React.useState([]);
     const [genres, setGenres] = React.useState([]);
@@ -111,8 +112,12 @@ function App() {
                 <div className='rightSide'>
                     <div className='modeButtons'>
                         <Box mr={3}>
-                            <Button variant='outlined' color='inherit' onClick={MainDisplayChange}>View as a
-                                table</Button>
+                            {mainDisplay
+                                ? <Button variant='outlined' color='inherit' onClick={MainDisplayChange}>View as a
+                                      table</Button>
+                                : <Button variant='outlined' color='inherit' onClick={MainDisplayChange}>View as a
+                                      list</Button>
+                            }
                         </Box>
                         <Box mr={3}>
                             <Button variant='outlined' color='inherit'>Analyze</Button>

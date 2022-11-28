@@ -13,14 +13,14 @@ function EditorComp({ updateMaterialsSelect, updateGenresSelect, updateMuseumsSe
         name: '',
         author: '',
         description: '',
-        startYear: '',
-        endYear: '',
+        start_year: 0,
+        end_year: 0,
         materials: '',
         type: '',
-        museumName: '',
-        museumAddress: '',
+        museum_name: '',
+        museum_address: '',
         genre: '',
-        URL: ''
+        url: ''
     });
 
 
@@ -33,7 +33,6 @@ function EditorComp({ updateMaterialsSelect, updateGenresSelect, updateMuseumsSe
             data.description = descriptionData;
 
         setDescEditor(false);
-        // console.log(data);
     }
 
     const handlePreviewOpen = () => {
@@ -66,14 +65,14 @@ function EditorComp({ updateMaterialsSelect, updateGenresSelect, updateMuseumsSe
                 name: data.name,
                 author: data.author,
                 description: data.description,
-                startYear: data.startYear,
-                endYear: data.endYear,
+                start_year: data.start_year,
+                end_year: data.end_year,
                 materials: data.materials,
                 type: data.type,
-                museumName: data.museumName,
-                museumAddress: data.museumAddress,
+                museum_name: data.museum_name,
+                museum_address: data.museum_address,
                 genre: data.genre,
-                URL: data.URL
+                url: data.url
             }).then(r => {
                 window.location.reload();
                 console.log(r.data)
@@ -85,11 +84,23 @@ function EditorComp({ updateMaterialsSelect, updateGenresSelect, updateMuseumsSe
         }
     }
 
-    function valid() {
+    const isValidUrl = urlString=> {
+        var urlPattern = new RegExp('^(https?:\\/\\/)?'+ // validate protocol
+        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // validate domain name
+        '((\\d{1,3}\\.){3}\\d{1,3}))'+ // validate OR ip (v4) address
+        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // validate port and path
+        '(\\?[;&a-z\\d%_.~+=-]*)?'+ // validate query string
+        '(\\#[-a-z\\d_]*)?$','i'); // validate fragment locator
+        return !!urlPattern.test(urlString);
+    }
+
+    function valid(){
         return (data.name != '') && (data.author != '') && (data.type != '') &&
-            (data.description != '') && (data.startYear != '') && (data.endYear != '') &&
-            (data.materials != '') && (data.museumName != '') && (data.museumAddress != '') &&
-            (data.genre != '');
+            (data.description != '')  && (data.materials != '') &&
+            (data.museum_name != '') && (data.museum_address != '') &&
+            (data.genre != '') && (data.url != '') && ((data.start_year) <= (data.end_year)) &&
+            (data.start_year > 0 && data.start_year < 3000 && data.end_year > 0 && data.end_year < 3000) &&
+            (isValidUrl(data.url));
     }
 
     return (
@@ -115,18 +126,18 @@ function EditorComp({ updateMaterialsSelect, updateGenresSelect, updateMuseumsSe
                     <DescriptionEditor dataToPass={data.description} is_open={desc_editor} func={handleDescClose} />
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField onChange={(e) => { data.museumName = e.target.value; }} size='small' fullWidth={true} label="Museum name" variant="outlined" required />
+                    <TextField onChange={(e) => {data.museum_name = e.target.value;}} size='small' fullWidth={true} label="Museum name" variant="outlined" required/>
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField onChange={(e) => { data.museumAddress = e.target.value; }} size='small' fullWidth={true} label="Museum address" variant="outlined" required />
+                    <TextField onChange={(e) => {data.museum_address = e.target.value;}} size='small' fullWidth={true} label="Museum address" variant="outlined" required/>
                 </Grid>
                 <Grid item xs={6}>
                     Start year
-                    <TextField onChange={(e) => { data.startYear = e.target.value }} type="date" size='small' fullWidth={true} variant="outlined" required />
+                    <TextField onChange={(e) => {data.start_year = +(e.target.value)}} type="number"  size='small' fullWidth={true}  variant="outlined" required/>
                 </Grid>
                 <Grid item xs={6}>
                     End year
-                    <TextField onChange={(e) => { data.endYear = e.target.value }} type="date" size='small' fullWidth={true} variant="outlined" required />
+                    <TextField onChange={(e) => {data.end_year = +(e.target.value)}} type="number"  size='small' fullWidth={true}  variant="outlined" required/>
                 </Grid>
                 <Grid item xs={12}>
                     <TextField onChange={(e) => { data.genre = e.target.value }} size='small' fullWidth={true} label="Genre" variant="outlined" required />
@@ -138,7 +149,7 @@ function EditorComp({ updateMaterialsSelect, updateGenresSelect, updateMuseumsSe
                     <TextField onChange={(e) => { data.type = e.target.value }} size='small' fullWidth={true} label="Type" variant="outlined" required />
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField onChange={(e) => { data.URL = e.target.value; console.log(data); }} type="URL" size='small' fullWidth={true} label="URL" variant="outlined" required />
+                    <TextField onChange={(e) => { data.url = e.target.value; console.log(data); }} type="URL" size='small' fullWidth={true} label="URL" variant="outlined" required />
                 </Grid>
 
                 <Grid item xs={6}>
