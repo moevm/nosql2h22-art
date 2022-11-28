@@ -58,6 +58,27 @@ def clear_tmp():
     cache.clear()
     return "It's me, Flask"
 
+def get_materials():
+    res = db.execute("""SELECT DISTINCT(materials) FROM ArtWorks""")
+    materials_list = []
+    for i in res:
+        materials_list.append(dict(i)['materials'])
+    return materials_list
+
+def get_genres():
+    res = db.execute("""SELECT DISTINCT(genre) FROM ArtWorks""")
+    genres_list = []
+    for i in res:
+        genres_list.append(dict(i)['genre'])
+    return genres_list
+
+def get_museums():
+    res = db.execute("""SELECT DISTINCT(museumname) FROM ArtWorks""")
+    museums_list = []
+    for i in res:
+        museums_list.append(dict(i)['museumname'])
+    return museums_list
+
 
 def add_art():
     data = request.get_json()
@@ -109,6 +130,63 @@ def get_arts():
         json.append(dict(i))
     return json
 
+def get_arts_by_filter():
+    requestJson = request.get_json()
+
+    titleFilter = requestJson['title']
+    authorFilter = requestJson['author']
+    startYearFilter = requestJson['startYear']
+    endYearFilter = requestJson['endYear']
+    museumFilter = requestJson['museum']
+    genreFilter = requestJson['genre']
+    materialFilter = requestJson['material']
+    res = []
+
+    titleFilter = '%' + titleFilter + '%'
+ 
+    authorFilter = '%' + authorFilter + '%'
+
+    if ((startYearFilter != '') & (endYearFilter != '')):
+        startYearFilter = startYearFilter + '-01-01'
+        endYearFilter = endYearFilter + '-12-31'
+    elif ((startYearFilter == '') & (endYearFilter != '')):
+        startYearFilter = '0001-01-01' 
+        endYearFilter = endYearFilter + '-12-31'
+    elif ((startYearFilter != '') & (endYearFilter == '')):
+        startYearFilter = startYearFilter + '-01-01'
+        endYearFilter = '9999-12-31'
+    elif ((startYearFilter == '') & (endYearFilter == '')):
+        startYearFilter = '0001-01-01'
+        endYearFilter = '9999-12-31'
+
+    res = db.execute(
+
+        """
+            SELECT * FROM ArtWorks
+            WHERE
+                name LIKE %s
+                AND author LIKE %s
+                AND startyear > %s
+                AND endyear < %s
+                AND museumname = %s
+                AND genre = %s
+                AND materials = %s
+        """,
+        (
+            titleFilter,
+            authorFilter,
+            startYearFilter,
+            endYearFilter,
+            museumFilter,
+            genreFilter,
+            materialFilter
+        )
+        )
+    
+    json = []
+    for i in res:
+        json.append(dict(i))
+    return json
 
 def recreate_table(): # it's not used but it useful when you need to change table configuration (e.g. fields)
     db.execute(DROP_TABLE)

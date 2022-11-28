@@ -1,12 +1,12 @@
-import {Typography, TextField, Grid, Button} from "@mui/material";
-import React, {useState} from "react";
+import { Typography, TextField, Grid, Button } from "@mui/material";
+import React, { useState } from "react";
 import DescriptionEditor from "./DescriptionEditor";
 import '../App/App.css';
 import PreviewComp from "./PreviewComp";
 import Axios from "axios";
 
 
-function EditorComp() {
+function EditorComp({ updateMaterialsSelect, updateGenresSelect, updateMuseumsSelect }) {
     const [desc_editor, setDescEditor] = React.useState(false);
     const [preview_open, setPreview] = React.useState(false);
     const [data, setData] = useState({
@@ -29,14 +29,14 @@ function EditorComp() {
         setDescEditor(true);
     }
     const handleDescClose = (descriptionData) => {
-        if(typeof descriptionData === "string")
+        if (typeof descriptionData === "string")
             data.description = descriptionData;
 
         setDescEditor(false);
     }
 
     const handlePreviewOpen = () => {
-        if(!valid()){
+        if (!valid()) {
             alert("Form is incorrect for preview");
         } else {
             setPreview(true);
@@ -56,9 +56,9 @@ function EditorComp() {
         }
     }
 
-    function submit(){
+    function submit() {
         const url = "http://localhost:5000/add_art";
-        if(!valid()){
+        if (!valid()) {
             alert("Form is incorrect");
         } else {
             Axios.post(url, {
@@ -77,6 +77,10 @@ function EditorComp() {
                 window.location.reload();
                 console.log(r.data)
             });
+
+            updateMaterialsSelect();
+            updateGenresSelect();
+            updateMuseumsSelect();
         }
     }
 
@@ -112,14 +116,14 @@ function EditorComp() {
                 {/*        /></Button>*/}
                 {/*</Grid>*/}
                 <Grid item xs={12}>
-                    <TextField onChange={(e) => {data.name = e.target.value; }} size='small' fullWidth={true} label="Name" variant="outlined" required/>
+                    <TextField onChange={(e) => { data.name = e.target.value; }} size='small' fullWidth={true} label="Name" variant="outlined" required />
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField onChange={(e) => {data.author = e.target.value}} size='small' fullWidth={true} label="Author" variant="outlined" required/>
+                    <TextField onChange={(e) => { data.author = e.target.value }} size='small' fullWidth={true} label="Author" variant="outlined" required />
                 </Grid>
                 <Grid item xs={12}>
                     <Button variant='outlined' color='primary' onClick={handleDescOpen}>Description</Button>
-                    <DescriptionEditor dataToPass={data.description} is_open={desc_editor} func={handleDescClose}/>
+                    <DescriptionEditor dataToPass={data.description} is_open={desc_editor} func={handleDescClose} />
                 </Grid>
                 <Grid item xs={12}>
                     <TextField onChange={(e) => {data.museum_name = e.target.value;}} size='small' fullWidth={true} label="Museum name" variant="outlined" required/>
@@ -136,16 +140,16 @@ function EditorComp() {
                     <TextField onChange={(e) => {data.end_year = +(e.target.value)}} type="number"  size='small' fullWidth={true}  variant="outlined" required/>
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField  onChange={(e) => {data.genre = e.target.value}} size='small' fullWidth={true} label="Genre" variant="outlined" required/>
+                    <TextField onChange={(e) => { data.genre = e.target.value }} size='small' fullWidth={true} label="Genre" variant="outlined" required />
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField onChange={(e) => {data.materials = e.target.value}} size='small' fullWidth={true} label="Materials" variant="outlined" required/>
+                    <TextField onChange={(e) => { data.materials = e.target.value }} size='small' fullWidth={true} label="Materials" variant="outlined" required />
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField onChange={(e) => {data.type = e.target.value}} size='small' fullWidth={true} label="Type" variant="outlined" required/>
+                    <TextField onChange={(e) => { data.type = e.target.value }} size='small' fullWidth={true} label="Type" variant="outlined" required />
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField  onChange={(e) => {data.url = e.target.value; console.log(data);}} type="URL" size='small' fullWidth={true} label="URL" variant="outlined" required/>
+                    <TextField onChange={(e) => { data.url = e.target.value; console.log(data); }} type="URL" size='small' fullWidth={true} label="URL" variant="outlined" required />
                 </Grid>
 
                 <Grid item xs={6}>
@@ -154,7 +158,7 @@ function EditorComp() {
 
                 <Grid item xs={6}>
                     <Button variant='outlined' color='primary' onClick={handlePreviewOpen}>Preview</Button>
-                    <PreviewComp dataToPass={data} is_open={preview_open} func={handlePreviewClose}/>
+                    <PreviewComp dataToPass={data} is_open={preview_open} func={handlePreviewClose} />
                 </Grid>
             </Grid>
         </div>
