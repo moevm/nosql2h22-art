@@ -10,7 +10,7 @@ export default class TableComp extends PureComponent {
 
     render() {
         return (
-            <TableContainer component={Paper}>
+            <TableContainer component={Paper} style={{height: '87vh', overflowY: 'scroll'}}>
                 <Table sx={{minWidth: 650}} aria-label="simple table">
                     <TableHead>
                         <TableRow>
