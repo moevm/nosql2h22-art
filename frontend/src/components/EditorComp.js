@@ -149,7 +149,7 @@ function EditorComp({ updateMaterialsSelect, updateGenresSelect, updateMuseumsSe
                     <TextField onChange={(e) => { data.type = e.target.value }} size='small' fullWidth={true} label="Type" variant="outlined" required />
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField onChange={(e) => { data.url = e.target.value; console.log(data); }} type="URL" size='small' fullWidth={true} label="URL" variant="outlined" required />
+                    <TextField onChange={(e) => { data.url = e.target.value; }} type="URL" size='small' fullWidth={true} label="URL" variant="outlined" required />
                 </Grid>
 
                 <Grid item xs={6}>
