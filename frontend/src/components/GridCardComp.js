@@ -59,22 +59,22 @@ export default class GridCardComp extends PureComponent {
                         </Grid>
                     ))}
                     <Grid xs="12" display={"flex"} justifyContent={"center"}>
-                        {this.props.page-5>1
+                        {this.props.page - 5 > 1
                             ? <p>...</p>
                             : <p/>
                         }
                         {((rows, i, len) => {
                             while (++i <= len) {
-                                if(i>=1 && i<=this.props.total/12+1 && (i-1)!==this.props.total/12)
-                                    if(i!=this.props.page) {
+                                if (i >= 1 && i <= this.props.total / 12 + 1 && (i - 1) !== this.props.total / 12)
+                                    if (i != this.props.page) {
                                         rows.push(<a id={i} onClick={this.set_page} href="">{i}</a>)
-                                    }else{
+                                    } else {
                                         rows.push(<a>{i}</a>)
                                     }
                             }
                             return rows;
-                        })([], this.props.page-5, this.props.page+5)}
-                        {this.props.page+5<this.props.total/12
+                        })([], this.props.page - 5, this.props.page + 5)}
+                        {this.props.page + 5 < this.props.total / 12
                             ? <p>...</p>
                             : <p/>
                         }
