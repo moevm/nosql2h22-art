@@ -144,7 +144,6 @@ def get_arts_by_filter():
     museumFilter = requestJson['museum_name']
     genreFilter = requestJson['genre']
     materialFilter = requestJson['material']
-    res = []
 
     titleFilter = '%' + titleFilter + '%'
 
@@ -160,8 +159,8 @@ def get_arts_by_filter():
             WHERE
                 name LIKE %s
                 AND author LIKE %s
-                AND start_year > %s
-                AND end_year < %s
+                AND start_year >= %s
+                AND end_year <= %s
                 AND museum_name = %s
                 AND genre = %s
                 AND materials = %s
