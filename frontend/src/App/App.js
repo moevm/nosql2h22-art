@@ -85,19 +85,19 @@ function App() {
     const getMaterials = async () => {
         const response = await Axios.get(getMaterialsUrl)
         console.log('materials', response.data);
-        setMaterials(response.data.map((value) => ({ value, label: value })));
+        setMaterials(response.data.map((value, index) => ({ value: `${index}`, label: value })));
     };
 
     const getGenres = async () => {
         const response = await Axios.get(getGenresUrl)
         console.log('genres', response.data);
-        setGenres(response.data.map((value) => ({ value, label: value })));
+        setGenres(response.data.map((value, index) => ({ value: `${index}`, label: value })));
     };
 
     const getMuseums = async () => {
         const response = await Axios.get(getMuseumsUrl)
         console.log('museums', response.data);
-        setMuseums(response.data.map((value) => ({ value, label: value })));
+        setMuseums(response.data.map((value, index) => ({ value: `${index}`, label: value })));
     };
 
     return (
@@ -105,8 +105,8 @@ function App() {
             <AppBarComp changeView={EditorDisplayChange} updateData={UpdateData} editor={displayEditor} />
             <div className='mainContainer'>
                 <div className='leftSide'>
-                    <FilterComp setData={setData} museums={museums} genres={genres} materials={materials} />
-                    <DisplayEditor />
+                    <FilterComp setData={setData} museums={museums} genres={genres} materials={materials} getAllData={UpdateData} />
+                    <DisplayEditor updateMaterialsSelect={getMaterials} updateGenresSelect={getGenres} updateMuseumsSelect={getMuseums}/>
                 </div>
                 <div className='rightSide'>
                     <div className='modeButtons'>

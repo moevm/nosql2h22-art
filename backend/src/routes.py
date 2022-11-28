@@ -145,12 +145,12 @@ def get_arts_by_filter():
         """
             SELECT * FROM ArtWorks
             WHERE
-                name_ LIKE %s
-                AND author_ LIKE %s
-                AND start_year_ > %s
-                AND end_year_ < %s
-                AND museum_name = %s
-                AND genre_name = %s
+                name LIKE %s
+                AND author LIKE %s
+                AND startyear > %s
+                AND endyear < %s
+                AND museumname = %s
+                AND genre = %s
                 AND materials = %s
         """,
         (

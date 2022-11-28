@@ -3,12 +3,12 @@ import React from "react";
 import Axios from "axios";
 import '../App/App.css';
 
-function FilterComp({ setData, museums, genres, materials }) {
+function FilterComp({ setData, museums, genres, materials, getAllData }) {
     const get_arts_url = "http://localhost:5000/get_arts_by_filter";
 
-    const [museum, setMuseum] = React.useState(museums[0].value);
-    const [genre, setGenre] = React.useState(genres[0].value);
-    const [material, setMaterial] = React.useState(materials[0].value);
+    const [museum, setMuseum] = React.useState('0');
+    const [genre, setGenre] = React.useState('0');
+    const [material, setMaterial] = React.useState('0');
 
     const [title, setTitle] = React.useState('');
     const [author, setAuthor] = React.useState('');
@@ -34,15 +34,25 @@ function FilterComp({ setData, museums, genres, materials }) {
             author,
             startYear,
             endYear,
-            museum,
-            genre,
-            material,
+            museum: museums[museum].label,
+            genre: genres[genre].label,
+            material: materials[material].label,
         })
-
 
         console.log('response.data', response.data);
         setData(response.data)
     };
+
+    const clearFilters = () => {
+        getAllData();
+        setMuseum('0');
+        setGenre('0');
+        setMaterial('0');
+        setTitle('');
+        setAuthor('');
+        setStartYear('');
+        setEndYear('');
+    }
 
     const museumChange = (event) => {
         setMuseum(event.target.value);
@@ -138,7 +148,7 @@ function FilterComp({ setData, museums, genres, materials }) {
                 </Grid>
 
                 <Grid item xs={6}>
-                    <Button variant='outlined' color='primary'>Clear</Button>
+                    <Button onClick={clearFilters} variant='outlined' color='primary'>Clear</Button>
                 </Grid>
             </Grid>
         </Box>
