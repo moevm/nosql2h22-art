@@ -11,11 +11,12 @@ export default class PreviewComp extends PureComponent {
 
     render() {
         if(this.props.dataToPass !== undefined) {
+            console.log(this.props.dataToPass);
             return (
                 <Dialog open={this.props.is_open} onClose={this.props.func} aria-labelledby="form-dialog-title">
                     <DialogContent>
                         <div>
-                            <img src={this.props.dataToPass.URL} style={{width: '400px', height: '400px'}}/>
+                            <img src={this.props.dataToPass.url} style={{width: '400px', height: '400px'}}/>
                         </div>
                         <div>
                             <Typography> {this.props.dataToPass.name}</Typography>
@@ -31,7 +32,7 @@ export default class PreviewComp extends PureComponent {
                         </div>
                         <div>
                             <p>Museum:</p>
-                            <Typography> {this.props.dataToPass.museumName}</Typography>
+                            <Typography> {this.props.dataToPass.museum_name}</Typography>
                         </div>
                         <div>
                             <p>Type:</p>

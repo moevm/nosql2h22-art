@@ -3,12 +3,12 @@ CREATE TABLE IF NOT EXISTS ArtWorks (
     name varchar(200),
     author varchar(200),
     description varchar(10000),
-    startYear INT,
-    endYear INT,
+    start_year INT,
+    end_year INT,
     materials varchar(200),
     type varchar(100),
-    museumName varchar(200),
-    museumAddress varchar(200),
+    museum_name varchar(200),
+    museum_address varchar(200),
     genre varchar(100),
-    URL varchar(10000)
+    url varchar(10000)
 );

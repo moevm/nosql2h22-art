@@ -13,14 +13,14 @@ function EditorComp() {
         name: '',
         author: '',
         description: '',
-        startYear: 0,
-        endYear: 0,
+        start_year: 0,
+        end_year: 0,
         materials: '',
         type: '',
-        museumName: '',
-        museumAddress: '',
+        museum_name: '',
+        museum_address: '',
         genre: '',
-        URL: ''
+        url: ''
     });
 
 
@@ -65,14 +65,14 @@ function EditorComp() {
                 name: data.name,
                 author: data.author,
                 description: data.description,
-                startYear: data.startYear,
-                endYear: data.endYear,
+                start_year: data.start_year,
+                end_year: data.end_year,
                 materials: data.materials,
                 type: data.type,
-                museumName: data.museumName,
-                museumAddress: data.museumAddress,
+                museum_name: data.museum_name,
+                museum_address: data.museum_address,
                 genre: data.genre,
-                URL: data.URL
+                url: data.url
             }).then(r => {
                 window.location.reload();
                 console.log(r.data)
@@ -93,10 +93,10 @@ function EditorComp() {
     function valid(){
         return (data.name != '') && (data.author != '') && (data.type != '') &&
             (data.description != '')  && (data.materials != '') &&
-            (data.museumName != '') && (data.museumAddress != '') &&
-            (data.genre != '') && (data.URL != '') && ((data.startYear) <= (data.endYear)) &&
-            (data.startYear > 0 && data.startYear < 3000 && data.endYear > 0 && data.endYear < 3000) &&
-            (isValidUrl(data.URL));
+            (data.museum_name != '') && (data.museum_address != '') &&
+            (data.genre != '') && (data.url != '') && ((data.start_year) <= (data.end_year)) &&
+            (data.start_year > 0 && data.start_year < 3000 && data.end_year > 0 && data.end_year < 3000) &&
+            (isValidUrl(data.url));
     }
 
     return (
@@ -122,18 +122,18 @@ function EditorComp() {
                     <DescriptionEditor dataToPass={data.description} is_open={desc_editor} func={handleDescClose}/>
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField onChange={(e) => {data.museumName = e.target.value;}} size='small' fullWidth={true} label="Museum name" variant="outlined" required/>
+                    <TextField onChange={(e) => {data.museum_name = e.target.value;}} size='small' fullWidth={true} label="Museum name" variant="outlined" required/>
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField onChange={(e) => {data.museumAddress = e.target.value;}} size='small' fullWidth={true} label="Museum address" variant="outlined" required/>
+                    <TextField onChange={(e) => {data.museum_address = e.target.value;}} size='small' fullWidth={true} label="Museum address" variant="outlined" required/>
                 </Grid>
                 <Grid item xs={6}>
                     Start year
-                    <TextField onChange={(e) => {data.startYear = +(e.target.value)}} type="number"  size='small' fullWidth={true}  variant="outlined" required/>
+                    <TextField onChange={(e) => {data.start_year = +(e.target.value)}} type="number"  size='small' fullWidth={true}  variant="outlined" required/>
                 </Grid>
                 <Grid item xs={6}>
                     End year
-                    <TextField onChange={(e) => {data.endYear = +(e.target.value)}} type="number"  size='small' fullWidth={true}  variant="outlined" required/>
+                    <TextField onChange={(e) => {data.end_year = +(e.target.value)}} type="number"  size='small' fullWidth={true}  variant="outlined" required/>
                 </Grid>
                 <Grid item xs={12}>
                     <TextField  onChange={(e) => {data.genre = e.target.value}} size='small' fullWidth={true} label="Genre" variant="outlined" required/>
@@ -145,7 +145,7 @@ function EditorComp() {
                     <TextField onChange={(e) => {data.type = e.target.value}} size='small' fullWidth={true} label="Type" variant="outlined" required/>
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField  onChange={(e) => {data.URL = e.target.value; console.log(data);}} type="URL" size='small' fullWidth={true} label="URL" variant="outlined" required/>
+                    <TextField  onChange={(e) => {data.url = e.target.value; console.log(data);}} type="URL" size='small' fullWidth={true} label="URL" variant="outlined" required/>
                 </Grid>
 
                 <Grid item xs={6}>

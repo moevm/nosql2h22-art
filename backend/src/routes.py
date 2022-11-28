@@ -29,23 +29,23 @@ CREATE TABLE IF NOT EXISTS ArtWorks (
     name varchar(200),
     author varchar(200),
     description varchar(10000),
-    startYear INT,
-    endYear INT,
+    start_year INT,
+    end_year INT,
     materials varchar(200),
     type varchar(100),
-    museumName varchar(200),
-    museumAddress varchar(200),
+    museum_name varchar(200),
+    museum_address varchar(200),
     genre varchar(100),
-    URL varchar(10000)
+    url varchar(10000)
 );
 """
 
 ADD_PICTURE = """
     INSERT INTO ArtWorks (name, author, 
-                          description, startYear, 
-                          endYear, materials, 
-                          type,  museumName, 
-                          museumAddress, genre, URL)
+                          description, start_year, 
+                          end_year, materials, 
+                          type,  museum_name, 
+                          museum_address, genre, url)
     VALUES (%s, %s, %s, %s, 
             %s, %s, %s, %s, 
             %s, %s, %s)
@@ -64,11 +64,11 @@ def add_art():
     # adding into postgres
 
     key = db.execute(ADD_PICTURE, (data['name'], data['author'],
-                                   data['description'], data['startYear'],
-                                   data['endYear'], data['materials'],
-                                   data['type'], data['museumName'],
-                                   data['museumAddress'], data['genre'],
-                                   data['URL']))
+                                   data['description'], data['start_year'],
+                                   data['end_year'], data['materials'],
+                                   data['type'], data['museum_name'],
+                                   data['museum_address'], data['genre'],
+                                   data['url']))
 
     res = db.execute("""SELECT * FROM ArtWorks""")
     for i in res:
@@ -90,11 +90,11 @@ def reimport_arts():
     json = request.get_json()
     for data in json:
         key = db.execute(ADD_PICTURE, (data['name'], data['author'],
-                                       data['description'], data['startYear'],
-                                       data['endYear'], data['materials'],
-                                       data['type'], data['museumName'],
-                                       data['museumAddress'], data['genre'],
-                                       data['URL']))
+                                       data['description'], data['start_year'],
+                                       data['end_year'], data['materials'],
+                                       data['type'], data['museum_name'],
+                                       data['museum_address'], data['genre'],
+                                       data['url']))
         key = str(key.all()[0][0])
         cache.set(key, data)
         print("Value is written into memcached by key: {}".format(key))
