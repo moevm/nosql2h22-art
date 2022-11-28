@@ -34,9 +34,9 @@ export default class GridCardComp extends PureComponent {
     render() {
         return (
             <div>
-                <PreviewComp is_open={this.state.preview_open} func={this.handlePreviewClose}/>
+                <PreviewComp dataToPass={this.props.data[this.state.current_index]} is_open={this.state.preview_open} func={this.handlePreviewClose}/>
                 <Grid style={{height: '90vh', overflowY: 'scroll'}} container spacing={4} padding={2}>
-                    {this.props.data.map((card) => (
+                    {this.props.data.map((card, index) => (
                         <Grid item key={card.id} xs= {itemInRow(this.props.data.length)}>
                             <Card>
                                 <CardMedia

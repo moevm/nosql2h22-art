@@ -6,14 +6,14 @@ import '../App/App.css';
 function FilterComp({ setData, museums, genres, materials, getAllData }) {
     const get_arts_url = "http://localhost:5000/get_arts_by_filter";
 
-    const [museum, setMuseum] = React.useState('0');
+    const [museum_name, setMuseum] = React.useState('0');
     const [genre, setGenre] = React.useState('0');
     const [material, setMaterial] = React.useState('0');
 
     const [title, setTitle] = React.useState('');
     const [author, setAuthor] = React.useState('');
-    const [startYear, setStartYear] = React.useState('');
-    const [endYear, setEndYear] = React.useState('');
+    const [start_year, setStartYear] = React.useState('');
+    const [end_year, setEndYear] = React.useState('');
 
     const handleChangeTitle = (event) => setTitle(event.target.value);
     const handleChangeAuthor = (event) => setAuthor(event.target.value);
@@ -23,18 +23,18 @@ function FilterComp({ setData, museums, genres, materials, getAllData }) {
     const findByFilter = async () => {
         console.log('title', title);
         console.log('author', author);
-        console.log('startYear', startYear);
-        console.log('endYear', endYear);
+        console.log('start_year', start_year);
+        console.log('end_year', end_year);
         console.log('material', material);
         console.log('genre', genre);
-        console.log('museum', museum);
+        console.log('museum_name', museum_name);
 
         const response = await Axios.post(get_arts_url, {
             title,
             author,
-            startYear,
-            endYear,
-            museum: museums[museum].label,
+            start_year,
+            end_year,
+            museum_name: museums[museum_name].label,
             genre: genres[genre].label,
             material: materials[material].label,
         })
@@ -74,10 +74,10 @@ function FilterComp({ setData, museums, genres, materials, getAllData }) {
                     <TextField value={author} onChange={handleChangeAuthor} size='small' fullWidth={true} label="Автор" variant="outlined" />
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField value={startYear} onChange={handleChangeStartYear} size='small' fullWidth={true} label="Год начала" variant="outlined" />
+                    <TextField value={start_year} onChange={handleChangeStartYear} size='small' fullWidth={true} label="Год начала" variant="outlined" />
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField value={endYear} onChange={handleChangeEndYear} size='small' fullWidth={true} label="Год завершения" variant="outlined" />
+                    <TextField value={end_year} onChange={handleChangeEndYear} size='small' fullWidth={true} label="Год завершения" variant="outlined" />
                 </Grid>
 
                 <Grid item xs={4}>
@@ -90,7 +90,7 @@ function FilterComp({ setData, museums, genres, materials, getAllData }) {
                         fullWidth={true}
                         variant="outlined"
                         select
-                        value={museum}
+                        value={museum_name}
                         onChange={museumChange}
                     >
                         {museums.map((option) => (

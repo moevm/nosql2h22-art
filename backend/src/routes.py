@@ -73,10 +73,10 @@ def get_genres():
     return genres_list
 
 def get_museums():
-    res = db.execute("""SELECT DISTINCT(museumname) FROM ArtWorks""")
+    res = db.execute("""SELECT DISTINCT(museum_name) FROM ArtWorks""")
     museums_list = []
     for i in res:
-        museums_list.append(dict(i)['museumname'])
+        museums_list.append(dict(i)['museum_name'])
     return museums_list
 
 
@@ -135,9 +135,9 @@ def get_arts_by_filter():
 
     titleFilter = requestJson['title']
     authorFilter = requestJson['author']
-    startYearFilter = requestJson['startYear']
-    endYearFilter = requestJson['endYear']
-    museumFilter = requestJson['museum']
+    startYearFilter = requestJson['start_year']
+    endYearFilter = requestJson['end_year']
+    museumFilter = requestJson['museum_name']
     genreFilter = requestJson['genre']
     materialFilter = requestJson['material']
     res = []
@@ -146,18 +146,13 @@ def get_arts_by_filter():
  
     authorFilter = '%' + authorFilter + '%'
 
-    if ((startYearFilter != '') & (endYearFilter != '')):
-        startYearFilter = startYearFilter + '-01-01'
-        endYearFilter = endYearFilter + '-12-31'
-    elif ((startYearFilter == '') & (endYearFilter != '')):
-        startYearFilter = '0001-01-01' 
-        endYearFilter = endYearFilter + '-12-31'
+    if ((startYearFilter == '') & (endYearFilter != '')):
+        startYearFilter = '0001'
     elif ((startYearFilter != '') & (endYearFilter == '')):
-        startYearFilter = startYearFilter + '-01-01'
-        endYearFilter = '9999-12-31'
+        endYearFilter = '9999'
     elif ((startYearFilter == '') & (endYearFilter == '')):
-        startYearFilter = '0001-01-01'
-        endYearFilter = '9999-12-31'
+        startYearFilter = '0001'
+        endYearFilter = '9999'
 
     res = db.execute(
 
@@ -166,9 +161,9 @@ def get_arts_by_filter():
             WHERE
                 name LIKE %s
                 AND author LIKE %s
-                AND startyear > %s
-                AND endyear < %s
-                AND museumname = %s
+                AND start_year > %s
+                AND end_year < %s
+                AND museum_name = %s
                 AND genre = %s
                 AND materials = %s
         """,
