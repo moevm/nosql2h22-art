@@ -11,7 +11,8 @@ export default class GridCardComp extends PureComponent {
     constructor(props) {
         super(props)
         this.state = {
-            preview_open: false
+            preview_open: false,
+            current_index: 0
         }
     }
 
@@ -23,8 +24,9 @@ export default class GridCardComp extends PureComponent {
         this.setState({preview_open: false})
     }
 
-    dot(id) {
-        console.log(id)
+    dot(index) {
+        // console.log(index)
+        this.state.current_index = index;
         this.handlePreviewOpen()
         console.log(this.state.preview_open)
     }
@@ -39,8 +41,8 @@ export default class GridCardComp extends PureComponent {
                             <Card>
                                 <CardMedia
                                     className='cardMedia'
-                                    image={card.image}
-                                    onClick={() => this.dot(card.id)}
+                                    image={card.url}
+                                    onClick={() => this.dot(index)}
                                 />
                                 <CardContent className="cardContent">
                                     <Typography variant='h5' gutterBottom>
