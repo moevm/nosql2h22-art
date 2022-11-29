@@ -7,10 +7,19 @@ import UpdaterComp from '../components/UpdaterComp';
 import TableComp from '../components/TableComp';
 import {Box, Button} from '@mui/material';
 import FilterComp from '../components/FilterComp';
-import {API_GET_ARTS, API_GET_MATERIALS, API_GET_GENRES, API_GET_MUSEUMS} from "../constants";
+import {
+    API_GET_ARTS,
+    API_GET_MATERIALS,
+    API_GET_GENRES,
+    API_GET_MUSEUMS,
+    NOT_CHOSEN_LABEL,
+    API_GET_TYPES
+} from "../constants";
 import AddArtworkForm from "../components/AddArtworkForm";
 import Axios from "axios";
 import {saveAs} from 'file-saver'
+
+const defaultFilterValue = {value: "0", label: NOT_CHOSEN_LABEL};
 
 function App() {
 
@@ -22,12 +31,14 @@ function App() {
     const [museums, setMuseums] = React.useState([]);
     const [genres, setGenres] = React.useState([]);
     const [materials, setMaterials] = React.useState([]);
+    const [types, setTypes] = React.useState([]);
 
     useEffect(() => {
         UpdateData()
         getMaterials();
         getGenres();
         getMuseums();
+        getTypes();
     }, [])
 
     function DisplayEditor() {
@@ -58,7 +69,7 @@ function App() {
     function onExport() {
         try {
             Axios.get(API_GET_ARTS).then(r => {
-                let blob = new Blob([JSON.stringify(data)], {type: 'application/json'})
+                let blob = new Blob([JSON.stringify(r.data)], {type: 'application/json'})
                 saveAs(blob, 'exported_data.json')
             });
         } catch (e) {
@@ -83,22 +94,32 @@ function App() {
         }
     }
 
+    const getTypes = async () => {
+        const response = await Axios.get(API_GET_TYPES)
+        console.log('types', response.data);
+        const list = response.data.map((value, index) => ({value: `${index+1}`, label: value}));
+        setTypes([defaultFilterValue].concat(list));
+    };
+
     const getMaterials = async () => {
         const response = await Axios.get(API_GET_MATERIALS)
         console.log('materials', response.data);
-        setMaterials(response.data.map((value, index) => ({value: `${index}`, label: value})));
+        const list = response.data.map((value, index) => ({value: `${index+1}`, label: value}));
+        setMaterials([defaultFilterValue].concat(list));
     };
 
     const getGenres = async () => {
         const response = await Axios.get(API_GET_GENRES)
         console.log('genres', response.data);
-        setGenres(response.data.map((value, index) => ({value: `${index}`, label: value})));
+        const list = response.data.map((value, index) => ({value: `${index+1}`, label: value}));
+        setGenres([defaultFilterValue].concat(list));
     };
 
     const getMuseums = async () => {
         const response = await Axios.get(API_GET_MUSEUMS)
         console.log('museums', response.data);
-        setMuseums(response.data.map((value, index) => ({value: `${index}`, label: value})));
+        const list = response.data.map((value, index) => ({value: `${index+1}`, label: value}));
+        setMuseums([defaultFilterValue].concat(list));
     };
 
     return (
@@ -106,7 +127,8 @@ function App() {
             <AppBarComp changeView={EditorDisplayChange} updateData={UpdateData} editor={displayEditor}/>
             <div className='mainContainer'>
                 <div className='leftSide'>
-                    <FilterComp setData={setData} museums={museums} genres={genres} materials={materials}
+                    <FilterComp setData={setData} museums={museums} genres={genres}
+                                types={types} materials={materials}
                                 getAllData={UpdateData}/>
                     <DisplayEditor updateMaterialsSelect={getMaterials} updateGenresSelect={getGenres}
                                    updateMuseumsSelect={getMuseums}/>
