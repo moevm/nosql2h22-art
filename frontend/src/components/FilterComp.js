@@ -67,13 +67,13 @@ function FilterComp({setData, museums, genres, materials, getAllData}) {
                     <TextField value={author} onChange={handleChangeAuthor} size='small' fullWidth={true} label="Автор"
                                variant="outlined"/>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={6}>
                     <TextField value={start_year} onChange={handleChangeStartYear} size='small' fullWidth={true}
-                               label="Год начала" variant="outlined"/>
+                               label="Год начала" variant="outlined"  type="number"/>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={6}>
                     <TextField value={end_year} onChange={handleChangeEndYear} size='small' fullWidth={true}
-                               label="Год завершения" variant="outlined"/>
+                               label="Год завершения" variant="outlined"  type="number"/>
                 </Grid>
 
                 <Grid item xs={4}>

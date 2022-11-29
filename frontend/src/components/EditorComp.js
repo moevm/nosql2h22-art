@@ -18,7 +18,6 @@ function EditorComp({ updateMaterialsSelect, updateGenresSelect, updateMuseumsSe
         materials: '',
         type: '',
         museum_name: '',
-        museum_address: '',
         genre: '',
         url: ''
     });
@@ -70,7 +69,6 @@ function EditorComp({ updateMaterialsSelect, updateGenresSelect, updateMuseumsSe
                 materials: data.materials,
                 type: data.type,
                 museum_name: data.museum_name,
-                museum_address: data.museum_address,
                 genre: data.genre,
                 url: data.url
             }).then(r => {
@@ -97,8 +95,7 @@ function EditorComp({ updateMaterialsSelect, updateGenresSelect, updateMuseumsSe
     function valid(){
         return (data.name != '') && (data.author != '') && (data.type != '') &&
             (data.description != '')  && (data.materials != '') &&
-            (data.museum_name != '') && (data.museum_address != '') &&
-            (data.genre != '') && (data.url != '') && ((data.start_year) <= (data.end_year)) &&
+            (data.museum_name != '') && (data.genre != '') && (data.url != '') && ((data.start_year) <= (data.end_year)) &&
             (data.start_year > 0 && data.start_year < 3000 && data.end_year > 0 && data.end_year < 3000) &&
             (isValidUrl(data.url));
     }
@@ -126,18 +123,13 @@ function EditorComp({ updateMaterialsSelect, updateGenresSelect, updateMuseumsSe
                     <DescriptionEditor dataToPass={data.description} is_open={desc_editor} func={handleDescClose} />
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField onChange={(e) => {data.museum_name = e.target.value;}} size='small' fullWidth={true} label="Museum name" variant="outlined" required/>
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField onChange={(e) => {data.museum_address = e.target.value;}} size='small' fullWidth={true} label="Museum address" variant="outlined" required/>
+                    <TextField onChange={(e) => {data.museum_name = e.target.value;}} size='small' fullWidth={true} label="Museum name & address" variant="outlined" required/>
                 </Grid>
                 <Grid item xs={6}>
-                    Start year
-                    <TextField onChange={(e) => {data.start_year = +(e.target.value)}} type="number"  size='small' fullWidth={true}  variant="outlined" required/>
+                    <TextField onChange={(e) => {data.start_year = +(e.target.value)}} type="number" label="Start year" size='small' fullWidth={true}  variant="outlined" required/>
                 </Grid>
                 <Grid item xs={6}>
-                    End year
-                    <TextField onChange={(e) => {data.end_year = +(e.target.value)}} type="number"  size='small' fullWidth={true}  variant="outlined" required/>
+                    <TextField onChange={(e) => {data.end_year = +(e.target.value)}} type="number" label="End year"  size='small' fullWidth={true}  variant="outlined" required/>
                 </Grid>
                 <Grid item xs={12}>
                     <TextField onChange={(e) => { data.genre = e.target.value }} size='small' fullWidth={true} label="Genre" variant="outlined" required />
