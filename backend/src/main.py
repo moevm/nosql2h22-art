@@ -14,6 +14,7 @@ app.add_url_rule('/get_materials', methods=['GET'], view_func=routes.get_materia
 app.add_url_rule('/get_genres', methods=['GET'], view_func=routes.get_genres)
 app.add_url_rule('/get_museums', methods=['GET'], view_func=routes.get_museums)
 app.add_url_rule('/get_types', methods=['GET'], view_func=routes.get_types)
+app.add_url_rule('/recreate_table', methods=['GET'], view_func=routes.recreate_table)
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0")

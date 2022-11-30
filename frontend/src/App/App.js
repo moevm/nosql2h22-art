@@ -69,7 +69,7 @@ function App() {
     function onExport() {
         try {
             Axios.get(API_GET_ARTS).then(r => {
-                let blob = new Blob([JSON.stringify(r.data)], {type: 'application/json'})
+                let blob = new Blob([JSON.stringify(data)], {type: 'application/json'})
                 saveAs(blob, 'exported_data.json')
             });
         } catch (e) {

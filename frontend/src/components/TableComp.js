@@ -19,8 +19,7 @@ export default class TableComp extends PureComponent {
                             <TableCell align="right">Description</TableCell>
                             <TableCell align="right">Type</TableCell>
                             <TableCell align="right">Genre</TableCell>
-                            <TableCell align="right">Museum name</TableCell>
-                            <TableCell align="right">Museum address</TableCell>
+                            <TableCell align="right">Museum</TableCell>
                             <TableCell align="right">Materials</TableCell>
                             <TableCell align="right">Start</TableCell>
                             <TableCell align="right">End</TableCell>
@@ -41,7 +40,6 @@ export default class TableComp extends PureComponent {
                                 <TableCell align="right">{row.type}</TableCell>
                                 <TableCell align="right">{row.genre}</TableCell>
                                 <TableCell align="right">{row.museum_name}</TableCell>
-                                <TableCell align="right">{row.museum_address}</TableCell>
                                 <TableCell align="right">{row.materials}</TableCell>
                                 <TableCell align="right">{row.start_year}</TableCell>
                                 <TableCell align="right">{row.end_year}</TableCell>
