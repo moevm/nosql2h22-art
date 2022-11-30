@@ -1,8 +1,8 @@
-FROM node:12-alpine as build
-WORKDIR /frontend
-COPY package.json /app/package.json
-RUN npm install --only=prod
-RUN npm install -g serve
-CMD serve -s build
-COPY . /frontend
+FROM node:13.12.0-alpine
+WORKDIR /app
+ENV PATH /app/node_modules/.bin:$PATH
+COPY package.json ./
+RUN npm install --silent
+RUN npm install react-scripts@3.4.1 -g --silent
+COPY . ./
 EXPOSE 3000
