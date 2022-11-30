@@ -1,6 +1,5 @@
-from flask import request
 from cachelib import MemcachedCache
-
+from flask import request
 from sqlalchemy import create_engine
 
 db_name = 'testdb'
@@ -34,21 +33,20 @@ CREATE TABLE IF NOT EXISTS ArtWorks (
     materials varchar(200),
     type varchar(100),
     museum_name varchar(200),
-    museum_address varchar(200),
     genre varchar(100),
     url varchar(10000)
 );
 """
 
 ADD_PICTURE = """
-    INSERT INTO ArtWorks (name, author, 
-                          description, start_year, 
-                          end_year, materials, 
+    INSERT INTO ArtWorks (name, author,
+                          description, start_year,
+                          end_year, materials,
                           type,  museum_name, 
-                          museum_address, genre, url)
-    VALUES (%s, %s, %s, %s, 
-            %s, %s, %s, %s, 
-            %s, %s, %s)
+                          genre, url)
+    VALUES (%s, %s, %s, %s,
+            %s, %s, %s, %s,
+            %s, %s)
     RETURNING artworkid;
 """
 
@@ -83,6 +81,14 @@ def get_museums():
     return museums_list
 
 
+def get_types():
+    res = db.execute("""SELECT DISTINCT(type) FROM ArtWorks""")
+    museums_list = []
+    for i in res:
+        museums_list.append(dict(i)['type'])
+    return museums_list
+
+
 def add_art():
     data = request.get_json()
     # adding into postgres
@@ -91,8 +97,7 @@ def add_art():
                                    data['description'], data['start_year'],
                                    data['end_year'], data['materials'],
                                    data['type'], data['museum_name'],
-                                   data['museum_address'], data['genre'],
-                                   data['url']))
+                                   data['genre'], data['url']))
 
     res = db.execute("""SELECT * FROM ArtWorks""")
     for i in res:
@@ -117,8 +122,7 @@ def reimport_arts():
                                        data['description'], data['start_year'],
                                        data['end_year'], data['materials'],
                                        data['type'], data['museum_name'],
-                                       data['museum_address'], data['genre'],
-                                       data['url']))
+                                       data['genre'], data['url']))
         key = str(key.all()[0][0])
         cache.set(key, data)
         print("Value is written into memcached by key: {}".format(key))
@@ -134,37 +138,49 @@ def get_arts():
     return json
 
 
+def is_number_correct(requested_number):
+    if not requested_number:
+        return False
+    try:
+        return int(requested_number) > 0
+    except ValueError:
+        return False
+
+
+def string_or_any(requested_string):
+    if not requested_string:
+        return "%%"
+    return requested_string
+
+
 def get_arts_by_filter():
     requestJson = request.get_json()
-
-    titleFilter = requestJson['title']
-    authorFilter = requestJson['author']
-    startYearFilter = requestJson['start_year']
-    endYearFilter = requestJson['end_year']
-    museumFilter = requestJson['museum_name']
-    genreFilter = requestJson['genre']
-    materialFilter = requestJson['material']
-    res = []
+    print("by filter: ", requestJson)
+    titleFilter = string_or_any(requestJson['title'])
+    authorFilter = string_or_any(requestJson['author'])
+    museumFilter = string_or_any(requestJson['museum_name'])
+    genreFilter = string_or_any(requestJson['genre'])
+    materialFilter = string_or_any(requestJson['material'])
+    typeFilter = string_or_any(requestJson['type'])
 
     titleFilter = '%' + titleFilter + '%'
-
     authorFilter = '%' + authorFilter + '%'
 
-    startYearFilter = '0001' if startYearFilter == '' else startYearFilter
-    endYearFilter = '9999' if endYearFilter == '' else endYearFilter
+    startYearFilter = requestJson['start_year'] if is_number_correct(requestJson['start_year']) else -1
+    endYearFilter = requestJson['end_year'] if is_number_correct(requestJson['end_year']) else 3000
 
     res = db.execute(
-
         """
             SELECT * FROM ArtWorks
             WHERE
                 name LIKE %s
                 AND author LIKE %s
-                AND start_year > %s
-                AND end_year < %s
-                AND museum_name = %s
-                AND genre = %s
-                AND materials = %s
+                AND start_year >= %s
+                AND end_year <= %s
+                AND museum_name LIKE %s
+                AND genre LIKE %s
+                AND materials LIKE %s
+                AND type LIKE %s
         """,
         (
             titleFilter,
@@ -173,7 +189,8 @@ def get_arts_by_filter():
             endYearFilter,
             museumFilter,
             genreFilter,
-            materialFilter
+            materialFilter,
+            typeFilter
         )
     )
 
@@ -187,3 +204,4 @@ def recreate_table():  # it's not used but it useful when you need to change tab
     db.execute(DROP_TABLE)
     db.execute(CREATE_TABLE)
     cache.clear()
+    return ''

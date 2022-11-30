@@ -2,9 +2,9 @@ import {Typography, TextField, MenuItem, Grid, Button, Box, InputLabel} from "@m
 import React from "react";
 import Axios from "axios";
 import '../App/App.css';
-import {API_GET_ARTS_BY_FILTER} from "../constants";
+import {API_GET_ARTS_BY_FILTER, NOT_CHOSEN_LABEL} from "../constants";
 
-function FilterComp({setData, museums, genres, materials, getAllData}) {
+function FilterComp({setData, museums, genres, types, materials, getAllData}) {
 
     const [museum_name, setMuseum] = React.useState('0');
     const [genre, setGenre] = React.useState('0');
@@ -14,26 +14,58 @@ function FilterComp({setData, museums, genres, materials, getAllData}) {
     const [author, setAuthor] = React.useState('');
     const [start_year, setStartYear] = React.useState('');
     const [end_year, setEndYear] = React.useState('');
+    const [type, setType] = React.useState('0');
 
     const handleChangeTitle = (event) => setTitle(event.target.value);
-    const handleChangeAuthor = (event) => setAuthor(event.target.value);
+    const handleChangeAuthor = (event) => {
+        console.log(event.target.value);
+        setAuthor(event.target.value)};
     const handleChangeStartYear = (event) => setStartYear(event.target.value);
     const handleChangeEndYear = (event) => setEndYear(event.target.value);
 
-    const findByFilter = async () => {
-        const response = await Axios.post(API_GET_ARTS_BY_FILTER, {
-            title,
-            author,
-            start_year,
-            end_year,
-            museum_name: museums[museum_name].label,
-            genre: genres[genre].label,
-            material: materials[material].label,
-        })
+    const checkOnNoChosen = (val) => {
+        if (val === NOT_CHOSEN_LABEL) {
+            console.log("Not chosen val");
+            return "";
+        }
+        return val;
+    }
 
-        console.log('response.data', response.data);
-        setData(response.data)
-    };
+    const checkYear = (year) => {
+        if (year === "")
+            return true;
+        return Number(year) > 0 && Number(year) < 3000;
+    }
+
+    const valid = React.useCallback(() => {
+        const checkStart = checkYear(start_year);
+        const checkEnd = checkYear(end_year);
+        return (start_year <= end_year && checkStart && checkEnd);
+    }, [start_year, end_year]);
+
+    const findByFilter = React.useCallback(async () => {
+        if (!valid()) {
+            alert("Incorrect years!");
+        }
+        else {
+            const response = await Axios.post(API_GET_ARTS_BY_FILTER, {
+                title,
+                author,
+                start_year,
+                end_year,
+                museum_name: checkOnNoChosen(museums[museum_name].label),
+                genre: checkOnNoChosen(genres[genre].label),
+                material: checkOnNoChosen(materials[material].label),
+                type: checkOnNoChosen(types[type].label)
+            })
+
+            console.log('response.data', response.data);
+            setData(response.data)
+        }
+    }, [title,
+        author,
+        start_year,
+        end_year, museum_name, genre, material]);
 
     const clearFilters = () => {
         getAllData();
@@ -44,6 +76,7 @@ function FilterComp({setData, museums, genres, materials, getAllData}) {
         setAuthor('');
         setStartYear('');
         setEndYear('');
+        setType('0');
     }
 
     const museumChange = (event) => {
@@ -55,6 +88,8 @@ function FilterComp({setData, museums, genres, materials, getAllData}) {
     const materialChange = (event) => {
         setMaterial(event.target.value);
     };
+
+    const handleChangeType = (event) => setType(event.target.value);
     return (
         <Box className="filterMenu">
             <Typography fontSize={20}>Filters</Typography>
@@ -67,14 +102,17 @@ function FilterComp({setData, museums, genres, materials, getAllData}) {
                     <TextField value={author} onChange={handleChangeAuthor} size='small' fullWidth={true} label="Автор"
                                variant="outlined"/>
                 </Grid>
-                <Grid item xs={12}>
-                    <TextField value={start_year} onChange={handleChangeStartYear} size='small' fullWidth={true}
-                               label="Год начала" variant="outlined"/>
+
+                <Grid item xs={6}>
+                    <TextField type="number" value={start_year} onChange={handleChangeStartYear} size='small' fullWidth={true}
+                               label="Год начала" variant="outlined" type="number"/>
                 </Grid>
-                <Grid item xs={12}>
-                    <TextField value={end_year} onChange={handleChangeEndYear} size='small' fullWidth={true}
-                               label="Год завершения" variant="outlined"/>
+                <Grid item xs={6}>
+                    <TextField type="number" value={end_year} onChange={handleChangeEndYear} size='small' fullWidth={true}
+                               label="Год завершения" variant="outlined" type="number"/>
                 </Grid>
+
+
 
                 <Grid item xs={4}>
                     <InputLabel>Музей</InputLabel>
@@ -97,6 +135,26 @@ function FilterComp({setData, museums, genres, materials, getAllData}) {
                     </TextField>
                 </Grid>
 
+                <Grid item xs={4}>
+                    <InputLabel>Тип</InputLabel>
+                </Grid>
+
+                <Grid item xs={8}>
+                    <TextField
+                        size='small'
+                        fullWidth={true}
+                        variant="outlined"
+                        select
+                        value={type}
+                        onChange={handleChangeType}
+                    >
+                        {types.map((option) => (
+                            <MenuItem key={option.value} value={option.value}>
+                                {option.label}
+                            </MenuItem>
+                        ))}
+                    </TextField>
+                </Grid>
                 <Grid item xs={4}>
                     <InputLabel>Жанр</InputLabel>
                 </Grid>
