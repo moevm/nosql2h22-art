@@ -61,7 +61,8 @@ function App() {
             );
         } else {
             return (
-                <TableComp data={data}/>
+                <TableComp data={data.slice((page - 1) * 12, (page) * 12)} total={data.length} setPage={setPage}
+                              page={page}/>
             );
         }
     }
