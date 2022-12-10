@@ -47,7 +47,8 @@ function App() {
                 <EditorComp/>
             );
         } else {
-            return (<></>
+            return (
+                <UpdaterComp/>
             );
         }
     }
