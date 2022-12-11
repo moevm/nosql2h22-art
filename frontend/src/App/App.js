@@ -24,7 +24,9 @@ const defaultFilterValue = {value: "0", label: NOT_CHOSEN_LABEL};
 function App() {
 
     const [displayEditor, setDisplay] = React.useState(true);
+    const [displayUpdater, setUpdater] = React.useState();
     const [mainDisplay, setMainDisplay] = React.useState(true);
+    const [currentIndex, setIndex] = React.useState(0);
     const [page, setPage] = React.useState(1);
 
     const [data, setData] = React.useState([]);
@@ -43,13 +45,15 @@ function App() {
 
     function DisplayEditor() {
         if (displayEditor) {
-            return (
-                <EditorComp/>
-            );
-        } else {
-            return (
-                <UpdaterComp/>
-            );
+            if(displayUpdater){
+                return(<UpdaterComp dataToPass={rows[currentIndex]}/>);
+            }
+            else{
+                return(<EditorComp/>);
+            } 
+        } 
+        else{
+            return(<></>);
         }
     }
 
@@ -58,7 +62,7 @@ function App() {
             console.log(data.slice((page - 1) * 12, (page) * 12))
             return (
                 <GridCardComp data={data.slice((page - 1) * 12, (page) * 12)} total={data.length} setPage={setPage}
-                              page={page}/>
+                              page={page} curIndex = {currentIndex} curIndexChange = {DisplayIndexChange}/>
             );
         } else {
             return (
@@ -81,6 +85,10 @@ function App() {
 
     const EditorDisplayChange = () => {
         setDisplay(!displayEditor);
+    }
+    const DisplayIndexChange = (index) => {
+        setIndex(index);
+        setUpdater(true);
     }
     const MainDisplayChange = () => {
         setMainDisplay(!mainDisplay);
