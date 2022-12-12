@@ -1,29 +1,16 @@
 import {Grid, Card, CardMedia, CardContent, Typography, Box} from '@mui/material';
 import React, {PureComponent} from 'react';
 import '../App/App.css';
-import PreviewComp from "./PreviewComp";
 
 export default class GridCardComp extends PureComponent {
     constructor(props) {
         super(props)
         this.state = {
-            preview_open: false,
         }
     }
 
-    handlePreviewOpen() {
-        this.setState({preview_open: true})
-    }
-
-    handlePreviewClose = () => {
-        this.setState({preview_open: false})
-    }
-
     dot(index) {
-        // console.log(index)
         this.props.curIndexChange(index);
-        this.handlePreviewOpen()
-        console.log(this.state.preview_open)
     }
 
     set_page = (e) => {
@@ -34,8 +21,6 @@ export default class GridCardComp extends PureComponent {
     render() {
         return (
             <div>
-                <PreviewComp dataToPass={this.props.data[this.props.curIndex]} is_open={this.state.preview_open}
-                             func={this.handlePreviewClose}/>
                 <Grid style={{height: '80vh'}} container spacing={4} padding={2}>
                     {this.props.data.map((card, index) => (
                         <Grid item key={card.id} xs="3">

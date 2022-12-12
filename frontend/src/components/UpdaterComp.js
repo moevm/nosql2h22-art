@@ -4,7 +4,7 @@ import DescriptionEditor from "./DescriptionEditor";
 import '../App/App.css';
 
 
-function UpdaterComp({dataToPass}) {
+function UpdaterComp({dataToPass, hide}) {
     const [desc_editor, setDescEditor] = React.useState(false);
     const [data, setData] = useState(dataToPass);
 
@@ -71,7 +71,7 @@ function UpdaterComp({dataToPass}) {
                     <Button variant='contained' color='error'>Delete</Button>
                 </Grid>
                 <Grid item xs={3}>
-                    <Button variant='outlined' color='primary'>Cancle</Button>
+                    <Button variant='outlined' color='primary' onClick={hide}>Cancel</Button>
                 </Grid>
             </Grid>
         </div>

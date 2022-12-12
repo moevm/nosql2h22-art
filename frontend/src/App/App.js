@@ -7,6 +7,7 @@ import UpdaterComp from '../components/UpdaterComp';
 import TableComp from '../components/TableComp';
 import {Box, Button} from '@mui/material';
 import FilterComp from '../components/FilterComp';
+import PreviewComp from "../components/PreviewComp";
 import {
     API_GET_ARTS,
     API_GET_MATERIALS,
@@ -24,10 +25,11 @@ const defaultFilterValue = {value: "0", label: NOT_CHOSEN_LABEL};
 function App() {
 
     const [displayEditor, setDisplay] = React.useState(true);
-    const [displayUpdater, setUpdater] = React.useState();
-    const [mainDisplay, setMainDisplay] = React.useState(true);
-    const [currentIndex, setIndex] = React.useState(0);
+    const [displayUpdater, setUpdater] = React.useState(false);
+    const [mainDisplay, setMainDisplay] = React.useState("List");
     const [page, setPage] = React.useState(1);
+    const [previewData, setPreviewData] = React.useState([]);
+    const [previewOpen, setPreview] = React.useState(false);
 
     const [data, setData] = React.useState([]);
     const [museums, setMuseums] = React.useState([]);
@@ -46,10 +48,10 @@ function App() {
     function DisplayEditor() {
         if (displayEditor) {
             if(displayUpdater){
-                return(<UpdaterComp dataToPass={rows[currentIndex]}/>);
+                return(<UpdaterComp dataToPass={previewData} hide={HidePreview}/>);
             }
             else{
-                return(<EditorComp/>);
+                return(<EditorComp showPreview={ShowPreview} hidePreview={HidePreview} previewOpen={previewOpen}/>);
             } 
         } 
         else{
@@ -58,17 +60,24 @@ function App() {
     }
 
     function MainDisplay() {
-        if (mainDisplay) {
+        if(previewOpen){
+            return(
+                <PreviewComp dataToPass={previewData}/>
+            );
+        }
+        else{
+            if (mainDisplay) {
             console.log(data.slice((page - 1) * 12, (page) * 12))
-            return (
-                <GridCardComp data={data.slice((page - 1) * 12, (page) * 12)} total={data.length} setPage={setPage}
-                              page={page} curIndex = {currentIndex} curIndexChange = {DisplayIndexChange}/>
-            );
-        } else {
-            return (
-                <TableComp data={data.slice((page - 1) * 12, (page) * 12)} total={data.length} setPage={setPage}
-                              page={page}/>
-            );
+                return (
+                    <GridCardComp data={data.slice((page - 1) * 12, (page) * 12)} total={data.length} setPage={setPage}
+                                page={page} curIndexChange = {DisplayIndexChange}/>
+                );
+            } else {
+                return (
+                    <TableComp data={data.slice((page - 1) * 12, (page) * 12)} total={data.length} setPage={setPage}
+                                page={page}/>
+                );
+            }  
         }
     }
 
@@ -87,11 +96,20 @@ function App() {
         setDisplay(!displayEditor);
     }
     const DisplayIndexChange = (index) => {
-        setIndex(index);
+        setPreviewData(data[index]);
+        setPreview(!previewOpen);
         setUpdater(true);
     }
     const MainDisplayChange = () => {
         setMainDisplay(!mainDisplay);
+    }
+    const ShowPreview = (data) => {
+        setPreview(!previewOpen);
+        setPreviewData(data);
+    }
+    const HidePreview = () => {
+        setPreview(!previewOpen);
+        setUpdater(false);
     }
 
     const UpdateData = () => {
@@ -140,8 +158,8 @@ function App() {
                     <FilterComp setData={setData} museums={museums} genres={genres}
                                 types={types} materials={materials}
                                 getAllData={UpdateData}/>
-                    <DisplayEditor updateMaterialsSelect={getMaterials} updateGenresSelect={getGenres}
-                                   updateMuseumsSelect={getMuseums}/>
+                    <DisplayEditor />
+                    
                 </div>
                 <div className='rightSide'>
                     <div className='modeButtons'>
