@@ -1,6 +1,7 @@
 from cachelib import MemcachedCache
 from flask import request
 from sqlalchemy import create_engine
+from analysis import *
 
 db_name = 'testdb'
 db_user = 'postgres'
@@ -100,14 +101,10 @@ def add_art():
                                    data['genre'], data['url']))
 
     res = db.execute("""SELECT * FROM ArtWorks""")
-    for i in res:
-        print(i)
 
     # adding into memcached
     key = str(key.all()[0][0])
     cache.set(key, data)
-
-    print('added')
 
     return data
 
@@ -205,3 +202,80 @@ def recreate_table():  # it's not used but it useful when you need to change tab
     db.execute(CREATE_TABLE)
     cache.clear()
     return ''
+
+
+def get_analysis_museums():
+    first_seven_count = db.execute("""SELECT DISTINCT museum_name, COUNT(museum_name) AS items_count
+                        FROM ArtWorks
+                        GROUP BY museum_name
+                        ORDER BY items_count DESC
+                        LIMIT 7;""")
+
+    other_count = db.execute("""SELECT COUNT(*) FROM ArtWorks""")
+    return draw_diagram_get_png(first_seven_count, other_count, field='museum_name')
+
+
+def get_analysis_start_years():
+    first_seven_count = db.execute("""SELECT DISTINCT start_year, COUNT(start_year) AS items_count
+                        FROM ArtWorks
+                        GROUP BY start_year
+                        ORDER BY items_count DESC
+                        LIMIT 7;""")
+
+    other_count = db.execute("""SELECT COUNT(*) FROM ArtWorks""")
+    return draw_diagram_get_png(first_seven_count, other_count, field='start_year')
+
+
+def get_analysis_end_years():
+    first_seven_count = db.execute("""SELECT DISTINCT end_year, COUNT(end_year) AS items_count
+                        FROM ArtWorks
+                        GROUP BY end_year
+                        ORDER BY items_count DESC
+                        LIMIT 7;""")
+
+    other_count = db.execute("""SELECT COUNT(*) FROM ArtWorks""")
+    return draw_diagram_get_png(first_seven_count, other_count, field='end_year')
+
+
+def get_analysis_materials():
+    first_seven_count = db.execute("""SELECT DISTINCT materials, COUNT(materials) AS items_count
+                        FROM ArtWorks
+                        GROUP BY materials
+                        ORDER BY items_count DESC
+                        LIMIT 7;""")
+
+    other_count = db.execute("""SELECT COUNT(*) FROM ArtWorks""")
+    return draw_diagram_get_png(first_seven_count, other_count, field='materials')
+
+
+def get_analysis_types():
+    first_seven_count = db.execute("""SELECT DISTINCT type, COUNT(type) AS items_count
+                        FROM ArtWorks
+                        GROUP BY type
+                        ORDER BY items_count DESC
+                        LIMIT 7;""")
+
+    other_count = db.execute("""SELECT COUNT(*) FROM ArtWorks""")
+    return draw_diagram_get_png(first_seven_count, other_count, field='type')
+
+
+def get_analysis_authors():
+    first_seven_count = db.execute("""SELECT DISTINCT author, COUNT(author) AS items_count
+                        FROM ArtWorks
+                        GROUP BY author
+                        ORDER BY items_count DESC
+                        LIMIT 7;""")
+
+    other_count = db.execute("""SELECT COUNT(*) FROM ArtWorks""")
+    return draw_diagram_get_png(first_seven_count, other_count, field='author')
+
+
+def get_analysis_genres():
+    first_seven_count = db.execute("""SELECT DISTINCT genre, COUNT(genre) AS items_count
+                        FROM ArtWorks
+                        GROUP BY genre
+                        ORDER BY items_count DESC
+                        LIMIT 7;""")
+
+    other_count = db.execute("""SELECT COUNT(*) FROM ArtWorks""")
+    return draw_diagram_get_png(first_seven_count, other_count, field='genre')
