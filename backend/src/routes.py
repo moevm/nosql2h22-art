@@ -1,3 +1,5 @@
+import json
+
 from cachelib import MemcachedCache
 from flask import request
 from sqlalchemy import create_engine
@@ -125,6 +127,96 @@ def reimport_arts():
         print("Value is written into memcached by key: {}".format(key))
         print(cache.get(key))
     return ''
+
+
+def build_update_query(id: str, update: json):
+    query = "UPDATE ArtWorks SET "
+    params = []
+
+    if 'name' in update:
+        print(f"New name {update['name']}")
+        query += 'name = %s,'
+        params.append(update['name'])
+
+    if 'url' in update:
+        print(f"New url {update['url']}")
+        query += 'url = %s,'
+        params.append(update['url'])
+
+    if 'description' in update:
+        print(f"New description {update['description']}")
+        query += 'description = %s,'
+        params.append(update['description'])
+
+    if 'author' in update:
+        print(f"New author {update['author']}")
+        query += 'author = %s,'
+        params.append(update['author'])
+
+    if 'museum_name' in update:
+        print(f"New museum_name {update['museum_name']}")
+        query += 'museum_name = %s,'
+        params.append(update['museum_name'])
+
+    if 'genre' in update:
+        print(f"New genre {update['genre']}")
+        query += 'genre = %s,'
+        params.append(update['genre'])
+
+    if 'materials' in update:
+        print(f"New materials {update['materials']}")
+        query += 'materials = %s,'
+        params.append(update['materials'])
+
+    if 'type' in update:
+        print(f"New type {update['type']}")
+        query += 'type = %s,'
+        params.append(update['type'])
+
+    if 'start_year' in update:
+        print(f"New start_year {update['start_year']}")
+        query += 'start_year = %s,'
+        params.append(int(update['start_year']))
+
+    if 'end_year' in update:
+        print(f"New end_year {update['end_year']}")
+        query += 'end_year = %s '
+        params.append(int(update['end_year']))
+
+    if not len(params):
+        raise ValueError('Update request cannot be empty')
+
+    query = query[:-1] + ' '
+    query += "WHERE artworkid = %s RETURNING *"
+    params.append(int(id))
+
+    print(f"Query: {query}")
+    print(f"Params: {params}")
+
+    return query, params
+
+
+def update_art(id):
+    update = request.get_json()
+
+    print(f'update_art {id}, request: {update}')
+
+    if id is None:
+        raise ValueError("Art work id cannot be empty")
+
+    query, params = build_update_query(id, update)
+    new_artwork = db.execute(query, *params).first()
+
+    if not new_artwork:
+        raise ValueError(f"Art work with id {id} not found")
+
+    new_artwork = dict(new_artwork)
+
+    print(f"Updated: {new_artwork}")
+
+    cache.set(id, new_artwork)
+
+    return new_artwork
 
 
 def get_arts():
