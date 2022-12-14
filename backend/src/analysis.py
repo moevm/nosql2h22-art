@@ -1,7 +1,7 @@
 import base64
 from io import BytesIO
 import matplotlib.pyplot as plt
-
+from flask import make_response
 
 def draw_diagram_get_png(first_seven_count, other_count, field):
     sum_of_first_seven = 0
@@ -21,5 +21,10 @@ def draw_diagram_get_png(first_seven_count, other_count, field):
     label = str(field + '_count.png')
     buf = BytesIO()
     fig.savefig(buf, format="png")
-    data = base64.b64encode(buf.getbuffer()).decode("ascii")
-    return f"<img src='data:image/png;base64,{data}'/>"
+    # data = base64.b64encode(buf.getbuffer()).decode("ascii")
+    # image_url = f"<img src='data:image/png;base64,{data}'/>"
+    response = make_response(buf.getvalue())
+    response.headers['Content-Disposition'] = f'attachment; filename={field}s.png'
+    response.mimetype = 'image/png'
+
+    return response
