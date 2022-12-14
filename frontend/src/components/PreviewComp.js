@@ -1,4 +1,4 @@
-import {Button, Dialog, DialogContent, Grid, Typography} from '@mui/material';
+import {Button, Grid, Typography} from '@mui/material';
 import React, {PureComponent} from 'react';
 import '../App/App.css';
 import DescriptionViewer from "./DescriptionViewer";
@@ -13,18 +13,18 @@ export default class PreviewComp extends PureComponent {
         this.handleDescClose = this.handleDescClose.bind(this);
     }
 
-    handleDescOpen(){
+    handleDescOpen() {
         this.setState({desc_editor: true});
     }
 
-    handleDescClose(descriptionData){
+    handleDescClose(descriptionData) {
         if (typeof descriptionData === "string")
             this.props.description = descriptionData;
         this.setState({desc_editor: false});
     }
 
     render() {
-        if(this.props.dataToPass !== undefined) {
+        if (this.props.dataToPass !== undefined) {
             return (
                 <>
                     <div>
@@ -71,8 +71,9 @@ export default class PreviewComp extends PureComponent {
                         <p></p>
                     </div>
                     <Grid item xs={12}>
-                        <Button variant='outlined' color='primary'  onClick={this.handleDescOpen}>Description</Button>
-                        <DescriptionViewer dataToPass={this.props.dataToPass.description} is_open={this.state.desc_editor} func={this.handleDescClose} />
+                        <Button variant='outlined' color='primary' onClick={this.handleDescOpen}>Description</Button>
+                        <DescriptionViewer dataToPass={this.props.dataToPass.description}
+                                           is_open={this.state.desc_editor} func={this.handleDescClose}/>
                     </Grid>
                 </>
             );

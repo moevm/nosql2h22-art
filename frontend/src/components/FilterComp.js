@@ -19,7 +19,8 @@ function FilterComp({setData, museums, genres, types, materials, getAllData}) {
     const handleChangeTitle = (event) => setTitle(event.target.value);
     const handleChangeAuthor = (event) => {
         console.log(event.target.value);
-        setAuthor(event.target.value)};
+        setAuthor(event.target.value)
+    };
     const handleChangeStartYear = (event) => setStartYear(event.target.value);
     const handleChangeEndYear = (event) => setEndYear(event.target.value);
 
@@ -46,8 +47,7 @@ function FilterComp({setData, museums, genres, types, materials, getAllData}) {
     const findByFilter = React.useCallback(async () => {
         if (!valid()) {
             alert("Incorrect years!");
-        }
-        else {
+        } else {
             const response = await Axios.post(API_GET_ARTS_BY_FILTER, {
                 title,
                 author,
@@ -104,14 +104,15 @@ function FilterComp({setData, museums, genres, types, materials, getAllData}) {
                 </Grid>
 
                 <Grid item xs={6}>
-                    <TextField type="number" value={start_year} onChange={handleChangeStartYear} size='small' fullWidth={true}
+                    <TextField type="number" value={start_year} onChange={handleChangeStartYear} size='small'
+                               fullWidth={true}
                                label="Год начала" variant="outlined"/>
                 </Grid>
                 <Grid item xs={6}>
-                    <TextField type="number" value={end_year} onChange={handleChangeEndYear} size='small' fullWidth={true}
+                    <TextField type="number" value={end_year} onChange={handleChangeEndYear} size='small'
+                               fullWidth={true}
                                label="Год завершения" variant="outlined"/>
                 </Grid>
-
 
 
                 <Grid item xs={4}>

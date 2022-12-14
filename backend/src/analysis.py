@@ -3,6 +3,7 @@ from io import BytesIO
 import matplotlib.pyplot as plt
 from flask import make_response
 
+
 def draw_diagram_get_png(first_seven_count, other_count, field):
     sum_of_first_seven = 0
     counts_of_first_seven = []

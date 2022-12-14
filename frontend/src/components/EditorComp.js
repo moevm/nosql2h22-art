@@ -1,11 +1,18 @@
-import { Typography, TextField, Grid, Button } from "@mui/material";
-import React, { useState } from "react";
+import {Typography, TextField, Grid, Button} from "@mui/material";
+import React, {useState} from "react";
 import DescriptionEditor from "./DescriptionEditor";
 import '../App/App.css';
 import Axios from "axios";
 
 
-function EditorComp({ updateMaterialsSelect, updateGenresSelect, updateMuseumsSelect, showPreview, hidePreview, previewOpen}) {
+function EditorComp({
+                        updateMaterialsSelect,
+                        updateGenresSelect,
+                        updateMuseumsSelect,
+                        showPreview,
+                        hidePreview,
+                        previewOpen
+                    }) {
     const [desc_editor, setDescEditor] = React.useState(false);
     const [data, setData] = useState({
         name: '',
@@ -19,7 +26,6 @@ function EditorComp({ updateMaterialsSelect, updateGenresSelect, updateMuseumsSe
         genre: '',
         url: ''
     });
-
 
 
     const handleDescOpen = (descriptionData) => {
@@ -40,16 +46,6 @@ function EditorComp({ updateMaterialsSelect, updateGenresSelect, updateMuseumsSe
     }
     const handlePreviewClose = () => {
         hidePreview();
-    }
-
-    function onFileChange(event) {
-        if (event.target.files.length === 0) {
-            return;
-        }
-        if (event.target.files[0].type !== "image/png") {
-            alert('Wrong file format');
-            return
-        }
     }
 
     function submit() {
@@ -79,20 +75,20 @@ function EditorComp({ updateMaterialsSelect, updateGenresSelect, updateMuseumsSe
         }
     }
 
-    const isValidUrl = urlString=> {
-        var urlPattern = new RegExp('^(https?:\\/\\/)?'+ // validate protocol
-        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // validate domain name
-        '((\\d{1,3}\\.){3}\\d{1,3}))'+ // validate OR ip (v4) address
-        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // validate port and path
-        '(\\?[;&a-z\\d%_.~+=-]*)?'+ // validate query string
-        '(\\#[-a-z\\d_]*)?$','i'); // validate fragment locator
+    const isValidUrl = urlString => {
+        var urlPattern = new RegExp('^(https?:\\/\\/)?' + // validate protocol
+            '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // validate domain name
+            '((\\d{1,3}\\.){3}\\d{1,3}))' + // validate OR ip (v4) address
+            '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // validate port and path
+            '(\\?[;&a-z\\d%_.~+=-]*)?' + // validate query string
+            '(\\#[-a-z\\d_]*)?$', 'i'); // validate fragment locator
         return !!urlPattern.test(urlString);
     }
 
-    function valid(){
-        return (data.name != '') && (data.author != '') && (data.type != '') &&
-            (data.description != '')  && (data.materials != '') &&
-            (data.museum_name != '') && (data.genre != '') && (data.url != '') && ((data.start_year) <= (data.end_year)) &&
+    function valid() {
+        return (data.name !== '') && (data.author !== '') && (data.type !== '') &&
+            (data.description !== '') && (data.materials !== '') &&
+            (data.museum_name !== '') && (data.genre !== '') && (data.url !== '') && ((data.start_year) <= (data.end_year)) &&
             (data.start_year > 0 && data.start_year < 3000 && data.end_year > 0 && data.end_year < 3000) &&
             (isValidUrl(data.url));
     }
@@ -110,35 +106,53 @@ function EditorComp({ updateMaterialsSelect, updateGenresSelect, updateMuseumsSe
                 {/*        /></Button>*/}
                 {/*</Grid>*/}
                 <Grid item xs={12}>
-                    <TextField onChange={(e) => { data.name = e.target.value; }} size='small' fullWidth={true} label="Name" variant="outlined" required />
+                    <TextField onChange={(e) => {
+                        data.name = e.target.value;
+                    }} size='small' fullWidth={true} label="Name" variant="outlined" required/>
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField onChange={(e) => { data.author = e.target.value }} size='small' fullWidth={true} label="Author" variant="outlined" required />
+                    <TextField onChange={(e) => {
+                        data.author = e.target.value
+                    }} size='small' fullWidth={true} label="Author" variant="outlined" required/>
                 </Grid>
                 <Grid item xs={12}>
                     <Button variant='outlined' color='primary' onClick={handleDescOpen}>Description</Button>
-                    <DescriptionEditor dataToPass={data.description} is_open={desc_editor} func={handleDescClose} />
+                    <DescriptionEditor dataToPass={data.description} is_open={desc_editor} func={handleDescClose}/>
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField onChange={(e) => {data.museum_name = e.target.value;}} size='small' fullWidth={true} label="Museum name & address" variant="outlined" required/>
+                    <TextField onChange={(e) => {
+                        data.museum_name = e.target.value;
+                    }} size='small' fullWidth={true} label="Museum name & address" variant="outlined" required/>
                 </Grid>
                 <Grid item xs={6}>
-                    <TextField onChange={(e) => {data.start_year = +(e.target.value)}} type="number" label="Start year" size='small' fullWidth={true}  variant="outlined" required/>
+                    <TextField onChange={(e) => {
+                        data.start_year = +(e.target.value)
+                    }} type="number" label="Start year" size='small' fullWidth={true} variant="outlined" required/>
                 </Grid>
                 <Grid item xs={6}>
-                    <TextField onChange={(e) => {data.end_year = +(e.target.value)}} type="number" label="End year"  size='small' fullWidth={true}  variant="outlined" required/>
+                    <TextField onChange={(e) => {
+                        data.end_year = +(e.target.value)
+                    }} type="number" label="End year" size='small' fullWidth={true} variant="outlined" required/>
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField onChange={(e) => { data.genre = e.target.value }} size='small' fullWidth={true} label="Genre" variant="outlined" required />
+                    <TextField onChange={(e) => {
+                        data.genre = e.target.value
+                    }} size='small' fullWidth={true} label="Genre" variant="outlined" required/>
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField onChange={(e) => { data.materials = e.target.value }} size='small' fullWidth={true} label="Materials" variant="outlined" required />
+                    <TextField onChange={(e) => {
+                        data.materials = e.target.value
+                    }} size='small' fullWidth={true} label="Materials" variant="outlined" required/>
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField onChange={(e) => { data.type = e.target.value }} size='small' fullWidth={true} label="Type" variant="outlined" required />
+                    <TextField onChange={(e) => {
+                        data.type = e.target.value
+                    }} size='small' fullWidth={true} label="Type" variant="outlined" required/>
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField onChange={(e) => { data.url = e.target.value; }} type="URL" size='small' fullWidth={true} label="URL" variant="outlined" required />
+                    <TextField onChange={(e) => {
+                        data.url = e.target.value;
+                    }} type="URL" size='small' fullWidth={true} label="URL" variant="outlined" required/>
                 </Grid>
 
                 <Grid item xs={6}>
@@ -146,10 +160,10 @@ function EditorComp({ updateMaterialsSelect, updateGenresSelect, updateMuseumsSe
                 </Grid>
                 <Grid item xs={6}>
                     {previewOpen
-                        ? <Button variant='outlined' color='primary' 
-                                    onClick={handlePreviewClose}>Close preview</Button>
-                        : <Button variant='outlined' color='primary' 
-                                    onClick={handlePreviewOpen}>Preview</Button>
+                        ? <Button variant='outlined' color='primary'
+                                  onClick={handlePreviewClose}>Close preview</Button>
+                        : <Button variant='outlined' color='primary'
+                                  onClick={handlePreviewOpen}>Preview</Button>
                     }
                 </Grid>
             </Grid>

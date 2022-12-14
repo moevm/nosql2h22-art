@@ -90,7 +90,7 @@
 
 .modeButtons {
     margin-top: 5px;
-    justify-content: end;
+    justify-content: flex-end;
     display: flex;
 }
 

@@ -1,5 +1,5 @@
 import {Typography, TextField, Grid, Button} from "@mui/material";
-import React, { useState } from "react";
+import React, {useState} from "react";
 import DescriptionEditor from "./DescriptionEditor";
 import '../App/App.css';
 
@@ -18,7 +18,8 @@ function UpdaterComp({dataToPass, hide}) {
         setDescEditor(false);
     }
 
-    function submit() {}
+    function submit() {
+    }
 
     return (
         <div className="editorMenu">
@@ -33,35 +34,53 @@ function UpdaterComp({dataToPass, hide}) {
                 {/*        /></Button>*/}
                 {/*</Grid>*/}
                 <Grid item xs={12}>
-                    <TextField value={data.name} onChange={(e) => { data.name = e.target.value; }} size='small' fullWidth={true} label="Name" variant="outlined" required />
+                    <TextField value={data.name} onChange={(e) => {
+                        data.name = e.target.value;
+                    }} size='small' fullWidth={true} label="Name" variant="outlined" required/>
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField value={data.author} onChange={(e) => { data.author = e.target.value }} size='small' fullWidth={true} label="Author" variant="outlined" required />
+                    <TextField value={data.author} onChange={(e) => {
+                        data.author = e.target.value
+                    }} size='small' fullWidth={true} label="Author" variant="outlined" required/>
                 </Grid>
                 <Grid item xs={12}>
                     <Button variant='outlined' color='primary' onClick={handleDescOpen}>Description</Button>
-                    <DescriptionEditor dataToPass={data.description} is_open={desc_editor} func={handleDescClose} />
+                    <DescriptionEditor dataToPass={data.description} is_open={desc_editor} func={handleDescClose}/>
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField value={data.museum_name} onChange={(e) => {data.museum_name = e.target.value;}} size='small' fullWidth={true} label="Museum name & address" variant="outlined" required/>
+                    <TextField value={data.museum_name} onChange={(e) => {
+                        data.museum_name = e.target.value;
+                    }} size='small' fullWidth={true} label="Museum name & address" variant="outlined" required/>
                 </Grid>
                 <Grid item xs={6}>
-                    <TextField value={data.start_year} onChange={(e) => {data.start_year = +(e.target.value)}} type="number" label="Start year" size='small' fullWidth={true}  variant="outlined" required/>
+                    <TextField value={data.start_year} onChange={(e) => {
+                        data.start_year = +(e.target.value)
+                    }} type="number" label="Start year" size='small' fullWidth={true} variant="outlined" required/>
                 </Grid>
                 <Grid item xs={6}>
-                    <TextField value={data.end_year} onChange={(e) => {data.end_year = +(e.target.value)}} type="number" label="End year"  size='small' fullWidth={true}  variant="outlined" required/>
+                    <TextField value={data.end_year} onChange={(e) => {
+                        data.end_year = +(e.target.value)
+                    }} type="number" label="End year" size='small' fullWidth={true} variant="outlined" required/>
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField value={data.genre} onChange={(e) => { data.genre = e.target.value }} size='small' fullWidth={true} label="Genre" variant="outlined" required />
+                    <TextField value={data.genre} onChange={(e) => {
+                        data.genre = e.target.value
+                    }} size='small' fullWidth={true} label="Genre" variant="outlined" required/>
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField value={data.materials} onChange={(e) => { data.materials = e.target.value }} size='small' fullWidth={true} label="Materials" variant="outlined" required />
+                    <TextField value={data.materials} onChange={(e) => {
+                        data.materials = e.target.value
+                    }} size='small' fullWidth={true} label="Materials" variant="outlined" required/>
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField value={data.type} onChange={(e) => { data.type = e.target.value }} size='small' fullWidth={true} label="Type" variant="outlined" required />
+                    <TextField value={data.type} onChange={(e) => {
+                        data.type = e.target.value
+                    }} size='small' fullWidth={true} label="Type" variant="outlined" required/>
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField value={data.url} onChange={(e) => { data.url = e.target.value; }} type="URL" size='small' fullWidth={true} label="URL" variant="outlined" required />
+                    <TextField value={data.url} onChange={(e) => {
+                        data.url = e.target.value;
+                    }} type="URL" size='small' fullWidth={true} label="URL" variant="outlined" required/>
                 </Grid>
 
                 <Grid item xs={3}>

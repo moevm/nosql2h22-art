@@ -26,4 +26,4 @@ app.add_url_rule('/get_analysis_authors', methods=['GET'], view_func=routes.get_
 app.add_url_rule('/get_analysis_genres', methods=['GET'], view_func=routes.get_analysis_genres)
 
 if __name__ == '__main__':
-    app.run(debug=True, host="0.0.0.0", port="8080")
+    app.run(debug=True, host="0.0.0.0")

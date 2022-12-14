@@ -61,11 +61,11 @@ export default class AppBarComp extends PureComponent {
                         <Box mr={3}>
                             {this.props.editor
                                 ? <Button color='inherit' variant='outlined' align='right' component="label">Import
-                                <input
-                                type="file"
-                                hidden
-                                onChange={this.onFileChange}
-                                /></Button>
+                                    <input
+                                        type="file"
+                                        hidden
+                                        onChange={this.onFileChange}
+                                    /></Button>
                                 : <div/>
                             }
                         </Box>

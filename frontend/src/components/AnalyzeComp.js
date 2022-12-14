@@ -52,10 +52,11 @@ function AnalyzeComp({closeAnalyze}) {
                             <TextField size='small' fullWidth={true} label="Museum name & address" variant="outlined"/>
                         </Grid>
                         <Grid item xs={6}>
-                            <TextField type="number" label="Start year" size='small' fullWidth={true}  variant="outlined"/>
+                            <TextField type="number" label="Start year" size='small' fullWidth={true}
+                                       variant="outlined"/>
                         </Grid>
                         <Grid item xs={6}>
-                            <TextField type="number" label="End year"  size='small' fullWidth={true}  variant="outlined"/>
+                            <TextField type="number" label="End year" size='small' fullWidth={true} variant="outlined"/>
                         </Grid>
                         <Grid item xs={12}>
                             <TextField size='small' fullWidth={true} label="Genre" variant="outlined"/>
@@ -66,11 +67,12 @@ function AnalyzeComp({closeAnalyze}) {
                     </Grid>
                     <Button variant='contained' color='primary' style={{marginTop: 10}}>Save as .png</Button>
                     <Button variant='contained' color='error' style={{marginTop: 10, marginLeft: 10}}
-                                onClick={closeAnalyze}>Cancel</Button>
+                            onClick={closeAnalyze}>Cancel</Button>
                 </div>
                 <div className='analyzeView'>
                     <Typography fontSize={20}>Analysis for</Typography>
-                    <img src='https://assets.pikiran-rakyat.com/crop/0x0:0x0/x/photo/2021/05/18/1067981407.jpg' style={{width: 400, height: 300}}/>
+                    <img src='https://assets.pikiran-rakyat.com/crop/0x0:0x0/x/photo/2021/05/18/1067981407.jpg'
+                         style={{width: 400, height: 300}}/>
                 </div>
             </div>
         </div>

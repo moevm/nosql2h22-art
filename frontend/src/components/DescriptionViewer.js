@@ -1,8 +1,6 @@
 import {
     Dialog,
     DialogContent,
-    DialogActions,
-    Button,
     TextareaAutosize
 } from '@mui/material';
 import React, {PureComponent} from 'react';
@@ -23,7 +21,7 @@ export default class DescriptionViewer extends PureComponent {
             <Dialog open={this.props.is_open} onClose={this.props.func}>
                 <DialogContent sx={{width: '25vw', height: '25vh'}}>
                     <TextareaAutosize
-                        style={{width:550, height:300}}
+                        style={{width: 550, height: 300}}
                         autoFocus={true}
                         defaultValue={this.props.dataToPass}
                         label={'Description'}
