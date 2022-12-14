@@ -1,59 +1,79 @@
 import {Typography, TextField, Grid, Button} from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import DescriptionEditor from "./DescriptionEditor";
 import '../App/App.css';
 
 
-function UpdaterComp() {
+function UpdaterComp({dataToPass, hide}) {
     const [desc_editor, setDescEditor] = React.useState(false);
+    const [data, setData] = useState(dataToPass);
 
-    const handleDescOpen = () => {
+    const handleDescOpen = (descriptionData) => {
         setDescEditor(true);
     }
-    const handleDescClose = () => {
+    const handleDescClose = (descriptionData) => {
+        if (typeof descriptionData === "string")
+            data.description = descriptionData;
+
         setDescEditor(false);
     }
 
+    function submit() {}
+
     return (
         <div className="editorMenu">
-            <Typography>Editor</Typography>
-            <Button variant='outlined' color='primary'>Add picture</Button>
-            <div>
-                <TextField id="outlined-basic" label="Name" variant="outlined"/>
-            </div>
-            <div>
-                <TextField id="outlined-basic" label="Author" variant="outlined"/>
-            </div>
-            <div>
-                <Button variant='outlined' color='primary' onClick={handleDescOpen}>Descryption</Button>
-                <DescriptionEditor is_open={desc_editor} func={handleDescClose}/>
-            </div>
-            <div>
-                <TextField id="outlined-basic" label="Museum" variant="outlined"/>
-            </div>
-            <div>
-                <TextField id="outlined-basic" label="Start year" variant="outlined"/>
-                <TextField id="outlined-basic" label="End year" variant="outlined"/>
-            </div>
-            <div>
-                <TextField id="outlined-basic" label="Genre" variant="outlined"/>
-            </div>
-            <div>
-                <TextField id="outlined-basic" label="Materials" variant="outlined"/>
-            </div>
-
-            <div className='bottomGrid'>
-                <Grid container spacing={2}>
-                    <Grid item>
-                        <Button variant='contained' color='primary'>Add</Button>
-                    </Grid>
-                    <Grid item>
-                        <Button variant='outlined' color='success'>Edit</Button>
-                        <Button variant='outlined' color='primary'>Delete</Button>
-                        <Button variant='outlined' color='error'>Cancel</Button>
-                    </Grid>
+            <Typography fontSize={20}>Updater</Typography>
+            <Grid container spacing={1} padding={1} alignItems={'center'}>
+                {/*<Grid item xs={12}>*/}
+                {/*    <Button variant='outlined' color='primary' component="label">Change picture*/}
+                {/*        <input*/}
+                {/*            type="file"*/}
+                {/*            hidden*/}
+                {/*            onChange={onFileChange}*/}
+                {/*        /></Button>*/}
+                {/*</Grid>*/}
+                <Grid item xs={12}>
+                    <TextField value={data.name} onChange={(e) => { data.name = e.target.value; }} size='small' fullWidth={true} label="Name" variant="outlined" required />
                 </Grid>
-            </div>
+                <Grid item xs={12}>
+                    <TextField value={data.author} onChange={(e) => { data.author = e.target.value }} size='small' fullWidth={true} label="Author" variant="outlined" required />
+                </Grid>
+                <Grid item xs={12}>
+                    <Button variant='outlined' color='primary' onClick={handleDescOpen}>Description</Button>
+                    <DescriptionEditor dataToPass={data.description} is_open={desc_editor} func={handleDescClose} />
+                </Grid>
+                <Grid item xs={12}>
+                    <TextField value={data.museum_name} onChange={(e) => {data.museum_name = e.target.value;}} size='small' fullWidth={true} label="Museum name & address" variant="outlined" required/>
+                </Grid>
+                <Grid item xs={6}>
+                    <TextField value={data.start_year} onChange={(e) => {data.start_year = +(e.target.value)}} type="number" label="Start year" size='small' fullWidth={true}  variant="outlined" required/>
+                </Grid>
+                <Grid item xs={6}>
+                    <TextField value={data.end_year} onChange={(e) => {data.end_year = +(e.target.value)}} type="number" label="End year"  size='small' fullWidth={true}  variant="outlined" required/>
+                </Grid>
+                <Grid item xs={12}>
+                    <TextField value={data.genre} onChange={(e) => { data.genre = e.target.value }} size='small' fullWidth={true} label="Genre" variant="outlined" required />
+                </Grid>
+                <Grid item xs={12}>
+                    <TextField value={data.materials} onChange={(e) => { data.materials = e.target.value }} size='small' fullWidth={true} label="Materials" variant="outlined" required />
+                </Grid>
+                <Grid item xs={12}>
+                    <TextField value={data.type} onChange={(e) => { data.type = e.target.value }} size='small' fullWidth={true} label="Type" variant="outlined" required />
+                </Grid>
+                <Grid item xs={12}>
+                    <TextField value={data.url} onChange={(e) => { data.url = e.target.value; }} type="URL" size='small' fullWidth={true} label="URL" variant="outlined" required />
+                </Grid>
+
+                <Grid item xs={3}>
+                    <Button type="submit" variant='contained' onClick={submit} color='success'>Edit</Button>
+                </Grid>
+                <Grid item xs={4}>
+                    <Button variant='contained' color='error'>Delete</Button>
+                </Grid>
+                <Grid item xs={3}>
+                    <Button variant='outlined' color='primary' onClick={hide}>Cancel</Button>
+                </Grid>
+            </Grid>
         </div>
     );
 }

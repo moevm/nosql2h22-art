@@ -109,4 +109,20 @@
 
 .analyzeContainer {
     display: flex;
+    padding: 10px;
+    justify-content: space-evenly;
+}
+
+.analyzeControls {
+    width: 30%;
+}
+
+.analyzeView {
+    width: 50%;
+}
+
+.analyzeGrid {
+    border: 2px solid black;
+    border-radius: 10px;
+    text-align: center;
 }

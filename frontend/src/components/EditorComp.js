@@ -2,13 +2,11 @@ import { Typography, TextField, Grid, Button } from "@mui/material";
 import React, { useState } from "react";
 import DescriptionEditor from "./DescriptionEditor";
 import '../App/App.css';
-import PreviewComp from "./PreviewComp";
 import Axios from "axios";
 
 
-function EditorComp({ updateMaterialsSelect, updateGenresSelect, updateMuseumsSelect }) {
+function EditorComp({ updateMaterialsSelect, updateGenresSelect, updateMuseumsSelect, showPreview, hidePreview, previewOpen}) {
     const [desc_editor, setDescEditor] = React.useState(false);
-    const [preview_open, setPreview] = React.useState(false);
     const [data, setData] = useState({
         name: '',
         author: '',
@@ -30,7 +28,6 @@ function EditorComp({ updateMaterialsSelect, updateGenresSelect, updateMuseumsSe
     const handleDescClose = (descriptionData) => {
         if (typeof descriptionData === "string")
             data.description = descriptionData;
-
         setDescEditor(false);
     }
 
@@ -38,11 +35,11 @@ function EditorComp({ updateMaterialsSelect, updateGenresSelect, updateMuseumsSe
         if (!valid()) {
             alert("Form is incorrect for preview");
         } else {
-            setPreview(true);
+            showPreview(data);
         }
     }
     const handlePreviewClose = () => {
-        setPreview(false);
+        hidePreview();
     }
 
     function onFileChange(event) {
@@ -147,10 +144,13 @@ function EditorComp({ updateMaterialsSelect, updateGenresSelect, updateMuseumsSe
                 <Grid item xs={6}>
                     <Button type="submit" variant='contained' onClick={submit} color='primary'>Add</Button>
                 </Grid>
-
                 <Grid item xs={6}>
-                    <Button variant='outlined' color='primary' onClick={handlePreviewOpen}>Preview</Button>
-                    <PreviewComp dataToPass={data} is_open={preview_open} func={handlePreviewClose} />
+                    {previewOpen
+                        ? <Button variant='outlined' color='primary' 
+                                    onClick={handlePreviewClose}>Close preview</Button>
+                        : <Button variant='outlined' color='primary' 
+                                    onClick={handlePreviewOpen}>Preview</Button>
+                    }
                 </Grid>
             </Grid>
         </div>
