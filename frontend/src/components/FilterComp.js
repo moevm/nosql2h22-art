@@ -105,11 +105,11 @@ function FilterComp({setData, museums, genres, types, materials, getAllData}) {
 
                 <Grid item xs={6}>
                     <TextField type="number" value={start_year} onChange={handleChangeStartYear} size='small' fullWidth={true}
-                               label="Год начала" variant="outlined" type="number"/>
+                               label="Год начала" variant="outlined"/>
                 </Grid>
                 <Grid item xs={6}>
                     <TextField type="number" value={end_year} onChange={handleChangeEndYear} size='small' fullWidth={true}
-                               label="Год завершения" variant="outlined" type="number"/>
+                               label="Год завершения" variant="outlined"/>
                 </Grid>
 
 
