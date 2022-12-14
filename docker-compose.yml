@@ -3,10 +3,6 @@ services:
   memcached:
     image: memcached:1.6.12
     container_name: memcached
-    ports:
-      - "11211:11211"
-    expose:
-      - "11211"
     entrypoint:
       - memcached
       - -m 64
@@ -36,8 +32,6 @@ services:
     image: postgres:15.1
     build: ./database
     container_name: postgres
-    ports:
-      - "5432:5432"
     environment:
       - POSTGRES_HOST_AUTH_METHOD=trust
     volumes:
