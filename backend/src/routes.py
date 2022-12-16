@@ -296,78 +296,20 @@ def recreate_table():  # it's not used but it useful when you need to change tab
     return ''
 
 
-def get_analysis_museums():
-    first_seven_count = db.execute("""SELECT DISTINCT museum_name, COUNT(museum_name) AS items_count
+def get_analysis(field: str):
+    fields_list = ['museum_name', 'start_year', 'end_year',
+                   'materials', 'type', 'author', 'genre']
+    if field not in fields_list:
+        print('FUCK')
+        response = make_response('No such field')
+        return response
+    first_seven_count = db.execute(f"""SELECT DISTINCT {field}, COUNT({field}) AS items_count
                         FROM ArtWorks
-                        GROUP BY museum_name
+                        GROUP BY {field}
                         ORDER BY items_count DESC
                         LIMIT 7;""")
 
     other_count = db.execute("""SELECT COUNT(*) FROM ArtWorks""")
-    return draw_diagram_get_png(first_seven_count, other_count, field='museum_name')
+    return draw_diagram_get_png(first_seven_count, other_count, field=field)
 
 
-def get_analysis_start_years():
-    first_seven_count = db.execute("""SELECT DISTINCT start_year, COUNT(start_year) AS items_count
-                        FROM ArtWorks
-                        GROUP BY start_year
-                        ORDER BY items_count DESC
-                        LIMIT 7;""")
-
-    other_count = db.execute("""SELECT COUNT(*) FROM ArtWorks""")
-    return draw_diagram_get_png(first_seven_count, other_count, field='start_year')
-
-
-def get_analysis_end_years():
-    first_seven_count = db.execute("""SELECT DISTINCT end_year, COUNT(end_year) AS items_count
-                        FROM ArtWorks
-                        GROUP BY end_year
-                        ORDER BY items_count DESC
-                        LIMIT 7;""")
-
-    other_count = db.execute("""SELECT COUNT(*) FROM ArtWorks""")
-    return draw_diagram_get_png(first_seven_count, other_count, field='end_year')
-
-
-def get_analysis_materials():
-    first_seven_count = db.execute("""SELECT DISTINCT materials, COUNT(materials) AS items_count
-                        FROM ArtWorks
-                        GROUP BY materials
-                        ORDER BY items_count DESC
-                        LIMIT 7;""")
-
-    other_count = db.execute("""SELECT COUNT(*) FROM ArtWorks""")
-    return draw_diagram_get_png(first_seven_count, other_count, field='materials')
-
-
-def get_analysis_types():
-    first_seven_count = db.execute("""SELECT DISTINCT type, COUNT(type) AS items_count
-                        FROM ArtWorks
-                        GROUP BY type
-                        ORDER BY items_count DESC
-                        LIMIT 7;""")
-
-    other_count = db.execute("""SELECT COUNT(*) FROM ArtWorks""")
-    return draw_diagram_get_png(first_seven_count, other_count, field='type')
-
-
-def get_analysis_authors():
-    first_seven_count = db.execute("""SELECT DISTINCT author, COUNT(author) AS items_count
-                        FROM ArtWorks
-                        GROUP BY author
-                        ORDER BY items_count DESC
-                        LIMIT 7;""")
-
-    other_count = db.execute("""SELECT COUNT(*) FROM ArtWorks""")
-    return draw_diagram_get_png(first_seven_count, other_count, field='author')
-
-
-def get_analysis_genres():
-    first_seven_count = db.execute("""SELECT DISTINCT genre, COUNT(genre) AS items_count
-                        FROM ArtWorks
-                        GROUP BY genre
-                        ORDER BY items_count DESC
-                        LIMIT 7;""")
-
-    other_count = db.execute("""SELECT COUNT(*) FROM ArtWorks""")
-    return draw_diagram_get_png(first_seven_count, other_count, field='genre')

@@ -17,13 +17,7 @@ app.add_url_rule('/get_museums', methods=['GET'], view_func=routes.get_museums)
 app.add_url_rule('/get_types', methods=['GET'], view_func=routes.get_types)
 app.add_url_rule('/recreate_table', methods=['GET'], view_func=routes.recreate_table)
 
-app.add_url_rule('/get_analysis_museums', methods=['GET'], view_func=routes.get_analysis_museums)
-app.add_url_rule('/get_analysis_start_years', methods=['GET'], view_func=routes.get_analysis_start_years)
-app.add_url_rule('/get_analysis_end_years', methods=['GET'], view_func=routes.get_analysis_end_years)
-app.add_url_rule('/get_analysis_materials', methods=['GET'], view_func=routes.get_analysis_materials)
-app.add_url_rule('/get_analysis_types', methods=['GET'], view_func=routes.get_analysis_types)
-app.add_url_rule('/get_analysis_authors', methods=['GET'], view_func=routes.get_analysis_authors)
-app.add_url_rule('/get_analysis_genres', methods=['GET'], view_func=routes.get_analysis_genres)
+app.add_url_rule('/get_analysis/<field>', methods=['GET'], view_func=routes.get_analysis)
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0")
