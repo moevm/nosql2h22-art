@@ -135,7 +135,7 @@ function App() {
         setDisplay(!displayEditor);
     }
     const DisplayIndexChange = (index) => {
-        setPreviewData(data[index]);
+        setPreviewData(data.slice((page - 1) * 12, (page) * 12)[index]);
         setPreview(!previewOpen);
         setUpdater(true);
     }
