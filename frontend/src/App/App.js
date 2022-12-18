@@ -94,23 +94,26 @@ function App() {
 
                     </div>
                     <div className='rightSide'>
-                        <div className='modeButtons'>
-                            <Box mr={3}>
-                                {dataDisplay
-                                    ? <Button variant='outlined' color='inherit' onClick={DataDisplayChange}>View as a
-                                        table</Button>
-                                    : <Button variant='outlined' color='inherit' onClick={DataDisplayChange}>View as a
-                                        list</Button>
-                                }
-                            </Box>
-                            <Box mr={3}>
-                                <Button variant='outlined' color='inherit' onClick={MainDisplayChange}>Analyze</Button>
-                            </Box>
-                            <Box mr={3}>
-                                <Button color='inherit' variant='outlined' align='right' component="label"
-                                        onClick={onExport}>Export</Button>
-                            </Box>
-                        </div>
+                        {previewOpen
+                            ? <></>
+                            : <div className='modeButtons'>
+                                <Box mr={3}>
+                                    {dataDisplay
+                                        ? <Button variant='outlined' color='inherit' onClick={DataDisplayChange}>View as a
+                                            table</Button>
+                                        : <Button variant='outlined' color='inherit' onClick={DataDisplayChange}>View as a
+                                            list</Button>
+                                    }
+                                </Box>
+                                <Box mr={3}>
+                                    <Button variant='outlined' color='inherit' onClick={MainDisplayChange}>Analyze</Button>
+                                </Box>
+                                <Box mr={3}>
+                                    <Button color='inherit' variant='outlined' align='right' component="label"
+                                            onClick={onExport}>Export</Button>
+                                </Box>
+                            </div>
+                        }
                         <DataDisplay/>
                     </div>
                 </div>
