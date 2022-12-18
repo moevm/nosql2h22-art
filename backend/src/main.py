@@ -18,6 +18,7 @@ app.add_url_rule('/get_types', methods=['GET'], view_func=routes.get_types)
 app.add_url_rule('/recreate_table', methods=['GET'], view_func=routes.recreate_table)
 
 app.add_url_rule('/get_analysis/<field>', methods=['GET'], view_func=routes.get_analysis)
+app.add_url_rule('/get_analysis_filtered/<field>', methods=['POST'], view_func=routes.get_analysis_by_filter)
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0")

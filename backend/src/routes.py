@@ -312,3 +312,70 @@ def get_analysis(field: str):
     return draw_diagram_get_png(first_seven_count, other_count, field=field)
 
 
+def get_string_or_all(string:str):
+    if string == "":
+        return "%%"
+    return string
+
+def get_analysis_by_filter(field: str):
+    fields_list = ['museum_name', 'start_year', 'end_year',
+                   'materials', 'type', 'author', 'genre', 'name']
+    if field not in fields_list:
+        response = make_response('No such field')
+        return response
+
+    requestJson = request.get_json()
+
+    titleFilter = get_string_or_all(requestJson["name"])
+    authorFilter = get_string_or_all(requestJson["author"])
+    museumFilter = get_string_or_all(requestJson["museum_name"])
+    genreFilter = get_string_or_all(requestJson["genre"])
+    materialFilter = get_string_or_all(requestJson["materials"])
+    startYearFilter = requestJson['start_year'] if is_number_correct(requestJson['start_year']) else -1
+    endYearFilter = requestJson['end_year'] if is_number_correct(requestJson['end_year']) else 3000
+
+    print(titleFilter, authorFilter, museumFilter, genreFilter, materialFilter, startYearFilter, endYearFilter)
+
+    first_seven_count = db.execute(f"""SELECT DISTINCT {field}, COUNT({field}) AS items_count
+                            FROM (SELECT * FROM ArtWorks
+                                                    WHERE
+                                                    name LIKE %s
+                                                    AND author LIKE %s
+                                                    AND start_year >= %s
+                                                    AND end_year <= %s
+                                                    AND museum_name LIKE %s
+                                                    AND genre LIKE %s
+                                                    AND materials LIKE %s) AS SUB
+                            GROUP BY {field}
+                            ORDER BY items_count DESC
+                            LIMIT 7;""",
+                               (
+                                   titleFilter,
+                                   authorFilter,
+                                   startYearFilter,
+                                   endYearFilter,
+                                   museumFilter,
+                                   genreFilter,
+                                   materialFilter
+                               ))
+
+    other_count = db.execute("""SELECT COUNT(*) FROM (SELECT * FROM ArtWorks
+                                                    WHERE
+                                                    name LIKE %s
+                                                    AND author LIKE %s
+                                                    AND start_year >= %s
+                                                    AND end_year <= %s
+                                                    AND museum_name LIKE %s
+                                                    AND genre LIKE %s
+                                                    AND materials LIKE %s) AS SUB""",
+                                                    (
+                                                        titleFilter,
+                                                        authorFilter,
+                                                        startYearFilter,
+                                                        endYearFilter,
+                                                        museumFilter,
+                                                        genreFilter,
+                                                        materialFilter
+                                                    ))
+    return draw_diagram_get_png(first_seven_count=first_seven_count, other_count=other_count, field=field)
+
