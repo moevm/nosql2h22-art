@@ -300,7 +300,6 @@ def get_analysis(field: str):
     fields_list = ['museum_name', 'start_year', 'end_year',
                    'materials', 'type', 'author', 'genre']
     if field not in fields_list:
-        print('FUCK')
         response = make_response('No such field')
         return response
     first_seven_count = db.execute(f"""SELECT DISTINCT {field}, COUNT({field}) AS items_count

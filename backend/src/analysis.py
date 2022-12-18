@@ -22,10 +22,10 @@ def draw_diagram_get_png(first_seven_count, other_count, field):
     label = str(field + '_count.png')
     buf = BytesIO()
     fig.savefig(buf, format="png")
-    # data = base64.b64encode(buf.getbuffer()).decode("ascii")
-    # image_url = f"<img src='data:image/png;base64,{data}'/>"
-    response = make_response(buf.getvalue())
-    response.headers['Content-Disposition'] = f'attachment; filename={field}s.png'
-    response.mimetype = 'image/png'
+    data = base64.b64encode(buf.getbuffer()).decode("ascii")
+    image_url = f"data:image/png;base64,{data}"
+    # response = make_response(buf.getvalue())
+    # response.headers['Content-Disposition'] = f'attachment; filename={field}s.png'
+    # response.mimetype = 'image/png'
 
-    return response
+    return image_url

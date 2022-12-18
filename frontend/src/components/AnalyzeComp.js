@@ -1,23 +1,73 @@
 import '../App/App.css';
 import {Button, Typography, MenuItem, TextField, Grid} from '@mui/material';
-import React from 'react';
+import React, {useEffect} from 'react';
+import {API_GET_ANALYSIS_FIELD} from "../constants";
+import axios from "axios";
+import {Image} from "@mui/icons-material";
+import Axios from "axios";
+import { saveAs } from 'file-saver'
 
 const fields = [
     {
-        value: 'Museum',
+        value: 'author',
+        label: 'Автор'
+    },
+    {
+        value: 'museum_name',
         label: 'Музей'
     },
     {
-        value: 'Materials',
+          value: 'start_year',
+          label: 'Год начала'
+    },
+    {
+        value: 'end_year',
+        label: 'Год завершения'
+    },
+    {
+        value: 'materials',
         label: 'Материалы'
+    },
+    {
+        value: 'genre',
+        label: 'Жанр'
+    },
+    {
+        value: 'type',
+        label: 'Тип'
     }
 ];
 
+
+
+
 function AnalyzeComp({closeAnalyze}) {
-    const [field, setField] = React.useState('Museum');
+    const [field, setField] = React.useState('museum_name');
+    const [image, setImage] = React.useState([]);
     const fieldChange = (event) => {
         setField(event.target.value);
+        axios.get(API_GET_ANALYSIS_FIELD + event.target.value)
+          .then(res => {
+          setImage(res.data)
+      }).catch(err => {
+        console.log(err)
+      })
     };
+
+    const downloadImage = () => {
+        saveAs(image, field+'_analysis.png')
+    }
+
+
+    useEffect(() => {
+      axios.get(API_GET_ANALYSIS_FIELD + field)
+          .then(res => {
+          setImage(res.data)
+      }).catch(err => {
+        console.log(err)
+      })}, [])
+
+
     return (
         <div>
             <div className='analyzeContainer'>
@@ -65,14 +115,13 @@ function AnalyzeComp({closeAnalyze}) {
                             <TextField size='small' fullWidth={true} label="Materials" variant="outlined"/>
                         </Grid>
                     </Grid>
-                    <Button variant='contained' color='primary' style={{marginTop: 10}}>Save as .png</Button>
+                    <Button variant='contained' color='primary' style={{marginTop: 10}} onClick={downloadImage}>Save as .png</Button>
                     <Button variant='contained' color='error' style={{marginTop: 10, marginLeft: 10}}
                             onClick={closeAnalyze}>Cancel</Button>
                 </div>
                 <div className='analyzeView'>
-                    <Typography fontSize={20}>Analysis for</Typography>
-                    <img src='https://assets.pikiran-rakyat.com/crop/0x0:0x0/x/photo/2021/05/18/1067981407.jpg'
-                         style={{width: 400, height: 300}}/>
+                    <Typography fontSize={20} onChange={fieldChange}>Analysis for {field}</Typography>
+                    <img src={image} style={{width: 800, height: 600}}/>
                 </div>
             </div>
         </div>
