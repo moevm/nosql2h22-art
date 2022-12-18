@@ -13,7 +13,7 @@ const fields = [
     }
 ];
 
-function AnalyzeComp({closeAnalyze}) {
+function AnalyzeComp({closeAnalyze, filters}) {
     const [field, setField] = React.useState('Museum');
     const fieldChange = (event) => {
         setField(event.target.value);
@@ -43,26 +43,32 @@ function AnalyzeComp({closeAnalyze}) {
                             <Typography fontSize={20}>Based on filters</Typography>
                         </Grid>
                         <Grid item xs={12}>
-                            <TextField size='small' fullWidth={true} label="Name" variant="outlined"/>
+                            <TextField size='small' value={filters.title} InputProps={{readOnly:true}} fullWidth={true} 
+                                        label="Title" variant="outlined"/>
                         </Grid>
                         <Grid item xs={12}>
-                            <TextField size='small' fullWidth={true} label="Author" variant="outlined"/>
+                            <TextField size='small' value={filters.author} InputProps={{readOnly:true}} fullWidth={true} 
+                                        label="Author" variant="outlined"/>
                         </Grid>
                         <Grid item xs={12}>
-                            <TextField size='small' fullWidth={true} label="Museum name & address" variant="outlined"/>
+                            <TextField size='small' value={filters.museum_name} InputProps={{readOnly:true}} 
+                                        fullWidth={true} label="Museum name & address" variant="outlined"/>
                         </Grid>
                         <Grid item xs={6}>
-                            <TextField type="number" label="Start year" size='small' fullWidth={true}
-                                       variant="outlined"/>
+                            <TextField type="number" value={filters.start_year} InputProps={{readOnly:true}} 
+                                        label="Start year" size='small' fullWidth={true} variant="outlined"/>
                         </Grid>
                         <Grid item xs={6}>
-                            <TextField type="number" label="End year" size='small' fullWidth={true} variant="outlined"/>
+                            <TextField type="number" value={filters.end_year} InputProps={{readOnly:true}} 
+                                        label="End year" size='small' fullWidth={true} variant="outlined"/>
                         </Grid>
                         <Grid item xs={12}>
-                            <TextField size='small' fullWidth={true} label="Genre" variant="outlined"/>
+                            <TextField size='small' value={filters.genre} InputProps={{readOnly:true}} fullWidth={true} 
+                                        label="Genre" variant="outlined"/>
                         </Grid>
                         <Grid item xs={12}>
-                            <TextField size='small' fullWidth={true} label="Materials" variant="outlined"/>
+                            <TextField size='small' value={filters.materials} InputProps={{readOnly:true}} 
+                                        fullWidth={true} label="Materials" variant="outlined"/>
                         </Grid>
                     </Grid>
                     <Button variant='contained' color='primary' style={{marginTop: 10}}>Save as .png</Button>
