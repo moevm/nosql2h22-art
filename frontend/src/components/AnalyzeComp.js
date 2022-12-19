@@ -1,23 +1,159 @@
 import '../App/App.css';
 import {Button, Typography, MenuItem, TextField, Grid} from '@mui/material';
-import React from 'react';
+import React, {useEffect} from 'react';
+import {
+    API_GET_ANALYSIS_FIELD,
+    API_GET_ANALYSIS_FILTERED_FIELD,
+    API_GET_ARTS_BY_FILTER,
+    NOT_CHOSEN_LABEL
+} from "../constants";
+import axios from "axios";
+import {Image} from "@mui/icons-material";
+import Axios from "axios";
+import { saveAs } from 'file-saver'
 
 const fields = [
     {
-        value: 'Museum',
+        value: 'author',
+        label: 'Автор'
+    },
+    {
+        value: 'museum_name',
         label: 'Музей'
     },
     {
-        value: 'Materials',
+          value: 'start_year',
+          label: 'Год начала'
+    },
+    {
+        value: 'end_year',
+        label: 'Год завершения'
+    },
+    {
+        value: 'materials',
         label: 'Материалы'
+    },
+    {
+        value: 'genre',
+        label: 'Жанр'
+    },
+    {
+        value: 'type',
+        label: 'Тип'
     }
 ];
 
-function AnalyzeComp({closeAnalyze}) {
-    const [field, setField] = React.useState('Museum');
+
+
+function AnalyzeComp({closeAnalyze, setData, museums, genres, types, materials, getAllData}) {
+    const [field, setField] = React.useState('museum_name');
+    const [image, setImage] = React.useState([]);
     const fieldChange = (event) => {
         setField(event.target.value);
+        console.log(API_GET_ANALYSIS_FIELD + event.target.value)
+        axios.get(API_GET_ANALYSIS_FIELD + event.target.value)
+          .then(res => {
+          setImage(res.data)
+      }).catch(err => {
+        console.log(err)
+      })
     };
+
+    const downloadImage = () => {
+        saveAs(image, field+'_analysis.png')
+    }
+
+    useEffect(() => {
+      axios.get(API_GET_ANALYSIS_FIELD + field)
+          .then(res => {
+          setImage(res.data)
+      }).catch(err => {
+        console.log(err)
+      })}, [])
+
+    const [museum_name, setMuseum] = React.useState('');
+    const [genre, setGenre] = React.useState('');
+    const [material, setMaterial] = React.useState('');
+
+    const [title, setTitle] = React.useState('');
+    const [author, setAuthor] = React.useState('');
+    const [start_year, setStartYear] = React.useState('');
+    const [end_year, setEndYear] = React.useState('');
+    const [type, setType] = React.useState('');
+
+    const handleChangeTitle = (event) => setTitle(event.target.value);
+    const handleChangeAuthor = (event) => {
+        console.log(event.target.value);
+        setAuthor(event.target.value);
+    };
+    const handleChangeStartYear = (event) => setStartYear(event.target.value);
+    const handleChangeEndYear = (event) => setEndYear(event.target.value);
+
+    const checkOnNoChosen = (val) => {
+        if (val === NOT_CHOSEN_LABEL) {
+            console.log("Not chosen val");
+            return "";
+        }
+        return val;
+    }
+
+    const checkYear = (year) => {
+        if (year === "")
+            return true;
+        return Number(year) > 0 && Number(year) < 3000;
+    }
+
+    const valid = React.useCallback(() => {
+        const checkStart = checkYear(start_year);
+        const checkEnd = checkYear(end_year);
+        return (start_year <= end_year && checkStart && checkEnd);
+    }, [start_year, end_year]);
+
+    const findByFilter = React.useCallback(async (field) => {
+        if (!valid()) {
+            alert("Incorrect years!");
+        } else {
+
+            let url = API_GET_ANALYSIS_FILTERED_FIELD + field;
+            const response = await Axios.post(url, {
+                name:  title,
+                author: author,
+                start_year: start_year,
+                end_year: end_year,
+                materials: material,
+                museum_name: museum_name,
+                genre: genre
+            });
+            if(response.data !== "")
+                setImage(response.data);
+        }
+    }, [title,
+        author,
+        start_year,
+        end_year, museum_name, genre, material]);
+
+    const clearFilters = () => {
+        setMuseum('');
+        setGenre('');
+        setMaterial('');
+        setTitle('');
+        setAuthor('');
+        setStartYear('');
+        setEndYear('');
+        setType('');
+    }
+
+    const museumChange = (event) => {
+        setMuseum(event.target.value);
+    };
+    const genreChange = (event) => {
+        setGenre(event.target.value);
+    };
+    const materialChange = (event) => {
+        setMaterial(event.target.value);
+    };
+
+
     return (
         <div>
             <div className='analyzeContainer'>
@@ -43,36 +179,36 @@ function AnalyzeComp({closeAnalyze}) {
                             <Typography fontSize={20}>Based on filters</Typography>
                         </Grid>
                         <Grid item xs={12}>
-                            <TextField size='small' fullWidth={true} label="Name" variant="outlined"/>
+                            <TextField size='small' fullWidth={true} label="Name" onChange={handleChangeTitle} variant="outlined"/>
                         </Grid>
                         <Grid item xs={12}>
-                            <TextField size='small' fullWidth={true} label="Author" variant="outlined"/>
+                            <TextField size='small' onChange={handleChangeAuthor} fullWidth={true} label="Author" variant="outlined"/>
                         </Grid>
                         <Grid item xs={12}>
-                            <TextField size='small' fullWidth={true} label="Museum name & address" variant="outlined"/>
+                            <TextField size='small' onChange={museumChange} fullWidth={true} label="Museum name & address" variant="outlined"/>
                         </Grid>
                         <Grid item xs={6}>
-                            <TextField type="number" label="Start year" size='small' fullWidth={true}
+                            <TextField type="number" label="Start year" size='small' onChange={handleChangeStartYear} fullWidth={true}
                                        variant="outlined"/>
                         </Grid>
                         <Grid item xs={6}>
-                            <TextField type="number" label="End year" size='small' fullWidth={true} variant="outlined"/>
+                            <TextField type="number" label="End year" size='small' onChange={handleChangeEndYear} fullWidth={true} variant="outlined"/>
                         </Grid>
                         <Grid item xs={12}>
-                            <TextField size='small' fullWidth={true} label="Genre" variant="outlined"/>
+                            <TextField size='small' fullWidth={true} label="Genre" onChange={genreChange} variant="outlined"/>
                         </Grid>
                         <Grid item xs={12}>
-                            <TextField size='small' fullWidth={true} label="Materials" variant="outlined"/>
+                            <TextField size='small' fullWidth={true} label="Materials" onChange={materialChange} variant="outlined"/>
                         </Grid>
                     </Grid>
-                    <Button variant='contained' color='primary' style={{marginTop: 10}}>Save as .png</Button>
-                    <Button variant='contained' color='error' style={{marginTop: 10, marginLeft: 10}}
+                    <Button variant='contained' color='primary' style={{marginTop: 10}} onClick={()=>{findByFilter(field)}}>filter</Button>
+                    <Button variant='contained' color='primary' style={{marginTop: 10, marginLeft: 5}} onClick={downloadImage}>Save as .png</Button>
+                    <Button variant='contained' color='error' style={{marginTop: 10, marginLeft: 5}}
                             onClick={closeAnalyze}>Cancel</Button>
                 </div>
                 <div className='analyzeView'>
-                    <Typography fontSize={20}>Analysis for</Typography>
-                    <img src='https://assets.pikiran-rakyat.com/crop/0x0:0x0/x/photo/2021/05/18/1067981407.jpg'
-                         style={{width: 400, height: 300}}/>
+                    <Typography fontSize={20} onChange={fieldChange}>Analysis for {field}</Typography>
+                    <img src={image} style={{width: 800, height: 600}}/>
                 </div>
             </div>
         </div>
