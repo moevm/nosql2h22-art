@@ -4,7 +4,7 @@ import Axios from "axios";
 import '../App/App.css';
 import {API_GET_ARTS_BY_FILTER, NOT_CHOSEN_LABEL} from "../constants";
 
-function FilterComp({setData, museums, genres, types, materials, getAllData}) {
+function FilterComp({setData, museums, genres, types, materials, getAllData, setFilters}) {
 
     const [museum_name, setMuseum] = React.useState('0');
     const [genre, setGenre] = React.useState('0');
@@ -60,7 +60,8 @@ function FilterComp({setData, museums, genres, types, materials, getAllData}) {
             })
 
             console.log('response.data', response.data);
-            setData(response.data)
+            setData(response.data);
+            setFilters({title, author, museum_name, start_year, end_year, genre, material});
         }
     }, [title,
         author,

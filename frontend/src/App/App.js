@@ -29,6 +29,7 @@ function App() {
     const [dataDisplay, setDataDisplay] = React.useState(true);
     const [page, setPage] = React.useState(1);
     const [previewData, setPreviewData] = React.useState([]);
+    const [filtersData, setFiltersData] = React.useState([]);
     const [previewOpen, setPreview] = React.useState(false);
     const [mainDisplay, setMainDisplay] = React.useState(true);
 
@@ -86,36 +87,40 @@ function App() {
                     <div className='leftSide'>
                         <FilterComp setData={setData} museums={museums} genres={genres}
                                     types={types} materials={materials}
-                                    getAllData={UpdateData}/>
+                                    getAllData={UpdateData}
+                                    setFilters={setFiltersData}/>
                         <DisplayEditor updateMaterialsSelect={getMaterials} updateGenresSelect={getGenres}
                                        updateMuseumsSelect={getMuseums}/>
 
                     </div>
                     <div className='rightSide'>
-                        <div className='modeButtons'>
-                            <Box mr={3}>
-                                {dataDisplay
-                                    ? <Button variant='outlined' color='inherit' onClick={DataDisplayChange}>View as a
-                                        table</Button>
-                                    : <Button variant='outlined' color='inherit' onClick={DataDisplayChange}>View as a
-                                        list</Button>
-                                }
-                            </Box>
-                            <Box mr={3}>
-                                <Button variant='outlined' color='inherit' onClick={MainDisplayChange}>Analyze</Button>
-                            </Box>
-                            <Box mr={3}>
-                                <Button color='inherit' variant='outlined' align='right' component="label"
-                                        onClick={onExport}>Export</Button>
-                            </Box>
-                        </div>
+                        {previewOpen
+                            ? <></>
+                            : <div className='modeButtons'>
+                                <Box mr={3}>
+                                    {dataDisplay
+                                        ? <Button variant='outlined' color='inherit' onClick={DataDisplayChange}>View as a
+                                            table</Button>
+                                        : <Button variant='outlined' color='inherit' onClick={DataDisplayChange}>View as a
+                                            list</Button>
+                                    }
+                                </Box>
+                                <Box mr={3}>
+                                    <Button variant='outlined' color='inherit' onClick={MainDisplayChange}>Analyze</Button>
+                                </Box>
+                                <Box mr={3}>
+                                    <Button color='inherit' variant='outlined' align='right' component="label"
+                                            onClick={onExport}>Export</Button>
+                                </Box>
+                            </div>
+                        }
                         <DataDisplay/>
                     </div>
                 </div>
             );
         } else {
             return (
-                <AnalyzeComp closeAnalyze={MainDisplayChange}/>
+                <AnalyzeComp closeAnalyze={MainDisplayChange} filters={filtersData}/>
             );
         }
     }
@@ -135,7 +140,7 @@ function App() {
         setDisplay(!displayEditor);
     }
     const DisplayIndexChange = (index) => {
-        setPreviewData(data[index]);
+        setPreviewData(data.slice((page - 1) * 12, (page) * 12)[index]);
         setPreview(!previewOpen);
         setUpdater(true);
     }
