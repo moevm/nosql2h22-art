@@ -61,7 +61,7 @@ function FilterComp({setData, museums, genres, types, materials, getAllData, set
 
             console.log('response.data', response.data);
             setData(response.data);
-            setFilters({title, author, museum_name, start_year, end_year, genre, material});
+            setFilters({title, author, museum_name: museums[parseInt(museum_name)].label, start_year, end_year, genre: genres[parseInt(genre)].label, material: materials[parseInt(material)].label});
         }
     }, [title,
         author,
