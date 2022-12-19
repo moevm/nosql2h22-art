@@ -34,7 +34,7 @@ function App() {
     const [previewOpen, setPreview] = React.useState(false);
     const [mainDisplay, setMainDisplay] = React.useState(true);
 
-    const [data, setData] = React.useState();
+    const [data, setData] = React.useState([]);
     const [museums, setMuseums] = React.useState([]);
     const [genres, setGenres] = React.useState([]);
     const [materials, setMaterials] = React.useState([]);
@@ -70,7 +70,6 @@ function App() {
         }
         else{
             if (dataDisplay) {
-            console.log(data.slice((page - 1) * 12, (page) * 12))
                 return (
                     <GridCardComp data={data.slice((page - 1) * 12, (page) * 12)} total={data.length} setPage={setPage}
                                 page={page} curIndexChange = {DisplayIndexChange}/>
