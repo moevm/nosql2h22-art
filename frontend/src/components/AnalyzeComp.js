@@ -45,28 +45,51 @@ const fields = [
 
 
 
-function AnalyzeComp({closeAnalyze, setData, museums, genres, types, materials, getAllData}) {
+function AnalyzeComp({closeAnalyze, filters}) {
     const [field, setField] = React.useState('museum_name');
     const [image, setImage] = React.useState([]);
     const fieldChange = (event) => {
         setField(event.target.value);
+        console.log(filters)
         console.log(API_GET_ANALYSIS_FIELD + event.target.value)
-        axios.get(API_GET_ANALYSIS_FIELD + event.target.value)
+        axios.post(API_GET_ANALYSIS_FILTERED_FIELD + event.target.value, {
+            "name": filters.title,
+            "author": filters.author,
+            "museum_name": filters.museum_name.localeCompare("Не выбрано" ) === 0 ? "" : filters.museum_name,
+            "start_year": filters.start_year,
+            "end_year": filters.end_year,
+            "genre": filters.genre.localeCompare("Не выбрано" ) === 0 ? "" : filters.genre,
+            "materials": filters.material.localeCompare("Не выбрано" ) === 0 ? "" : filters.material,
+             "type": filters.type.localeCompare("Не выбрано" ) === 0 ? "" : filters.type
+        })
           .then(res => {
           setImage(res.data)
+              console.log(filters)
       }).catch(err => {
         console.log(err)
       })
     };
+
+
 
     const downloadImage = () => {
         saveAs(image, field+'_analysis.png')
     }
 
     useEffect(() => {
-      axios.get(API_GET_ANALYSIS_FIELD + field)
+      axios.post(API_GET_ANALYSIS_FILTERED_FIELD + field, {
+            "name": filters.title,
+            "author": filters.author,
+            "museum_name": filters.museum_name.localeCompare("Не выбрано" ) === 0 ? "" : filters.museum_name,
+            "start_year": filters.start_year,
+            "end_year": filters.end_year,
+            "genre": filters.genre.localeCompare("Не выбрано" ) === 0 ? "" : filters.genre,
+            "materials": filters.material.localeCompare("Не выбрано" ) === 0 ? "" : filters.material,
+            "type": filters.type.localeCompare("Не выбрано" ) === 0 ? "" : filters.type
+      })
           .then(res => {
           setImage(res.data)
+              console.log(filters)
       }).catch(err => {
         console.log(err)
       })}, [])
@@ -74,85 +97,11 @@ function AnalyzeComp({closeAnalyze, setData, museums, genres, types, materials, 
     const [museum_name, setMuseum] = React.useState('');
     const [genre, setGenre] = React.useState('');
     const [material, setMaterial] = React.useState('');
-
     const [title, setTitle] = React.useState('');
     const [author, setAuthor] = React.useState('');
     const [start_year, setStartYear] = React.useState('');
     const [end_year, setEndYear] = React.useState('');
     const [type, setType] = React.useState('');
-
-    const handleChangeTitle = (event) => setTitle(event.target.value);
-    const handleChangeAuthor = (event) => {
-        console.log(event.target.value);
-        setAuthor(event.target.value);
-    };
-    const handleChangeStartYear = (event) => setStartYear(event.target.value);
-    const handleChangeEndYear = (event) => setEndYear(event.target.value);
-
-    const checkOnNoChosen = (val) => {
-        if (val === NOT_CHOSEN_LABEL) {
-            console.log("Not chosen val");
-            return "";
-        }
-        return val;
-    }
-
-    const checkYear = (year) => {
-        if (year === "")
-            return true;
-        return Number(year) > 0 && Number(year) < 3000;
-    }
-
-    const valid = React.useCallback(() => {
-        const checkStart = checkYear(start_year);
-        const checkEnd = checkYear(end_year);
-        return (start_year <= end_year && checkStart && checkEnd);
-    }, [start_year, end_year]);
-
-    const findByFilter = React.useCallback(async (field) => {
-        if (!valid()) {
-            alert("Incorrect years!");
-        } else {
-
-            let url = API_GET_ANALYSIS_FILTERED_FIELD + field;
-            const response = await Axios.post(url, {
-                name:  title,
-                author: author,
-                start_year: start_year,
-                end_year: end_year,
-                materials: material,
-                museum_name: museum_name,
-                genre: genre
-            });
-            if(response.data !== "")
-                setImage(response.data);
-        }
-    }, [title,
-        author,
-        start_year,
-        end_year, museum_name, genre, material]);
-
-    const clearFilters = () => {
-        setMuseum('');
-        setGenre('');
-        setMaterial('');
-        setTitle('');
-        setAuthor('');
-        setStartYear('');
-        setEndYear('');
-        setType('');
-    }
-
-    const museumChange = (event) => {
-        setMuseum(event.target.value);
-    };
-    const genreChange = (event) => {
-        setGenre(event.target.value);
-    };
-    const materialChange = (event) => {
-        setMaterial(event.target.value);
-    };
-
 
     return (
         <div>
@@ -187,7 +136,7 @@ function AnalyzeComp({closeAnalyze, setData, museums, genres, types, materials, 
                                         label="Author" variant="outlined"/>
                         </Grid>
                         <Grid item xs={12}>
-                            <TextField size='small' value={filters.museum_name} InputProps={{readOnly:true}} 
+                            <TextField size='small' value={filters.museum_name.localeCompare("Не выбрано") === 0 ? "" : filters.museum_name} InputProps={{readOnly:true}}
                                         fullWidth={true} label="Museum name & address" variant="outlined"/>
                         </Grid>
                         <Grid item xs={6}>
@@ -199,15 +148,18 @@ function AnalyzeComp({closeAnalyze, setData, museums, genres, types, materials, 
                                         label="End year" size='small' fullWidth={true} variant="outlined"/>
                         </Grid>
                         <Grid item xs={12}>
-                            <TextField size='small' value={filters.genre} InputProps={{readOnly:true}} fullWidth={true} 
+                            <TextField size='small' value={filters.genre.localeCompare("Не выбрано") === 0 ? "" : filters.genre} InputProps={{readOnly:true}} fullWidth={true}
                                         label="Genre" variant="outlined"/>
                         </Grid>
                         <Grid item xs={12}>
-                            <TextField size='small' value={filters.materials} InputProps={{readOnly:true}} 
+                            <TextField size='small' value={filters.material.localeCompare("Не выбрано") === 0 ? "" : filters.material} InputProps={{readOnly:true}}
                                         fullWidth={true} label="Materials" variant="outlined"/>
                         </Grid>
+                        <Grid item xs={12}>
+                            <TextField size='small' value={filters.type.localeCompare("Не выбрано") === 0 ? "" : filters.type} InputProps={{readOnly:true}}
+                                        fullWidth={true} label="Type" variant="outlined"/>
+                        </Grid>
                     </Grid>
-                    <Button variant='contained' color='primary' style={{marginTop: 10}} onClick={()=>{findByFilter(field)}}>filter</Button>
                     <Button variant='contained' color='primary' style={{marginTop: 10, marginLeft: 5}} onClick={downloadImage}>Save as .png</Button>
                     <Button variant='contained' color='error' style={{marginTop: 10, marginLeft: 5}}
                             onClick={closeAnalyze}>Cancel</Button>

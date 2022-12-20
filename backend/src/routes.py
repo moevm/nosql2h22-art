@@ -313,7 +313,7 @@ def get_analysis(field: str):
 
 
 def get_string_or_all(string:str):
-    if string == "":
+    if string == "" or string == "Не выбрано":
         return "%%"
     return string
 
@@ -325,7 +325,7 @@ def get_analysis_by_filter(field: str):
         return response
 
     requestJson = request.get_json()
-
+    print(requestJson)
     titleFilter = get_string_or_all(requestJson["name"])
     authorFilter = get_string_or_all(requestJson["author"])
     museumFilter = get_string_or_all(requestJson["museum_name"])

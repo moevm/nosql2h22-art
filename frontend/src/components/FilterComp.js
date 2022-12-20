@@ -61,12 +61,16 @@ function FilterComp({setData, museums, genres, types, materials, getAllData, set
 
             console.log('response.data', response.data);
             setData(response.data);
-            setFilters({title, author, museum_name: museums[parseInt(museum_name)].label, start_year, end_year, genre: genres[parseInt(genre)].label, material: materials[parseInt(material)].label});
+
+            console.log({title, author, museum_name: museums[museum_name].label, start_year, end_year, genre: genres[genre].label, material: materials[material].label, type: types[type].label})
+            console.log(type)
+            setFilters({title, author, museum_name: museums[museum_name].label, start_year, end_year, genre: genres[genre].label, material: materials[material].label, type: types[type].label});
+
         }
     }, [title,
         author,
         start_year,
-        end_year, museum_name, genre, material]);
+        end_year, museum_name, genre, material, type]);
 
     const clearFilters = () => {
         getAllData();
@@ -90,7 +94,7 @@ function FilterComp({setData, museums, genres, types, materials, getAllData, set
         setMaterial(event.target.value);
     };
 
-    const handleChangeType = (event) => setType(event.target.value);
+    const handleChangeType = (event) => {setType(event.target.value); console.log(type)};
     return (
         <Box className="filterMenu">
             <Typography fontSize={20}>Filters</Typography>
