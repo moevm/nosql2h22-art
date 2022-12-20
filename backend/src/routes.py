@@ -333,8 +333,9 @@ def get_analysis_by_filter(field: str):
     materialFilter = get_string_or_all(requestJson["materials"])
     startYearFilter = requestJson['start_year'] if is_number_correct(requestJson['start_year']) else -1
     endYearFilter = requestJson['end_year'] if is_number_correct(requestJson['end_year']) else 3000
+    typeFilter = get_string_or_all(requestJson['type'])
 
-    print(titleFilter, authorFilter, museumFilter, genreFilter, materialFilter, startYearFilter, endYearFilter)
+    print(titleFilter, authorFilter, museumFilter, genreFilter, materialFilter, startYearFilter, endYearFilter, typeFilter)
 
     first_seven_count = db.execute(f"""SELECT DISTINCT {field}, COUNT({field}) AS items_count
                             FROM (SELECT * FROM ArtWorks
@@ -345,7 +346,8 @@ def get_analysis_by_filter(field: str):
                                                     AND end_year <= %s
                                                     AND museum_name LIKE %s
                                                     AND genre LIKE %s
-                                                    AND materials LIKE %s) AS SUB
+                                                    AND materials LIKE %s
+                                                    AND type LIKE %s) AS SUB
                             GROUP BY {field}
                             ORDER BY items_count DESC
                             LIMIT 7;""",
@@ -356,7 +358,8 @@ def get_analysis_by_filter(field: str):
                                    endYearFilter,
                                    museumFilter,
                                    genreFilter,
-                                   materialFilter
+                                   materialFilter,
+                                   typeFilter
                                ))
 
     other_count = db.execute("""SELECT COUNT(*) FROM (SELECT * FROM ArtWorks
@@ -367,7 +370,8 @@ def get_analysis_by_filter(field: str):
                                                     AND end_year <= %s
                                                     AND museum_name LIKE %s
                                                     AND genre LIKE %s
-                                                    AND materials LIKE %s) AS SUB""",
+                                                    AND materials LIKE %s
+                                                    AND type LIKE %s) AS SUB""",
                                                     (
                                                         titleFilter,
                                                         authorFilter,
@@ -375,7 +379,8 @@ def get_analysis_by_filter(field: str):
                                                         endYearFilter,
                                                         museumFilter,
                                                         genreFilter,
-                                                        materialFilter
+                                                        materialFilter,
+                                                        typeFilter
                                                     ))
     return draw_diagram_get_png(first_seven_count=first_seven_count, other_count=other_count, field=field)
 
