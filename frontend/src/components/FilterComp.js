@@ -120,28 +120,28 @@ function FilterComp({setData, museums, genres, types, materials, getAllData, set
             <Typography fontSize={20}>Filters</Typography>
             <Grid container spacing={1} padding={1} alignItems={'center'}>
                 <Grid item xs={12}>
-                    <TextField value={title} onChange={handleChangeTitle} size='small' fullWidth={true} label="Название"
+                    <TextField value={title} onChange={handleChangeTitle} size='small' fullWidth={true} label="Title"
                                variant="outlined"/>
                 </Grid>
                 <Grid item xs={12}>
-                    <TextField value={author} onChange={handleChangeAuthor} size='small' fullWidth={true} label="Автор"
+                    <TextField value={author} onChange={handleChangeAuthor} size='small' fullWidth={true} label="Author"
                                variant="outlined"/>
                 </Grid>
 
                 <Grid item xs={6}>
                     <TextField type="number" value={start_year} onChange={handleChangeStartYear} size='small'
                                fullWidth={true}
-                               label="Год начала" variant="outlined"/>
+                               label="Start year" variant="outlined"/>
                 </Grid>
                 <Grid item xs={6}>
                     <TextField type="number" value={end_year} onChange={handleChangeEndYear} size='small'
                                fullWidth={true}
-                               label="Год завершения" variant="outlined"/>
+                               label="End year" variant="outlined"/>
                 </Grid>
 
 
                 <Grid item xs={4}>
-                    <InputLabel>Музей</InputLabel>
+                    <InputLabel>Museum</InputLabel>
                 </Grid>
 
                 <Grid item xs={8}>
@@ -162,7 +162,7 @@ function FilterComp({setData, museums, genres, types, materials, getAllData, set
                 </Grid>
 
                 <Grid item xs={4}>
-                    <InputLabel>Тип</InputLabel>
+                    <InputLabel>Type</InputLabel>
                 </Grid>
 
                 <Grid item xs={8}>
@@ -182,7 +182,7 @@ function FilterComp({setData, museums, genres, types, materials, getAllData, set
                     </TextField>
                 </Grid>
                 <Grid item xs={4}>
-                    <InputLabel>Жанр</InputLabel>
+                    <InputLabel>Genre</InputLabel>
                 </Grid>
 
                 <Grid item xs={8}>
@@ -203,7 +203,7 @@ function FilterComp({setData, museums, genres, types, materials, getAllData, set
                 </Grid>
 
                 <Grid item xs={4}>
-                    <InputLabel>Материал</InputLabel>
+                    <InputLabel>Materials</InputLabel>
                 </Grid>
 
                 <Grid item xs={8}>
