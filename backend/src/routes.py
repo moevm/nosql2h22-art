@@ -1,9 +1,7 @@
-from typing import Any
-
 import json
 
 from cachelib import MemcachedCache
-from flask import request
+from flask import request, make_response
 from sqlalchemy import create_engine
 from analysis import *
 
@@ -13,7 +11,7 @@ db_pass = '1111'
 db_host = 'database'
 db_port = '5432'
 
-# Connecto to the database
+# Connect to the database
 db_string = 'postgresql://{}:{}@{}:{}/{}'.format(db_user, db_pass, db_host, db_port, db_name)
 db = create_engine(db_string)
 
@@ -49,9 +47,7 @@ ADD_PICTURE = """
                           end_year, materials,
                           type,  museum_name, 
                           genre, url)
-    VALUES (%s, %s, %s, %s,
-            %s, %s, %s, %s,
-            %s, %s)
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
     RETURNING artworkid;
 """
 
@@ -88,15 +84,14 @@ def get_museums():
 
 def get_types():
     res = db.execute("""SELECT DISTINCT(type) FROM ArtWorks""")
-    museums_list = []
+    types_list = []
     for i in res:
-        museums_list.append(dict(i)['type'])
-    return museums_list
+        types_list.append(dict(i)['type'])
+    return types_list
 
 
 def add_art():
     data = request.get_json()
-    # adding into postgres
 
     key = db.execute(ADD_PICTURE, (data['name'], data['author'],
                                    data['description'], data['start_year'],
@@ -104,9 +99,6 @@ def add_art():
                                    data['type'], data['museum_name'],
                                    data['genre'], data['url']))
 
-    res = db.execute("""SELECT * FROM ArtWorks""")
-
-    # adding into memcached
     key = str(key.all()[0][0])
     cache.set(key, data)
 
@@ -117,8 +109,8 @@ def reimport_arts():
     print('reimport_arts')
     db.execute(DELETE_ALL_NOTES)
     cache.clear()
-    json = request.get_json()
-    for data in json:
+    json_list = request.get_json()
+    for data in json_list:
         key = db.execute(ADD_PICTURE, (data['name'], data['author'],
                                        data['description'], data['start_year'],
                                        data['end_year'], data['materials'],
@@ -131,24 +123,25 @@ def reimport_arts():
     return ''
 
 
-def queryParamsAppend(updateJson: json, queryString: str, keys: list):
+def queryParamsAppend(update_json: json, query_string: str, keys: list):
     last_item: str = keys[-1]
     print("Last item: ", last_item)
     params = []
     for key in keys:
-        if key in updateJson:
-            print(f"New {key} {updateJson[key]}")
+        if key in update_json:
+            print(f"New {key} {update_json[key]}")
             if key == last_item:
-                queryString = queryString + key + ' = %s '
+                query_string = query_string + key + ' = %s '
             else:
-                queryString = queryString + key + ' = %s,'
-            params.append(updateJson[key])
-    return [queryString, params]
+                query_string = query_string + key + ' = %s,'
+            params.append(update_json[key])
+    return [query_string, params]
 
 
 def build_update_query(id: str, update: json):
     print(update)
-    keys = ['name', 'url', 'description', 'author', 'museum_name', 'genre', 'materials', 'type', 'start_year', 'end_year']
+    keys = ['name', 'url', 'description', 'author', 'museum_name', 'genre', 'materials', 'type', 'start_year',
+            'end_year']
     res = queryParamsAppend(update, "UPDATE ArtWorks SET ", keys)
     query = res[0]
     params = res[1]
@@ -191,10 +184,10 @@ def update_art(id):
 
 def get_arts():
     res = db.execute("""SELECT * FROM ArtWorks""")
-    json = []
+    json_list = []
     for i in res:
-        json.append(dict(i))
-    return json
+        json_list.append(dict(i))
+    return json_list
 
 
 def is_number_correct(requested_number):
@@ -207,26 +200,24 @@ def is_number_correct(requested_number):
 
 
 def string_or_any(requested_string):
-    if not requested_string:
-        return "%%"
-    return requested_string
+    return "%%" if not requested_string else requested_string
 
 
 def get_arts_by_filter():
-    requestJson = request.get_json()
-    print("by filter: ", requestJson)
-    titleFilter = string_or_any(requestJson['title'])
-    authorFilter = string_or_any(requestJson['author'])
-    museumFilter = string_or_any(requestJson['museum_name'])
-    genreFilter = string_or_any(requestJson['genre'])
-    materialFilter = string_or_any(requestJson['material'])
-    typeFilter = string_or_any(requestJson['type'])
+    request_json = request.get_json()
+    print("by filter: ", request_json)
+    title_filter = string_or_any(request_json['title'])
+    author_filter = string_or_any(request_json['author'])
+    museum_filter = string_or_any(request_json['museum_name'])
+    genre_filter = string_or_any(request_json['genre'])
+    material_filter = string_or_any(request_json['material'])
+    type_filter = string_or_any(request_json['type'])
 
-    titleFilter = '%' + titleFilter + '%'
-    authorFilter = '%' + authorFilter + '%'
+    title_filter = '%' + title_filter + '%'
+    author_filter = '%' + author_filter + '%'
 
-    startYearFilter = requestJson['start_year'] if is_number_correct(requestJson['start_year']) else -1
-    endYearFilter = requestJson['end_year'] if is_number_correct(requestJson['end_year']) else 3000
+    start_year_filter = request_json['start_year'] if is_number_correct(request_json['start_year']) else -1
+    end_year_filter = request_json['end_year'] if is_number_correct(request_json['end_year']) else 3000
 
     res = db.execute(
         """
@@ -242,21 +233,21 @@ def get_arts_by_filter():
                 AND type LIKE %s
         """,
         (
-            titleFilter,
-            authorFilter,
-            startYearFilter,
-            endYearFilter,
-            museumFilter,
-            genreFilter,
-            materialFilter,
-            typeFilter
+            title_filter,
+            author_filter,
+            start_year_filter,
+            end_year_filter,
+            museum_filter,
+            genre_filter,
+            material_filter,
+            type_filter
         )
     )
 
-    json = []
+    json_list = []
     for i in res:
-        json.append(dict(i))
-    return json
+        json_list.append(dict(i))
+    return json_list
 
 
 def recreate_table():  # it's not used but it useful when you need to change table configuration (e.g. fields)
@@ -266,26 +257,11 @@ def recreate_table():  # it's not used but it useful when you need to change tab
     return ''
 
 
-def get_analysis(field: str):
-    fields_list = ['museum_name', 'start_year', 'end_year',
-                   'materials', 'type', 'author', 'genre']
-    if field not in fields_list:
-        response = make_response('No such field')
-        return response
-    first_seven_count = db.execute(f"""SELECT DISTINCT {field}, COUNT({field}) AS items_count
-                        FROM ArtWorks
-                        GROUP BY {field}
-                        ORDER BY items_count DESC
-                        LIMIT 7;""")
-
-    other_count = db.execute("""SELECT COUNT(*) FROM ArtWorks""")
-    return draw_diagram_get_png(first_seven_count, other_count, field=field)
-
-
-def get_string_or_all(string:str):
+def get_string_or_all(string: str):
     if string == "" or string == "Не выбрано":
         return "%%"
-    return string
+    return '%' + string + '%'
+
 
 def get_analysis_by_filter(field: str):
     fields_list = ['museum_name', 'start_year', 'end_year',
@@ -305,7 +281,8 @@ def get_analysis_by_filter(field: str):
     endYearFilter = requestJson['end_year'] if is_number_correct(requestJson['end_year']) else 3000
     typeFilter = get_string_or_all(requestJson['type'])
 
-    print(titleFilter, authorFilter, museumFilter, genreFilter, materialFilter, startYearFilter, endYearFilter, typeFilter)
+    print(titleFilter, authorFilter, museumFilter, genreFilter, materialFilter, startYearFilter, endYearFilter,
+          typeFilter)
 
     first_seven_count = db.execute(f"""SELECT DISTINCT {field}, COUNT({field}) AS items_count
                             FROM (SELECT * FROM ArtWorks
@@ -321,16 +298,16 @@ def get_analysis_by_filter(field: str):
                             GROUP BY {field}
                             ORDER BY items_count DESC
                             LIMIT 7;""",
-                               (
-                                   titleFilter,
-                                   authorFilter,
-                                   startYearFilter,
-                                   endYearFilter,
-                                   museumFilter,
-                                   genreFilter,
-                                   materialFilter,
-                                   typeFilter
-                               ))
+                                   (
+                                       titleFilter,
+                                       authorFilter,
+                                       startYearFilter,
+                                       endYearFilter,
+                                       museumFilter,
+                                       genreFilter,
+                                       materialFilter,
+                                       typeFilter
+                                   ))
 
     other_count = db.execute("""SELECT COUNT(*) FROM (SELECT * FROM ArtWorks
                                                     WHERE
@@ -342,15 +319,14 @@ def get_analysis_by_filter(field: str):
                                                     AND genre LIKE %s
                                                     AND materials LIKE %s
                                                     AND type LIKE %s) AS SUB""",
-                                                    (
-                                                        titleFilter,
-                                                        authorFilter,
-                                                        startYearFilter,
-                                                        endYearFilter,
-                                                        museumFilter,
-                                                        genreFilter,
-                                                        materialFilter,
-                                                        typeFilter
-                                                    ))
+                             (
+                                 titleFilter,
+                                 authorFilter,
+                                 startYearFilter,
+                                 endYearFilter,
+                                 museumFilter,
+                                 genreFilter,
+                                 materialFilter,
+                                 typeFilter
+                             ))
     return draw_diagram_get_png(first_seven_count=first_seven_count, other_count=other_count, field=field)
-

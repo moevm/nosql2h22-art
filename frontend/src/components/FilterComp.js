@@ -1,4 +1,4 @@
-import {Typography, TextField, MenuItem, Grid, Button, Box, InputLabel} from "@mui/material";
+import {Box, Button, Grid, InputLabel, MenuItem, TextField, Typography} from "@mui/material";
 import React from "react";
 import Axios from "axios";
 import '../App/App.css';
@@ -59,12 +59,19 @@ function FilterComp({setData, museums, genres, types, materials, getAllData, set
                 type: checkOnNoChosen(types[type].label)
             })
 
-            console.log('response.data', response.data);
             setData(response.data);
 
-            console.log({title, author, museum_name: museums[museum_name].label, start_year, end_year, genre: genres[genre].label, material: materials[material].label, type: types[type].label})
             console.log(type)
-            setFilters({title, author, museum_name: museums[museum_name].label, start_year, end_year, genre: genres[genre].label, material: materials[material].label, type: types[type].label});
+            setFilters({
+                title,
+                author,
+                museum_name: museums[museum_name].label,
+                start_year,
+                end_year,
+                genre: genres[genre].label,
+                material: materials[material].label,
+                type: types[type].label
+            });
 
         }
     }, [title,
@@ -82,6 +89,16 @@ function FilterComp({setData, museums, genres, types, materials, getAllData, set
         setStartYear('');
         setEndYear('');
         setType('0');
+        setFilters({
+            title,
+            author,
+            museum_name: museums[museum_name].label,
+            start_year,
+            end_year,
+            genre: genres[genre].label,
+            material: materials[material].label,
+            type: types[type].label
+        });
     }
 
     const museumChange = (event) => {
@@ -94,7 +111,10 @@ function FilterComp({setData, museums, genres, types, materials, getAllData, set
         setMaterial(event.target.value);
     };
 
-    const handleChangeType = (event) => {setType(event.target.value); console.log(type)};
+    const handleChangeType = (event) => {
+        setType(event.target.value);
+        console.log(type)
+    };
     return (
         <Box className="filterMenu">
             <Typography fontSize={20}>Filters</Typography>

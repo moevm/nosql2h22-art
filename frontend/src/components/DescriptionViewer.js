@@ -1,8 +1,4 @@
-import {
-    Dialog,
-    DialogContent,
-    TextareaAutosize
-} from '@mui/material';
+import {Dialog, DialogContent, TextareaAutosize} from '@mui/material';
 import React, {PureComponent} from 'react';
 import '../App/App.css';
 

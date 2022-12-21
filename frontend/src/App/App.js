@@ -11,11 +11,11 @@ import PreviewComp from "../components/PreviewComp";
 import AnalyzeComp from "../components/AnalyzeComp";
 import {
     API_GET_ARTS,
-    API_GET_MATERIALS,
     API_GET_GENRES,
+    API_GET_MATERIALS,
     API_GET_MUSEUMS,
-    NOT_CHOSEN_LABEL,
-    API_GET_TYPES
+    API_GET_TYPES,
+    NOT_CHOSEN_LABEL
 } from "../constants";
 import Axios from "axios";
 import {saveAs} from 'file-saver'
@@ -29,7 +29,9 @@ function App() {
     const [dataDisplay, setDataDisplay] = React.useState(true);
     const [page, setPage] = React.useState(1);
     const [previewData, setPreviewData] = React.useState([]);
-    const [filtersData, setFiltersData] = React.useState([]);
+    const [filtersData, setFiltersData] = React.useState({
+        title: "", author: "", museum_name: "", start_year: "", end_year: "", genre: "", material: "", type: "",
+    });
     const [previewOpen, setPreview] = React.useState(false);
     const [mainDisplay, setMainDisplay] = React.useState(true);
 
@@ -99,14 +101,17 @@ function App() {
                             : <div className='modeButtons'>
                                 <Box mr={3}>
                                     {dataDisplay
-                                        ? <Button variant='outlined' color='inherit' onClick={DataDisplayChange}>View as a
+                                        ?
+                                        <Button variant='outlined' color='inherit' onClick={DataDisplayChange}>View as a
                                             table</Button>
-                                        : <Button variant='outlined' color='inherit' onClick={DataDisplayChange}>View as a
+                                        :
+                                        <Button variant='outlined' color='inherit' onClick={DataDisplayChange}>View as a
                                             list</Button>
                                     }
                                 </Box>
                                 <Box mr={3}>
-                                    <Button variant='outlined' color='inherit' onClick={MainDisplayChange}>Analyze</Button>
+                                    <Button variant='outlined' color='inherit'
+                                            onClick={MainDisplayChange}>Analyze</Button>
                                 </Box>
                                 <Box mr={3}>
                                     <Button color='inherit' variant='outlined' align='right' component="label"
@@ -201,14 +206,6 @@ function App() {
         <div>
             <AppBarComp changeView={EditorDisplayChange} updateData={UpdateData} editor={displayEditor}/>
             <MainDisplay/>
-            {/*<div>*/}
-            {/*    It's me, React!*/}
-            {/*    <form method={'POST'} action={API_SERVER}>*/}
-            {/*        <input type="text" name="name"></input>*/}
-            {/*        <input type="submit" value="Set"></input>*/}
-            {/*    </form>*/}
-            {/*    <AddArtworkForm/>*/}
-            {/*</div>*/}
         </div>
     );
 }

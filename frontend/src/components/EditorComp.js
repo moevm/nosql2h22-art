@@ -1,7 +1,8 @@
-import {Typography, TextField, Grid, Button} from "@mui/material";
+import {Button, Grid, TextField, Typography} from "@mui/material";
 import React, {useState} from "react";
 import DescriptionEditor from "./DescriptionEditor";
 import '../App/App.css';
+import {API_ADD_ART} from "../constants";
 import Axios from "axios";
 
 
@@ -49,11 +50,10 @@ function EditorComp({
     }
 
     function submit() {
-        const url = "http://localhost:5000/add_art";
         if (!valid()) {
             alert("Form is incorrect");
         } else {
-            Axios.post(url, {
+            Axios.post(API_ADD_ART, {
                 name: data.name,
                 author: data.author,
                 description: data.description,
@@ -97,14 +97,6 @@ function EditorComp({
         <div className="editorMenu">
             <Typography fontSize={20}>Editor</Typography>
             <Grid container spacing={1} padding={1} alignItems={'center'}>
-                {/*<Grid item xs={12}>*/}
-                {/*    <Button variant='outlined' color='primary' component="label">Add picture*/}
-                {/*        <input*/}
-                {/*            type="file"*/}
-                {/*            hidden*/}
-                {/*            onChange={onFileChange}*/}
-                {/*        /></Button>*/}
-                {/*</Grid>*/}
                 <Grid item xs={12}>
                     <TextField onChange={(e) => {
                         data.name = e.target.value;

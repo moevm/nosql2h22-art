@@ -1,5 +1,6 @@
 export const NOT_CHOSEN_LABEL = "Не выбрано"
 export const API_SERVER = "http://localhost:5000/";
+export const API_UPDATE_ART = "http://localhost:5000/update_art/"
 export const API_ADD_ART = "http://localhost:5000/add_art"
 export const API_IMPORT = "http://localhost:5000/import_arts"
 export const API_GET_ARTS = "http://localhost:5000/get_arts"
@@ -8,5 +9,4 @@ export const API_GET_GENRES = "http://localhost:5000/get_genres"
 export const API_GET_MUSEUMS = "http://localhost:5000/get_museums"
 export const API_GET_ARTS_BY_FILTER = "http://localhost:5000/get_arts_by_filter"
 export const API_GET_TYPES = "http://localhost:5000/get_types"
-export const API_GET_ANALYSIS_FIELD = "http://localhost:5000/get_analysis/"
 export const API_GET_ANALYSIS_FILTERED_FIELD = "http://localhost:5000/get_analysis_filtered/"

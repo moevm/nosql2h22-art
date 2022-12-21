@@ -1,5 +1,5 @@
 import React, {PureComponent} from "react";
-import {Table, TableContainer, TableBody, TableCell, TableHead, TableRow, Paper, Box, Button} from "@mui/material";
+import {Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
 import '../App/App'
 import DescriptionViewer from "./DescriptionViewer";
 
@@ -22,7 +22,7 @@ export default class TableComp extends PureComponent {
         });
     }
 
-    handleDescClose(){
+    handleDescClose() {
         this.setState({
             desc_editor: false,
             description: ''
@@ -64,7 +64,8 @@ export default class TableComp extends PureComponent {
                                     </TableCell>
                                     <TableCell align="right">{row.author}</TableCell>
                                     <TableCell align="right">
-                                        <Button variant='outlined' color='primary' id={row.description} onClick={this.handleDescOpen}>Description</Button>
+                                        <Button variant='outlined' color='primary' id={row.description}
+                                                onClick={this.handleDescOpen}>Description</Button>
                                     </TableCell>
                                     <TableCell align="right">{row.type}</TableCell>
                                     <TableCell align="right">{row.genre}</TableCell>
@@ -78,12 +79,10 @@ export default class TableComp extends PureComponent {
                         </TableBody>
                     </Table>
                 </TableContainer>
-                <DescriptionViewer dataToPass={this.state.description} is_open={this.state.desc_editor} func={this.handleDescClose} />
+                <DescriptionViewer dataToPass={this.state.description} is_open={this.state.desc_editor}
+                                   func={this.handleDescClose}/>
                 <Box xs="12" display={"flex"} justifyContent={"center"}>
-                    {this.props.page - 5 >= 1
-                        ? <p style={{margin: '0'}}>...</p>
-                        : <p/>
-                    }
+                    {this.props.page - 5 >= 1 ? <p style={{margin: '0'}}>...</p> : <p/>}
                     {((rows, i, len) => {
                         while (++i <= len) {
                             if (i >= 1 && i <= this.props.total / 12 + 1 && (i - 1) !== this.props.total / 12) {

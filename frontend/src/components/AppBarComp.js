@@ -1,10 +1,4 @@
-import {
-    Button,
-    Container,
-    IconButton,
-    Toolbar,
-    Typography,
-} from '@mui/material'
+import {Button, Container, IconButton, Toolbar, Typography} from '@mui/material'
 import {PureComponent} from 'react';
 import '../App/App.css';
 import {Box} from '@mui/system';

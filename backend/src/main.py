@@ -7,7 +7,7 @@ CORS(app, support_credentials=True)
 
 app.add_url_rule('/', methods=['POST'], view_func=routes.clear_tmp)
 app.add_url_rule('/add_art', methods=['POST'], view_func=routes.add_art)
-app.add_url_rule('/art/<id>', methods=['PUT'], view_func=routes.update_art)
+app.add_url_rule('/update_art/<id>', methods=['PUT'], view_func=routes.update_art)
 app.add_url_rule('/import_arts', methods=['POST'], view_func=routes.reimport_arts)
 app.add_url_rule('/get_arts', methods=['GET'], view_func=routes.get_arts)
 app.add_url_rule('/get_arts_by_filter', methods=['POST'], view_func=routes.get_arts_by_filter)
@@ -16,8 +16,6 @@ app.add_url_rule('/get_genres', methods=['GET'], view_func=routes.get_genres)
 app.add_url_rule('/get_museums', methods=['GET'], view_func=routes.get_museums)
 app.add_url_rule('/get_types', methods=['GET'], view_func=routes.get_types)
 app.add_url_rule('/recreate_table', methods=['GET'], view_func=routes.recreate_table)
-
-app.add_url_rule('/get_analysis/<field>', methods=['GET'], view_func=routes.get_analysis)
 app.add_url_rule('/get_analysis_filtered/<field>', methods=['POST'], view_func=routes.get_analysis_by_filter)
 
 if __name__ == '__main__':

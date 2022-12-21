@@ -1,4 +1,4 @@
-import {Grid, Card, CardMedia, CardContent, Typography} from '@mui/material';
+import {Card, CardContent, CardMedia, Grid, Typography} from '@mui/material';
 import React, {PureComponent} from 'react';
 import '../App/App.css';
 

@@ -1,12 +1,12 @@
-import {Typography, TextField, Grid, Button} from "@mui/material";
+import {Button, Grid, TextField, Typography} from "@mui/material";
 import React, {useState} from "react";
-
+import {API_UPDATE_ART} from "../constants";
 import DescriptionEditor from "./DescriptionEditor";
 import '../App/App.css';
 import Axios from "axios";
 
 
-function UpdaterComp({ dataToPass, hide }) {
+function UpdaterComp({dataToPass, hide}) {
     const [desc_editor, setDescEditor] = React.useState(false);
     const [data, setData] = useState(dataToPass);
 
@@ -21,7 +21,7 @@ function UpdaterComp({ dataToPass, hide }) {
     }
 
     function submit() {
-        const url = "http://localhost:5000/art/" + data.artworkid;
+        const url = API_UPDATE_ART + data.artworkid;
         console.log("url put:", url);
 
         Axios.put(url, {

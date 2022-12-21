@@ -61,7 +61,7 @@ export default class PreviewComp extends PureComponent {
                         <p></p>
                     </Grid>
                     <Grid item xs={6} textAlign={'right'} padding={2}>
-                        <b>Materials:</b> 
+                        <b>Materials:</b>
                         <Typography> {this.props.dataToPass.materials}</Typography>
                         <p></p>
                     </Grid>
