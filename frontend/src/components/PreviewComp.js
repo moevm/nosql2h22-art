@@ -72,6 +72,10 @@ export default class PreviewComp extends PureComponent {
                     </Grid>
                     <Grid item xs={12}>
                         <Button variant='outlined' color='primary' onClick={this.handleDescOpen}>Description</Button>
+                        {this.props.editor
+                            ? <></>
+                            : <Button variant='outlined' color='error' onClick={this.props.returnBack}>Назад</Button>
+                        }
                         <DescriptionViewer dataToPass={this.props.dataToPass.description}
                                            is_open={this.state.desc_editor} func={this.handleDescClose}/>
                     </Grid>
