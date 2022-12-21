@@ -1,3 +1,5 @@
+from typing import Any
+
 import json
 
 from cachelib import MemcachedCache
@@ -129,59 +131,27 @@ def reimport_arts():
     return ''
 
 
-def build_update_query(id: str, update: json):
-    query = "UPDATE ArtWorks SET "
+def queryParamsAppend(updateJson: json, queryString: str, keys: list):
+    last_item: str = keys[-1]
+    print("Last item: ", last_item)
     params = []
+    for key in keys:
+        if key in updateJson:
+            print(f"New {key} {updateJson[key]}")
+            if key == last_item:
+                queryString = queryString + key + ' = %s '
+            else:
+                queryString = queryString + key + ' = %s,'
+            params.append(updateJson[key])
+    return [queryString, params]
 
-    if 'name' in update:
-        print(f"New name {update['name']}")
-        query += 'name = %s,'
-        params.append(update['name'])
 
-    if 'url' in update:
-        print(f"New url {update['url']}")
-        query += 'url = %s,'
-        params.append(update['url'])
-
-    if 'description' in update:
-        print(f"New description {update['description']}")
-        query += 'description = %s,'
-        params.append(update['description'])
-
-    if 'author' in update:
-        print(f"New author {update['author']}")
-        query += 'author = %s,'
-        params.append(update['author'])
-
-    if 'museum_name' in update:
-        print(f"New museum_name {update['museum_name']}")
-        query += 'museum_name = %s,'
-        params.append(update['museum_name'])
-
-    if 'genre' in update:
-        print(f"New genre {update['genre']}")
-        query += 'genre = %s,'
-        params.append(update['genre'])
-
-    if 'materials' in update:
-        print(f"New materials {update['materials']}")
-        query += 'materials = %s,'
-        params.append(update['materials'])
-
-    if 'type' in update:
-        print(f"New type {update['type']}")
-        query += 'type = %s,'
-        params.append(update['type'])
-
-    if 'start_year' in update:
-        print(f"New start_year {update['start_year']}")
-        query += 'start_year = %s,'
-        params.append(int(update['start_year']))
-
-    if 'end_year' in update:
-        print(f"New end_year {update['end_year']}")
-        query += 'end_year = %s '
-        params.append(int(update['end_year']))
+def build_update_query(id: str, update: json):
+    print(update)
+    keys = ['name', 'url', 'description', 'author', 'museum_name', 'genre', 'materials', 'type', 'start_year', 'end_year']
+    res = queryParamsAppend(update, "UPDATE ArtWorks SET ", keys)
+    query = res[0]
+    params = res[1]
 
     if not len(params):
         raise ValueError('Update request cannot be empty')

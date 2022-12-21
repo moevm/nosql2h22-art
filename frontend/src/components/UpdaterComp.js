@@ -1,10 +1,12 @@
 import {Typography, TextField, Grid, Button} from "@mui/material";
 import React, {useState} from "react";
+
 import DescriptionEditor from "./DescriptionEditor";
 import '../App/App.css';
+import Axios from "axios";
 
 
-function UpdaterComp({dataToPass, hide}) {
+function UpdaterComp({ dataToPass, hide }) {
     const [desc_editor, setDescEditor] = React.useState(false);
     const [data, setData] = useState(dataToPass);
 
@@ -19,6 +21,24 @@ function UpdaterComp({dataToPass, hide}) {
     }
 
     function submit() {
+        const url = "http://localhost:5000/art/" + data.artworkid;
+        console.log("url put:", url);
+
+        Axios.put(url, {
+            name: data.name,
+            author: data.author,
+            description: data.description,
+            start_year: data.start_year,
+            end_year: data.end_year,
+            materials: data.materials,
+            type: data.type,
+            museum_name: data.museum_name,
+            genre: data.genre,
+            url: data.url
+        }).then(r => {
+            window.location.reload();
+            console.log(r.data)
+        });
     }
 
     return (
