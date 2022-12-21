@@ -180,6 +180,16 @@ def update_art(id):
     cache.set(id, new_artwork)
 
     return new_artwork
+    
+    
+def delete_art(id):
+    if id is None:
+        raise ValueError("Art work id cannot be empty")
+    db.execute("DELETE FROM ArtWorks WHERE artworkid=%s;", id)
+    
+    cache.delete(id)
+    
+    return ''
 
 
 def get_arts():
