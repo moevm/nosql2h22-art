@@ -64,7 +64,7 @@ function App() {
     function DataDisplay() {
         if (previewOpen) {
             return (
-                <PreviewComp dataToPass={previewData}/>
+                <PreviewComp dataToPass={previewData} editor={displayEditor} returnBack={HidePreview}/>
             );
         } else {
             if (dataDisplay) {

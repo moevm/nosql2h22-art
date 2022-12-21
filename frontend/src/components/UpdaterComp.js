@@ -1,6 +1,6 @@
 import {Button, Grid, TextField, Typography} from "@mui/material";
 import React, {useState} from "react";
-import {API_UPDATE_ART} from "../constants";
+import {API_UPDATE_ART, API_DELETE_ART} from "../constants";
 import DescriptionEditor from "./DescriptionEditor";
 import '../App/App.css';
 import Axios from "axios";
@@ -40,6 +40,14 @@ function UpdaterComp({dataToPass, hide}) {
             console.log(r.data)
         });
     }
+	function delete_art() {
+		const url = API_DELETE_ART + data.artworkid;
+		
+		Axios.post(url).then(r => {
+			window.location.reload();
+			console.log(r.data)
+		});
+	}
 
     return (
         <div className="editorMenu">
@@ -107,7 +115,7 @@ function UpdaterComp({dataToPass, hide}) {
                     <Button type="submit" variant='contained' onClick={submit} color='success'>Edit</Button>
                 </Grid>
                 <Grid item xs={4}>
-                    <Button variant='contained' color='error'>Delete</Button>
+                    <Button variant='contained' color='error' onClick={delete_art}>Delete</Button>
                 </Grid>
                 <Grid item xs={3}>
                     <Button variant='outlined' color='primary' onClick={hide}>Cancel</Button>
