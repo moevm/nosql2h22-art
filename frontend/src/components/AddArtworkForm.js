@@ -1,12 +1,12 @@
 import React, {useState} from "react";
-import {API_ADD_ART, API_SERVER} from "../constants";
+import {API_ADD_ART} from "../constants";
 import Axios from "axios";
 
 // import axios from "axios";
 
 
 function AddArtworkForm() {
-    const url = "http://localhost:5000/add_art";
+    const url = API_ADD_ART;
 
     const [data, setData] = useState({
         name: '',

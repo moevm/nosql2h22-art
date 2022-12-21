@@ -72,7 +72,7 @@ export default class TableComp extends PureComponent {
                                     <TableCell align="right">{row.materials}</TableCell>
                                     <TableCell align="right">{row.start_year}</TableCell>
                                     <TableCell align="right">{row.end_year}</TableCell>
-                                    <TableCell align="right"><a href={row.url} target="_blank">Ссылка</a></TableCell>
+                                    <TableCell align="right"><a href={row.url}>Ссылка</a></TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>

@@ -90,7 +90,7 @@
 
 .modeButtons {
     margin-top: 5px;
-    justify-content: end;
+    justify-content: flex-end;
     display: flex;
 }
 
@@ -124,5 +124,10 @@
 .analyzeGrid {
     border: 2px solid black;
     border-radius: 10px;
+    text-align: center;
+}
+
+.preview {
+    padding-top: 30px;
     text-align: center;
 }

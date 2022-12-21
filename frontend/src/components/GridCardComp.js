@@ -1,12 +1,11 @@
-import {Grid, Card, CardMedia, CardContent, Typography, Box} from '@mui/material';
+import {Grid, Card, CardMedia, CardContent, Typography} from '@mui/material';
 import React, {PureComponent} from 'react';
 import '../App/App.css';
 
 export default class GridCardComp extends PureComponent {
     constructor(props) {
         super(props)
-        this.state = {
-        }
+        this.state = {}
     }
 
     dot(index) {
@@ -49,7 +48,8 @@ export default class GridCardComp extends PureComponent {
                             while (++i <= len) {
                                 if (i >= 1 && i <= this.props.total / 12 + 1 && (i - 1) !== this.props.total / 12) {
                                     if (i != this.props.page) {
-                                        rows.push(<a id={i} onClick={this.set_page} href="" style={{margin: "0 3px 0 3px"}}>{i}</a>)
+                                        rows.push(<a id={i} onClick={this.set_page} href=""
+                                                     style={{margin: "0 3px 0 3px"}}>{i}</a>)
                                     } else {
                                         rows.push(<a style={{margin: "0 3px 0 3px"}}>{i}</a>)
                                     }

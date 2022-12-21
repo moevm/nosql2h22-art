@@ -17,20 +17,19 @@ import {
     NOT_CHOSEN_LABEL,
     API_GET_TYPES
 } from "../constants";
-import AddArtworkForm from "../components/AddArtworkForm";
-import { Preview } from '@mui/icons-material';
 import Axios from "axios";
 import {saveAs} from 'file-saver'
 
 const defaultFilterValue = {value: "0", label: NOT_CHOSEN_LABEL};
 
 function App() {
-    
+
     const [displayEditor, setDisplay] = React.useState(true);
     const [displayUpdater, setUpdater] = React.useState(false);
     const [dataDisplay, setDataDisplay] = React.useState(true);
     const [page, setPage] = React.useState(1);
     const [previewData, setPreviewData] = React.useState([]);
+    const [filtersData, setFiltersData] = React.useState([]);
     const [previewOpen, setPreview] = React.useState(false);
     const [mainDisplay, setMainDisplay] = React.useState(true);
 
@@ -50,77 +49,78 @@ function App() {
 
     function DisplayEditor() {
         if (displayEditor) {
-            if(displayUpdater){
-                return(<UpdaterComp dataToPass={previewData} hide={HidePreview}/>);
+            if (displayUpdater) {
+                return (<UpdaterComp dataToPass={previewData} hide={HidePreview}/>);
+            } else {
+                return (<EditorComp showPreview={ShowPreview} hidePreview={HidePreview} previewOpen={previewOpen}/>);
             }
-            else{
-                return(<EditorComp showPreview={ShowPreview} hidePreview={HidePreview} previewOpen={previewOpen}/>);
-            } 
-        } 
-        else{
-            return(<></>);
+        } else {
+            return (<></>);
         }
     }
 
     function DataDisplay() {
-        if(previewOpen){
-            return(
+        if (previewOpen) {
+            return (
                 <PreviewComp dataToPass={previewData}/>
             );
-        }
-        else{
+        } else {
             if (dataDisplay) {
+                console.log(data.slice((page - 1) * 12, (page) * 12))
                 return (
                     <GridCardComp data={data.slice((page - 1) * 12, (page) * 12)} total={data.length} setPage={setPage}
-                                page={page} curIndexChange = {DisplayIndexChange}/>
+                                  page={page} curIndexChange={DisplayIndexChange}/>
                 );
             } else {
                 return (
                     <TableComp data={data.slice((page - 1) * 12, (page) * 12)} total={data.length} setPage={setPage}
-                                page={page}/>
+                               page={page}/>
                 );
-            }  
+            }
         }
     }
 
-    function MainDisplay () {
-        if(mainDisplay){
-            return(
+    function MainDisplay() {
+        if (mainDisplay) {
+            return (
                 <div className='mainContainer'>
                     <div className='leftSide'>
                         <FilterComp setData={setData} museums={museums} genres={genres}
                                     types={types} materials={materials}
-                                    getAllData={UpdateData}/>
+                                    getAllData={UpdateData}
+                                    setFilters={setFiltersData}/>
                         <DisplayEditor updateMaterialsSelect={getMaterials} updateGenresSelect={getGenres}
-                                    updateMuseumsSelect={getMuseums}/>
-                        
+                                       updateMuseumsSelect={getMuseums}/>
+
                     </div>
                     <div className='rightSide'>
-                        <div className='modeButtons'>
-                            <Box mr={3}>
-                                {dataDisplay
-                                    ? <Button variant='outlined' color='inherit' onClick={DataDisplayChange}>View as a
-                                        table</Button>
-                                    : <Button variant='outlined' color='inherit' onClick={DataDisplayChange}>View as a
-                                        list</Button>
-                                }
-                            </Box>
-                            <Box mr={3}>
-                                <Button variant='outlined' color='inherit' onClick={MainDisplayChange}>Analyze</Button>
-                            </Box>
-                            <Box mr={3}>
-                                <Button color='inherit' variant='outlined' align='right' component="label"
-                                        onClick={onExport}>Export</Button>
-                            </Box>
-                        </div>
+                        {previewOpen
+                            ? <></>
+                            : <div className='modeButtons'>
+                                <Box mr={3}>
+                                    {dataDisplay
+                                        ? <Button variant='outlined' color='inherit' onClick={DataDisplayChange}>View as a
+                                            table</Button>
+                                        : <Button variant='outlined' color='inherit' onClick={DataDisplayChange}>View as a
+                                            list</Button>
+                                    }
+                                </Box>
+                                <Box mr={3}>
+                                    <Button variant='outlined' color='inherit' onClick={MainDisplayChange}>Analyze</Button>
+                                </Box>
+                                <Box mr={3}>
+                                    <Button color='inherit' variant='outlined' align='right' component="label"
+                                            onClick={onExport}>Export</Button>
+                                </Box>
+                            </div>
+                        }
                         <DataDisplay/>
                     </div>
                 </div>
             );
-        }
-        else{
-            return(
-                <AnalyzeComp closeAnalyze = {MainDisplayChange}/>
+        } else {
+            return (
+                <AnalyzeComp closeAnalyze={MainDisplayChange} filters={filtersData}/>
             );
         }
     }
@@ -140,7 +140,7 @@ function App() {
         setDisplay(!displayEditor);
     }
     const DisplayIndexChange = (index) => {
-        setPreviewData(data[index]);
+        setPreviewData(data.slice((page - 1) * 12, (page) * 12)[index]);
         setPreview(!previewOpen);
         setUpdater(true);
     }
@@ -172,28 +172,28 @@ function App() {
     const getTypes = async () => {
         const response = await Axios.get(API_GET_TYPES)
         console.log('types', response.data);
-        const list = response.data.map((value, index) => ({value: `${index+1}`, label: value}));
+        const list = response.data.map((value, index) => ({value: `${index + 1}`, label: value}));
         setTypes([defaultFilterValue].concat(list));
     };
 
     const getMaterials = async () => {
         const response = await Axios.get(API_GET_MATERIALS)
         console.log('materials', response.data);
-        const list = response.data.map((value, index) => ({value: `${index+1}`, label: value}));
+        const list = response.data.map((value, index) => ({value: `${index + 1}`, label: value}));
         setMaterials([defaultFilterValue].concat(list));
     };
 
     const getGenres = async () => {
         const response = await Axios.get(API_GET_GENRES)
         console.log('genres', response.data);
-        const list = response.data.map((value, index) => ({value: `${index+1}`, label: value}));
+        const list = response.data.map((value, index) => ({value: `${index + 1}`, label: value}));
         setGenres([defaultFilterValue].concat(list));
     };
 
     const getMuseums = async () => {
         const response = await Axios.get(API_GET_MUSEUMS)
         console.log('museums', response.data);
-        const list = response.data.map((value, index) => ({value: `${index+1}`, label: value}));
+        const list = response.data.map((value, index) => ({value: `${index + 1}`, label: value}));
         setMuseums([defaultFilterValue].concat(list));
     };
 

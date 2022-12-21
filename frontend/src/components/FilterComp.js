@@ -4,7 +4,7 @@ import Axios from "axios";
 import '../App/App.css';
 import {API_GET_ARTS_BY_FILTER, NOT_CHOSEN_LABEL} from "../constants";
 
-function FilterComp({setData, museums, genres, types, materials, getAllData}) {
+function FilterComp({setData, museums, genres, types, materials, getAllData, setFilters}) {
 
     const [museum_name, setMuseum] = React.useState('0');
     const [genre, setGenre] = React.useState('0');
@@ -19,7 +19,8 @@ function FilterComp({setData, museums, genres, types, materials, getAllData}) {
     const handleChangeTitle = (event) => setTitle(event.target.value);
     const handleChangeAuthor = (event) => {
         console.log(event.target.value);
-        setAuthor(event.target.value)};
+        setAuthor(event.target.value)
+    };
     const handleChangeStartYear = (event) => setStartYear(event.target.value);
     const handleChangeEndYear = (event) => setEndYear(event.target.value);
 
@@ -46,8 +47,7 @@ function FilterComp({setData, museums, genres, types, materials, getAllData}) {
     const findByFilter = React.useCallback(async () => {
         if (!valid()) {
             alert("Incorrect years!");
-        }
-        else {
+        } else {
             const response = await Axios.post(API_GET_ARTS_BY_FILTER, {
                 title,
                 author,
@@ -60,12 +60,17 @@ function FilterComp({setData, museums, genres, types, materials, getAllData}) {
             })
 
             console.log('response.data', response.data);
-            setData(response.data)
+            setData(response.data);
+
+            console.log({title, author, museum_name: museums[museum_name].label, start_year, end_year, genre: genres[genre].label, material: materials[material].label, type: types[type].label})
+            console.log(type)
+            setFilters({title, author, museum_name: museums[museum_name].label, start_year, end_year, genre: genres[genre].label, material: materials[material].label, type: types[type].label});
+
         }
     }, [title,
         author,
         start_year,
-        end_year, museum_name, genre, material]);
+        end_year, museum_name, genre, material, type]);
 
     const clearFilters = () => {
         getAllData();
@@ -89,7 +94,7 @@ function FilterComp({setData, museums, genres, types, materials, getAllData}) {
         setMaterial(event.target.value);
     };
 
-    const handleChangeType = (event) => setType(event.target.value);
+    const handleChangeType = (event) => {setType(event.target.value); console.log(type)};
     return (
         <Box className="filterMenu">
             <Typography fontSize={20}>Filters</Typography>
@@ -104,14 +109,15 @@ function FilterComp({setData, museums, genres, types, materials, getAllData}) {
                 </Grid>
 
                 <Grid item xs={6}>
-                    <TextField type="number" value={start_year} onChange={handleChangeStartYear} size='small' fullWidth={true}
+                    <TextField type="number" value={start_year} onChange={handleChangeStartYear} size='small'
+                               fullWidth={true}
                                label="Год начала" variant="outlined"/>
                 </Grid>
                 <Grid item xs={6}>
-                    <TextField type="number" value={end_year} onChange={handleChangeEndYear} size='small' fullWidth={true}
+                    <TextField type="number" value={end_year} onChange={handleChangeEndYear} size='small'
+                               fullWidth={true}
                                label="Год завершения" variant="outlined"/>
                 </Grid>
-
 
 
                 <Grid item xs={4}>
