@@ -221,10 +221,12 @@ def get_arts_by_filter():
     museum_filter = string_or_any(request_json['museum_name'])
     genre_filter = string_or_any(request_json['genre'])
     material_filter = string_or_any(request_json['material'])
+    print(material_filter)
     type_filter = string_or_any(request_json['type'])
 
     title_filter = '%' + title_filter + '%'
     author_filter = '%' + author_filter + '%'
+    material_filter = '%' + material_filter + '%'
 
     start_year_filter = request_json['start_year'] if is_number_correct(request_json['start_year']) else -1
     end_year_filter = request_json['end_year'] if is_number_correct(request_json['end_year']) else 3000

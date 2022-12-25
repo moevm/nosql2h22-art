@@ -8,7 +8,7 @@ function FilterComp({setData, museums, genres, types, materials, getAllData, set
 
     const [museum_name, setMuseum] = React.useState('0');
     const [genre, setGenre] = React.useState('0');
-    const [material, setMaterial] = React.useState('0');
+    const [material, setMaterial] = React.useState('');
 
     const [title, setTitle] = React.useState('');
     const [author, setAuthor] = React.useState('');
@@ -55,7 +55,7 @@ function FilterComp({setData, museums, genres, types, materials, getAllData, set
                 end_year,
                 museum_name: checkOnNoChosen(museums[museum_name].label),
                 genre: checkOnNoChosen(genres[genre].label),
-                material: checkOnNoChosen(materials[material].label),
+                material,
                 type: checkOnNoChosen(types[type].label)
             })
 
@@ -69,7 +69,7 @@ function FilterComp({setData, museums, genres, types, materials, getAllData, set
                 start_year,
                 end_year,
                 genre: genres[genre].label,
-                material: materials[material].label,
+                material,
                 type: types[type].label
             });
 
@@ -83,7 +83,7 @@ function FilterComp({setData, museums, genres, types, materials, getAllData, set
         getAllData();
         setMuseum('0');
         setGenre('0');
-        setMaterial('0');
+        setMaterial('');
         setTitle('');
         setAuthor('');
         setStartYear('');
@@ -202,25 +202,9 @@ function FilterComp({setData, museums, genres, types, materials, getAllData, set
                     </TextField>
                 </Grid>
 
-                <Grid item xs={4}>
-                    <InputLabel>Materials</InputLabel>
-                </Grid>
-
-                <Grid item xs={8}>
-                    <TextField
-                        size='small'
-                        fullWidth={true}
-                        variant="outlined"
-                        select
-                        value={material}
-                        onChange={materialChange}
-                    >
-                        {materials.map((option) => (
-                            <MenuItem key={option.value} value={option.value}>
-                                {option.label}
-                            </MenuItem>
-                        ))}
-                    </TextField>
+                <Grid item xs={12}>
+                    <TextField value={material} onChange={materialChange} size='small' fullWidth={true} label="Materials"
+                               variant="outlined"/>
                 </Grid>
 
                 <Grid item xs={6}>
