@@ -90,7 +90,8 @@ function App() {
                         <FilterComp setData={setData} museums={museums} genres={genres}
                                     types={types} materials={materials}
                                     getAllData={UpdateData}
-                                    setFilters={setFiltersData}/>
+                                    setFilters={setFiltersData}
+                                    setPage={setPage}/>
                         <DisplayEditor updateMaterialsSelect={getMaterials} updateGenresSelect={getGenres}
                                        updateMuseumsSelect={getMuseums}/>
 

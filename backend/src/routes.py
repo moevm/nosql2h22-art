@@ -235,23 +235,23 @@ def get_arts_by_filter():
         """
             SELECT * FROM ArtWorks
             WHERE
-                name LIKE %s
-                AND author LIKE %s
+                lower(name) LIKE %s
+                AND lower(author) LIKE %s
                 AND start_year >= %s
                 AND end_year <= %s
                 AND museum_name LIKE %s
                 AND genre LIKE %s
-                AND materials LIKE %s
+                AND lower(materials) LIKE %s
                 AND type LIKE %s
         """,
         (
-            title_filter,
-            author_filter,
+            title_filter.lower(),
+            author_filter.lower(),
             start_year_filter,
             end_year_filter,
             museum_filter,
             genre_filter,
-            material_filter,
+            material_filter.lower(),
             type_filter
         )
     )
@@ -299,46 +299,46 @@ def get_analysis_by_filter(field: str):
     first_seven_count = db.execute(f"""SELECT DISTINCT {field}, COUNT({field}) AS items_count
                             FROM (SELECT * FROM ArtWorks
                                                     WHERE
-                                                    name LIKE %s
-                                                    AND author LIKE %s
+                                                    lower(name) LIKE %s
+                                                    AND lower(author) LIKE %s
                                                     AND start_year >= %s
                                                     AND end_year <= %s
                                                     AND museum_name LIKE %s
                                                     AND genre LIKE %s
-                                                    AND materials LIKE %s
+                                                    AND lower(materials) LIKE %s
                                                     AND type LIKE %s) AS SUB
                             GROUP BY {field}
                             ORDER BY items_count DESC
                             LIMIT 7;""",
                                    (
-                                       titleFilter,
-                                       authorFilter,
+                                       titleFilter.lower(),
+                                       authorFilter.lower(),
                                        startYearFilter,
                                        endYearFilter,
                                        museumFilter,
                                        genreFilter,
-                                       materialFilter,
+                                       materialFilter.lower(),
                                        typeFilter
                                    ))
 
     other_count = db.execute("""SELECT COUNT(*) FROM (SELECT * FROM ArtWorks
                                                     WHERE
-                                                    name LIKE %s
-                                                    AND author LIKE %s
+                                                    lower(name) LIKE %s
+                                                    AND lower(author) LIKE %s
                                                     AND start_year >= %s
                                                     AND end_year <= %s
                                                     AND museum_name LIKE %s
                                                     AND genre LIKE %s
-                                                    AND materials LIKE %s
+                                                    AND lower(materials) LIKE %s
                                                     AND type LIKE %s) AS SUB""",
                              (
-                                 titleFilter,
-                                 authorFilter,
+                                 titleFilter.lower(),
+                                 authorFilter.lower(),
                                  startYearFilter,
                                  endYearFilter,
                                  museumFilter,
                                  genreFilter,
-                                 materialFilter,
+                                 materialFilter.lower(),
                                  typeFilter
                              ))
     return draw_diagram_get_png(first_seven_count=first_seven_count, other_count=other_count, field=field)

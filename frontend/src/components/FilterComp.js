@@ -4,7 +4,7 @@ import Axios from "axios";
 import '../App/App.css';
 import {API_GET_ARTS_BY_FILTER, NOT_CHOSEN_LABEL} from "../constants";
 
-function FilterComp({setData, museums, genres, types, materials, getAllData, setFilters}) {
+function FilterComp({setData, museums, genres, types, materials, getAllData, setFilters, setPage}) {
 
     const [museum_name, setMuseum] = React.useState('0');
     const [genre, setGenre] = React.useState('0');
@@ -58,7 +58,7 @@ function FilterComp({setData, museums, genres, types, materials, getAllData, set
                 material,
                 type: checkOnNoChosen(types[type].label)
             })
-
+            setPage(1);
             setData(response.data);
 
             console.log(type)
@@ -72,7 +72,6 @@ function FilterComp({setData, museums, genres, types, materials, getAllData, set
                 material,
                 type: types[type].label
             });
-
         }
     }, [title,
         author,
@@ -89,6 +88,7 @@ function FilterComp({setData, museums, genres, types, materials, getAllData, set
         setStartYear('');
         setEndYear('');
         setType('0');
+        setPage(1);
         setFilters({
             title,
             author,
@@ -131,12 +131,12 @@ function FilterComp({setData, museums, genres, types, materials, getAllData, set
                 <Grid item xs={6}>
                     <TextField type="number" value={start_year} onChange={handleChangeStartYear} size='small'
                                fullWidth={true}
-                               label="Start year" variant="outlined"/>
+                               label="From" variant="outlined"/>
                 </Grid>
                 <Grid item xs={6}>
                     <TextField type="number" value={end_year} onChange={handleChangeEndYear} size='small'
                                fullWidth={true}
-                               label="End year" variant="outlined"/>
+                               label="To" variant="outlined"/>
                 </Grid>
 
 
